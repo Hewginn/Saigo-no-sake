@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Játékos mozgása [paraméter: mozgás iránya]
     void Move(Vector2 direction){
 
         //Képernyő határainak meghatározása

@@ -18,6 +18,7 @@ public class NewBehaviourScript : MonoBehaviour
         EnemyMoveForward();
     }
 
+    //Ellenséges repülő mozgása
     void EnemyMoveForward(){
 
         //Ellenfél új pozíciójának meghatározása
