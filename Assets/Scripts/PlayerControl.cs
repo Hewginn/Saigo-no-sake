@@ -6,18 +6,15 @@ using TMPro;
 public class PlayerControl : MonoBehaviour
 {
     public GameObject GameManagerGO;
-
     public GameObject PlayerBulletGO; //ez a játékos előgyártott lövedéke
     public GameObject bulletPosition01;
     public GameObject bulletPosition02;
     public GameObject ExpolsionGO;
-
     public TextMeshProUGUI LivesUIText;
-
     const int MaxLives = 3;
     int lives;
-
     public float speed;
+    bool isInvincible = false;
 
     public void Init(){
         lives = MaxLives;
@@ -75,14 +72,17 @@ public class PlayerControl : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        if((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")){
+        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")) && !isInvincible){
 
             PlayerExplosion();
-            lives--;
+            lives = lives > 0 ? lives - 1 : 0;
             LivesUIText.text = lives.ToString();
             if(lives ==0){
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
                 gameObject.SetActive(false);
+            }else{
+                InvincibleModeOn();
+                Invoke("InvincibleModeOff", 2f);
             }
 
             
@@ -95,5 +95,20 @@ public class PlayerControl : MonoBehaviour
         explosion.transform.position = transform.position;
     }
 
-    
+    void InvincibleModeOn(){
+        isInvincible = true;
+        gameObject.tag = "Untagged";
+        InvokeRepeating("Flash", 0f, 0.25f);
+    }
+
+    void InvincibleModeOff(){
+        isInvincible = false;
+        CancelInvoke("Flash");
+        GetComponent<Renderer>().enabled = true;
+        gameObject.tag = "PlayerShipTag";
+    }
+
+    void Flash(){
+        GetComponent<Renderer>().enabled = !(GetComponent<Renderer>().enabled);
+    }
 }
