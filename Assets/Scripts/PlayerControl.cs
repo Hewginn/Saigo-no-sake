@@ -14,9 +14,8 @@ public class PlayerControl : MonoBehaviour
 
     public TextMeshProUGUI LivesUIText;
 
-    const int MaxLives =3;
+    const int MaxLives = 3;
     int lives;
-    int shoot = 0;
 
     public float speed;
 
@@ -38,25 +37,13 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if(Input.GetKeyDown("space")){
-            GetComponent<AudioSource>().Play();
-        }
-
         // a szóköz billentyű lenyomására lő az űrhajó
         if(Input.GetKeyDown("space")){
-            //az első lövedék előkészítése
-            if(shoot==0){
+            GetComponent<AudioSource>().Play();
             GameObject bullet01= (GameObject)Instantiate(PlayerBulletGO);
-            bullet01.transform.position = bulletPosition01.transform.position;//a lövedék kezdeti pozíciója
-            shoot= 1;
-            }
-            else{
-            // a fentebbi művelet a második pozícióju lövedéknek
+            bullet01.transform.position = bulletPosition01.transform.position;
             GameObject bullet02= (GameObject)Instantiate(PlayerBulletGO);
             bullet02.transform.position = bulletPosition02.transform.position;
-            shoot=0;
-            }
         }
 
         float x = Input.GetAxisRaw("Horizontal");// az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
