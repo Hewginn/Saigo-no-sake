@@ -11,6 +11,9 @@ public class enemy2 : MonoBehaviour
     public GameObject ExpolsionGO;
 
     float speed;
+
+    bool isDestroyedByPlayer = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,8 +62,7 @@ public class enemy2 : MonoBehaviour
 
             PlayerExplosion();
 
-            scoreUITextGO.GetComponent<GameScore>().Score += 100;
-            killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+            isDestroyedByPlayer = true;
 
             Destroy(gameObject);
         }
@@ -70,5 +72,13 @@ public class enemy2 : MonoBehaviour
         GameObject explosion = (GameObject)Instantiate(ExpolsionGO);
 
         explosion.transform.position = transform.position;
+    }
+        private void OnDestroy() {
+
+        //Elpusztított repülők számolása
+        if(isDestroyedByPlayer){
+            scoreUITextGO.GetComponent<GameScore>().Score += 100;
+            killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+        }
     }
 }

@@ -6,6 +6,7 @@ public class EnemyControl : MonoBehaviour
 {
     GameObject scoreUITextGO;
     GameObject killsUITextGO;
+    bool isDestroyedByPlayer = false;
 
     public GameObject ExpolsionGO;
 
@@ -46,8 +47,7 @@ public class EnemyControl : MonoBehaviour
 
             PlayerExplosion();
 
-            scoreUITextGO.GetComponent<GameScore>().Score += 100;
-            killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+            isDestroyedByPlayer = true;
 
             Destroy(gameObject);
         }
@@ -57,5 +57,14 @@ public class EnemyControl : MonoBehaviour
         GameObject explosion = (GameObject)Instantiate(ExpolsionGO);
 
         explosion.transform.position = transform.position;
+    }
+
+    private void OnDestroy() {
+
+        //Elpusztított repülők számolása
+        if(isDestroyedByPlayer){
+            scoreUITextGO.GetComponent<GameScore>().Score += 100;
+            killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+        }
     }
 }

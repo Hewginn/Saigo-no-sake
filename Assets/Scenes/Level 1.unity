@@ -1092,6 +1092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyGO: {fileID: 2344398853210469666, guid: f7cbe6ec6a21f6942a4fd93d48f35a2c, type: 3}
   EnemyGO2: {fileID: 8055049402244810835, guid: 19352128bc4c3604583ee1f55ce7c3a2, type: 3}
+  EnemyGO3: {fileID: 2344398853210469666, guid: 068b132461cd32648908ded49bc9bbf1, type: 3}
 --- !u!4 &532809369
 Transform:
   m_ObjectHideFlags: 0

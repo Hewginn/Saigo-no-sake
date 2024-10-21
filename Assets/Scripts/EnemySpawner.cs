@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public GameObject EnemyGO;
     public GameObject EnemyGO2;
+    public GameObject EnemyGO3;
     float maxSpawnRateInSeconds = 5f;
     // ez az előre elkészített ellenség
     // Start is called before the first frame update
@@ -32,6 +33,10 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject anEnemy2 = (GameObject)Instantiate(EnemyGO2);
         anEnemy2.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
+
+        GameObject anEnemy3 = (GameObject)Instantiate(EnemyGO3);
+        anEnemy3.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
+
 
         ScheduleNextEnemySpawn();
     }

@@ -6,19 +6,15 @@ using TMPro;
 public class PlayerControl : MonoBehaviour
 {
     public GameObject GameManagerGO;
-
     public GameObject PlayerBulletGO; //ez a játékos előgyártott lövedéke
     public GameObject bulletPosition01;
     public GameObject bulletPosition02;
     public GameObject ExpolsionGO;
-
     public TextMeshProUGUI LivesUIText;
-
-    const int MaxLives =3;
+    const int MaxLives = 3;
     int lives;
-    int shoot = 0;
-
     public float speed;
+    bool isInvincible = false;
 
     public void Init(){
         lives = MaxLives;
@@ -38,25 +34,13 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if(Input.GetKeyDown("space")){
-            GetComponent<AudioSource>().Play();
-        }
-
         // a szóköz billentyű lenyomására lő az űrhajó
         if(Input.GetKeyDown("space")){
-            //az első lövedék előkészítése
-            if(shoot==0){
+            GetComponent<AudioSource>().Play();
             GameObject bullet01= (GameObject)Instantiate(PlayerBulletGO);
-            bullet01.transform.position = bulletPosition01.transform.position;//a lövedék kezdeti pozíciója
-            shoot= 1;
-            }
-            else{
-            // a fentebbi művelet a második pozícióju lövedéknek
+            bullet01.transform.position = bulletPosition01.transform.position;
             GameObject bullet02= (GameObject)Instantiate(PlayerBulletGO);
             bullet02.transform.position = bulletPosition02.transform.position;
-            shoot=0;
-            }
         }
 
         float x = Input.GetAxisRaw("Horizontal");// az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
@@ -88,14 +72,17 @@ public class PlayerControl : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        if((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")){
+        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")) && !isInvincible){
 
             PlayerExplosion();
-            lives--;
+            lives = lives > 0 ? lives - 1 : 0;
             LivesUIText.text = lives.ToString();
             if(lives ==0){
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
                 gameObject.SetActive(false);
+            }else{
+                InvincibleModeOn();
+                Invoke("InvincibleModeOff", 2f);
             }
 
             
@@ -108,5 +95,20 @@ public class PlayerControl : MonoBehaviour
         explosion.transform.position = transform.position;
     }
 
-    
+    void InvincibleModeOn(){
+        isInvincible = true;
+        gameObject.tag = "Untagged";
+        InvokeRepeating("Flash", 0f, 0.25f);
+    }
+
+    void InvincibleModeOff(){
+        isInvincible = false;
+        CancelInvoke("Flash");
+        GetComponent<Renderer>().enabled = true;
+        gameObject.tag = "PlayerShipTag";
+    }
+
+    void Flash(){
+        GetComponent<Renderer>().enabled = !(GetComponent<Renderer>().enabled);
+    }
 }
