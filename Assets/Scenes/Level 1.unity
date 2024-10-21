@@ -570,6 +570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BluePlanetGo
       objectReference: {fileID: 0}
+    - target: {fileID: 2204023657623785885, guid: 71885d643e216964cb620261c6a7a757, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7916398482768547948, guid: 71885d643e216964cb620261c6a7a757, type: 3}
       propertyPath: speed
       value: -0.4
@@ -1375,7 +1379,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &672786531
 GameObject:
@@ -1421,7 +1425,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &719553402
 GameObject:
@@ -1587,6 +1591,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 722187716}
   m_CullTransparentMesh: 1
+--- !u!1 &727536039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 727536040}
+  m_Layer: 0
+  m_Name: BulletPositionBonus03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &727536040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727536039}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.212, y: -0.15, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1449621466}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &741478682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,7 +1688,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &914611858 stripped
 GameObject:
@@ -1768,7 +1803,7 @@ RectTransform:
   - {fileID: 391396867}
   - {fileID: 722187717}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1786,6 +1821,10 @@ PrefabInstance:
     - target: {fileID: 2204023657623785885, guid: 71885d643e216964cb620261c6a7a757, type: 3}
       propertyPath: m_Name
       value: PinkPlanetGo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204023657623785885, guid: 71885d643e216964cb620261c6a7a757, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7916398482768547948, guid: 71885d643e216964cb620261c6a7a757, type: 3}
       propertyPath: speed
@@ -1922,7 +1961,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1031939623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1031939624}
+  m_Layer: 0
+  m_Name: BulletPositionBonus04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1031939624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031939623}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.224, y: -0.148, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1449621466}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1060943772
 GameObject:
@@ -2001,6 +2071,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060943772}
   m_CullTransparentMesh: 1
+--- !u!1 &1167671380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1167671382}
+  - component: {fileID: 1167671381}
+  m_Layer: 0
+  m_Name: PowerUpSpawnerGO
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1167671381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167671380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb1564585ce9e1419d42295c7903c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UpgradePUGO: {fileID: 1117657793019618908, guid: 0bea8fb1745072548bb229db63aa37b0, type: 3}
+  HealPUGO: {fileID: 6906509015077084686, guid: b9029e4af8e91384cbe5dc446750f851, type: 3}
+  SpecialPUGO: {fileID: 8994704215961294813, guid: 26d8549e52912d84cbdb65a809ebf45d, type: 3}
+--- !u!4 &1167671382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167671380}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1188499566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2081,7 +2198,7 @@ Transform:
   - {fileID: 914611861}
   - {fileID: 1327046727}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1298713731
 GameObject:
@@ -2560,8 +2677,12 @@ Transform:
   m_Children:
   - {fileID: 719553403}
   - {fileID: 1188499567}
+  - {fileID: 1770451038}
+  - {fileID: 1467649281}
+  - {fileID: 727536040}
+  - {fileID: 1031939624}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1449621467
 MonoBehaviour:
@@ -2579,6 +2700,10 @@ MonoBehaviour:
   PlayerBulletGO: {fileID: 8082158710186996147, guid: fe3bbd80fcabe4b48a179cf09d730910, type: 3}
   bulletPosition01: {fileID: 719553402}
   bulletPosition02: {fileID: 1188499566}
+  bulletPosition03: {fileID: 1770451037}
+  bulletPosition04: {fileID: 1467649280}
+  bulletPosition05: {fileID: 727536039}
+  bulletPosition06: {fileID: 1031939623}
   ExpolsionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
   LivesUIText: {fileID: 324326806}
   speed: 4
@@ -2750,6 +2875,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1467649280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1467649281}
+  m_Layer: 0
+  m_Name: BulletPositionBonus02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1467649281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467649280}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.182, y: 0.014, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1449621466}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1514180661
 GameObject:
   m_ObjectHideFlags: 0
@@ -2965,7 +3121,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1770451037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1770451038}
+  m_Layer: 0
+  m_Name: BulletPositionBonus01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1770451038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770451037}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.168, y: 0.011, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1449621466}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1818521754
 GameObject:
@@ -3154,6 +3341,7 @@ MonoBehaviour:
   TimerCounterGO: {fileID: 1818521754}
   GameTitleGO: {fileID: 1007734054}
   PauseButton: {fileID: 722187716}
+  powerUpSpawner: {fileID: 1167671380}
 --- !u!4 &1822782874
 Transform:
   m_ObjectHideFlags: 0
@@ -3167,7 +3355,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1978040938
 GameObject:
@@ -3467,6 +3655,10 @@ PrefabInstance:
     - target: {fileID: 2204023657623785885, guid: 71885d643e216964cb620261c6a7a757, type: 3}
       propertyPath: m_Name
       value: GreenPlanetGo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204023657623785885, guid: 71885d643e216964cb620261c6a7a757, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7916398482768547948, guid: 71885d643e216964cb620261c6a7a757, type: 3}
       propertyPath: speed

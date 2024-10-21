@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject TimerCounterGO;
     public GameObject GameTitleGO;
     public GameObject PauseButton;
+    public GameObject powerUpSpawner;
 
     public enum GameManagerState{
         Opening,
@@ -33,43 +34,47 @@ public class GameManager : MonoBehaviour
         {
             case GameManagerState.Opening:
 
-            playButton.SetActive(true);
+                playButton.SetActive(true);
 
-            menuButton.SetActive(true);
+                menuButton.SetActive(true);
 
-            GameTitleGO.SetActive(true);
+                GameTitleGO.SetActive(true);
 
-            GameOverGO.SetActive(false);
+                GameOverGO.SetActive(false);
 
-            PauseButton.SetActive(false);
+                PauseButton.SetActive(false);
 
-            break;
+                break;
 
             case GameManagerState.Gameplay:
 
-            scoreUITextGO.GetComponent<GameScore>().Score = 0;
-            destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
+                scoreUITextGO.GetComponent<GameScore>().Score = 0;
+                destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
 
-            playButton.SetActive(false);
+                playButton.SetActive(false);
 
-            menuButton.SetActive(false);
+                menuButton.SetActive(false);
 
-            GameTitleGO.SetActive(false);
-            PauseButton.SetActive(true);
+                GameTitleGO.SetActive(false);
+                PauseButton.SetActive(true);
 
-            playerShip.GetComponent<PlayerControl>().Init();
+                playerShip.GetComponent<PlayerControl>().Init();
 
-            enemySpawner.GetComponent<EnemySpawner>().ScheduleEnemySpawner();
+                enemySpawner.GetComponent<EnemySpawner>().ScheduleEnemySpawner();
 
-            TimerCounterGO.GetComponent<TimeCounter>().StartTimeCounter();
-  
-            break;
+                powerUpSpawner.GetComponent<PowerUpSpawner>().SchedulePowerUpSpawner();
+
+                TimerCounterGO.GetComponent<TimeCounter>().StartTimeCounter();
+    
+                break;
 
             case GameManagerState.GameOver:
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
                 enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+
+                powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
 
                 GameOverGO.SetActive(true);
 
@@ -78,7 +83,7 @@ public class GameManager : MonoBehaviour
                 Invoke("ChangeToOpeningState",8f);
                 
 
-            break;
+                break;
         }
     }
 

@@ -9,6 +9,11 @@ public class PlayerControl : MonoBehaviour
     public GameObject PlayerBulletGO; //ez a játékos előgyártott lövedéke
     public GameObject bulletPosition01;
     public GameObject bulletPosition02;
+    int upgradeLevel;
+    public GameObject bulletPosition03;
+    public GameObject bulletPosition04;
+    public GameObject bulletPosition05;
+    public GameObject bulletPosition06;
     public GameObject ExpolsionGO;
     public TextMeshProUGUI LivesUIText;
     const int MaxLives = 3;
@@ -24,6 +29,8 @@ public class PlayerControl : MonoBehaviour
         transform.position = new Vector2(0,0);
 
         gameObject.SetActive(true);
+
+        upgradeLevel = 0;
     }
     // Start is called before the first frame update
     void Start()
@@ -41,6 +48,22 @@ public class PlayerControl : MonoBehaviour
             bullet01.transform.position = bulletPosition01.transform.position;
             GameObject bullet02= (GameObject)Instantiate(PlayerBulletGO);
             bullet02.transform.position = bulletPosition02.transform.position;
+
+            //1. szintű fejlesztés búnusz lövedékei
+            if(upgradeLevel > 0){
+                GameObject bullet03 = (GameObject)Instantiate(PlayerBulletGO);
+                bullet03.transform.position = bulletPosition03.transform.position;
+                GameObject bullet04= (GameObject)Instantiate(PlayerBulletGO);
+                bullet04.transform.position = bulletPosition04.transform.position;
+            }
+
+            //2. szintű fejlesztés bónusz lövedékei
+            if(upgradeLevel > 1){
+                GameObject bullet05 = (GameObject)Instantiate(PlayerBulletGO);
+                bullet05.transform.position = bulletPosition05.transform.position;
+                GameObject bullet06 = (GameObject)Instantiate(PlayerBulletGO);
+                bullet06.transform.position = bulletPosition06.transform.position;
+            }
         }
 
         float x = Input.GetAxisRaw("Horizontal");// az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
@@ -72,11 +95,13 @@ public class PlayerControl : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
+
         if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")) && !isInvincible){
 
             PlayerExplosion();
             lives = lives > 0 ? lives - 1 : 0;
             LivesUIText.text = lives.ToString();
+            upgradeLevel = 0;
             if(lives ==0){
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
                 gameObject.SetActive(false);
@@ -86,6 +111,17 @@ public class PlayerControl : MonoBehaviour
             }
 
             
+        }else switch(col.tag){
+            case "UpgradePU":
+                upgradeLevel++;
+                break;
+            case "HealPU":
+                lives = lives == MaxLives ? lives : lives + 1;
+                LivesUIText.text = lives.ToString();
+                break;
+            case "SpecialPU":
+                
+                break;          
         }
     }
 

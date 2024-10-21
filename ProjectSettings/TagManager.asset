@@ -11,6 +11,9 @@ TagManager:
   - ScoreTextTag
   - DestroyedEnemies
   - Boundary
+  - UpgradePU
+  - SpecialPU
+  - HealPU
   layers:
   - Default
   - TransparentFX
