@@ -42,7 +42,7 @@ public class EnemyControl : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag"))
+        if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag") || (col.tag == "PlayerSpecialTag"))
         {
 
             PlayerExplosion();

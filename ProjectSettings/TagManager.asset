@@ -14,6 +14,8 @@ TagManager:
   - UpgradePU
   - SpecialPU
   - HealPU
+  - PlayerSpecialTag
+  - PlayerUndamagable
   layers:
   - Default
   - TransparentFX

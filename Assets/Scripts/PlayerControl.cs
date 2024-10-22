@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Threading;
+using System.Timers;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -14,15 +16,21 @@ public class PlayerControl : MonoBehaviour
     public GameObject bulletPosition04;
     public GameObject bulletPosition05;
     public GameObject bulletPosition06;
+    public GameObject specialPosition;
     public GameObject ExpolsionGO;
+    public GameObject SpecialGO;
     public TextMeshProUGUI LivesUIText;
-    const int MaxLives = 3;
+    public TextMeshProUGUI SpecialsUIText;
+    public GameObject scoreUITextGO;
+    const int maxLives = 3;
     int lives;
     public float speed;
     bool isInvincible = false;
+    int maxSpecial = 5;
+    int specials;
 
     public void Init(){
-        lives = MaxLives;
+        lives = maxLives;
 
         LivesUIText.text=lives.ToString();
 
@@ -31,6 +39,10 @@ public class PlayerControl : MonoBehaviour
         gameObject.SetActive(true);
 
         upgradeLevel = 0;
+
+        specials = 0;
+
+        SpecialsUIText.text = "X " + specials.ToString();
     }
     // Start is called before the first frame update
     void Start()
@@ -64,6 +76,14 @@ public class PlayerControl : MonoBehaviour
                 GameObject bullet06 = (GameObject)Instantiate(PlayerBulletGO);
                 bullet06.transform.position = bulletPosition06.transform.position;
             }
+
+        }
+
+        if(Input.GetKeyDown("e") && specials > 0){
+            GameObject bomb = (GameObject) Instantiate(SpecialGO);
+            bomb.transform.position = specialPosition.transform.position;
+            specials--;
+            SpecialsUIText.text = "X " + specials.ToString();
         }
 
         float x = Input.GetAxisRaw("Horizontal");// az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
@@ -113,14 +133,27 @@ public class PlayerControl : MonoBehaviour
             
         }else switch(col.tag){
             case "UpgradePU":
-                upgradeLevel++;
+                if(upgradeLevel < 2){
+                    upgradeLevel++;
+                }else{
+                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                }
                 break;
             case "HealPU":
-                lives = lives == MaxLives ? lives : lives + 1;
-                LivesUIText.text = lives.ToString();
+                if(lives < maxLives){
+                    lives++;
+                    LivesUIText.text = lives.ToString();
+                }else{
+                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                }
                 break;
             case "SpecialPU":
-                
+                if(specials < maxSpecial){
+                    specials++;
+                    SpecialsUIText.text = "X " + specials.ToString();
+                }else{
+                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                }
                 break;          
         }
     }
@@ -133,7 +166,7 @@ public class PlayerControl : MonoBehaviour
 
     void InvincibleModeOn(){
         isInvincible = true;
-        gameObject.tag = "Untagged";
+        gameObject.tag = "PlayerUndamagable";
         InvokeRepeating("Flash", 0f, 0.25f);
     }
 
