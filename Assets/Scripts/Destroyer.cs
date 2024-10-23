@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Destroyer : MonoBehaviour
 {
+    //Egyszeri animációk pl: robbanás törlése
     void DestroyGameObject(){
         Destroy(gameObject);
     }

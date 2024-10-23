@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Játékos lövedék
 public class PlayerBullet : MonoBehaviour
 {
+    //Lövedék sebessége
     float speed;
-    // Start is called before the first frame update
+
+    //Első frame update előtt van meghívva
     void Start()
     {
+        //Sebesség inicializálása
         speed = 8f;
     }
 
-    // Update is called once per frame
+    //Minden frame során megvan hívva
     void Update()
     {
         // a lövedék jelenlegi helyzete
@@ -31,7 +35,11 @@ public class PlayerBullet : MonoBehaviour
 
 
     }
+
+    //Ütközési esemény kezelő
     void OnTriggerEnter2D(Collider2D col){
+
+        //Lövedék elpusztítása, ha ellenfélnek ütközik
         if(col.tag == "EnemyShipTag"){
             Destroy(gameObject);
         }

@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 4957059873591411790}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4219866295741033314
 SpriteRenderer:
@@ -212,4 +212,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyBulletGO: {fileID: 7784119080253155303, guid: ada48569118554d4b977ddd2c6836d0b, type: 3}
-  Enemy2: {fileID: 8055049402244810835}
+  EnemyZigZag: {fileID: 8055049402244810835}

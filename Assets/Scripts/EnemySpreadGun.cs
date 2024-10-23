@@ -2,32 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Szoró ellenséges lövés
 public class EnemySpreadGun : MonoBehaviour
 {
+    //Ellenséges lövedék
     public GameObject EnemyBulletGO;
 
-    private float spread = 20; //A lövés szórása fokban mérve
+    //A lövés szórása fokban mérve
+    private float spread;
 
-    private int numberOfBullets = 3; //Egyszerre kilőtt lövedékek száma
+    //Egyszerre kilőtt lövedékek száma
+    private int numberOfBullets; 
     
-
-
-    // Start is called before the first frame update
+    //Első frame update előtt van meghívva
     void Start()
     {
+        //Inicializálás
+        spread = 20;
+        numberOfBullets = 3;
         Invoke("FireEnemyBullet", 1f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Szóró lövés
     void FireEnemyBullet(){
-        GameObject playerShip = GameObject.Find ("PlayerGO");
-        if(playerShip != null){
 
+        //Játékos objektumának megkeresés
+        GameObject playerPlane = GameObject.Find ("PlayerGO");
+
+        //Lövés, ha a játékos él még
+        if(playerPlane != null){
+
+            //Létrehozott lövedékek tömbje
             GameObject[] bullets = new GameObject[numberOfBullets];
 
             //Adott mennyiségű lövedék kilövése
@@ -38,7 +43,7 @@ public class EnemySpreadGun : MonoBehaviour
                 bullets[i].transform.position = transform.position;
             
                 //Lövés vektorának véletlenszerű elforgatása
-                UnityEngine.Vector2 direction = playerShip.transform.position - bullets[i].transform.position;
+                UnityEngine.Vector2 direction = playerPlane.transform.position - bullets[i].transform.position;
                 float delta = UnityEngine.Random.Range(spread/2 * Mathf.Deg2Rad, -spread/2 * Mathf.Deg2Rad);
                 direction = new UnityEngine.Vector2
                     (direction.x * Mathf.Cos(delta) - direction.y * Mathf.Sin(delta),
