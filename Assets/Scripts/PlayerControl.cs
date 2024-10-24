@@ -61,6 +61,9 @@ public class PlayerControl : MonoBehaviour
     //Aktuális különleges lövedék
     int specials;
 
+    //Legutóbbi lövés időpontja
+    float lastShoot;
+
     //Repülő inicializálása
     public void Init(){
 
@@ -80,13 +83,14 @@ public class PlayerControl : MonoBehaviour
         //Különleges lövedékek száma
         specials = 0;
         SpecialsUIText.text = "X " + specials.ToString();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        // a szóköz billentyű lenyomására lő az űrhajó
-        if(Input.GetKeyDown("space")){
+        // a szóköz billentyű lenyomására lő az űrhajó 0.25 másodpercenként
+        if(Input.GetKey("space") && Time.time - lastShoot > 0.25f){
             GetComponent<AudioSource>().Play();
             GameObject bullet01= (GameObject)Instantiate(PlayerBulletGO);
             bullet01.transform.position = bulletPosition01.transform.position;
@@ -109,6 +113,8 @@ public class PlayerControl : MonoBehaviour
                 bullet06.transform.position = bulletPosition06.transform.position;
             }
 
+            //Lövés időpontjának megadása
+            lastShoot = Time.time;
         }
 
         //Különleges lövedék lövése 'E' billentyűvel

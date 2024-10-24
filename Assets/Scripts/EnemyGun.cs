@@ -9,7 +9,7 @@ public class EnemyGun : MonoBehaviour
     public GameObject EnemyBulletGO;
 
     //Cikázó ellnfél
-    public GameObject EnemyZigZag;
+    public bool isEnemyZigZag;
 
     //Első frame update előtt van meghívva
     void Start()
@@ -19,7 +19,7 @@ public class EnemyGun : MonoBehaviour
         Invoke("FireEnemyBullet", 1f);
 
         //Ha az ellenfél cikázik 3 másodperc múlva is löjjön egyet
-        if (EnemyZigZag)
+        if (isEnemyZigZag)
         {
             Invoke("FireEnemyBullet", 3f);
         }
