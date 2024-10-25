@@ -4,47 +4,64 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+//Elpusztított ellenségek számolása
 public class DestroyedEnemy : MonoBehaviour
 {
-       public GameObject GameManagerGO;
-       public GameObject Player;
-       
+    //Játék kezelő
+    public GameObject GameManagerGO;
 
-    TextMeshProUGUI scoreTextUI;
+    //Játékos
+    public GameObject Player;
 
-    int score;
+    //Kiiktatást számláló UI szöveg
+    TextMeshProUGUI killsTextUI;
 
+    int kills; //Kiiktatásokat számláló
     public int Kills{
 
         get{
-            return this.score;
+            return this.kills;
         }
         set{
-            this.score = value;
+            this.kills = value;
             UpdateScoreTextUI();
         }
 
     }
-    // Start is called before the first frame update
+    
+    //Első frame update előtt van meghívva
     void Start()
     {
-        scoreTextUI = GetComponent<TextMeshProUGUI> ();
+        //Kiiktatás számlálót UI szöveg inicializálása
+        killsTextUI = GetComponent<TextMeshProUGUI> ();
     }
+
+    //Kiiktatásokat számláló UI frissítése
     void UpdateScoreTextUI(){
-        string scoreStr = string.Format("{0:0}",score);
-        scoreTextUI.text = scoreStr;
-        if(scoreStr=="100" ){
+
+        //UI frissítés
+        string killsStr = string.Format("{0:0}",kills);
+        killsTextUI.text = killsStr;
+
+        //Küldetés teljesítése elért kiiktatással
+        if(killsStr=="100"){
+
+                //Játék megszakítása
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
                 Player.SetActive(false);
+
+                //Új szint feloldása
                 UnlockNewLevel();
+                
             }
     }
 
+    //Új szint feloldása és feloldott szintek elmentése
     void UnlockNewLevel(){
-        if(SceneManager.GetActiveScene().buildIndex>= PlayerPrefs.GetInt("ReachedIndex"))
+        if(SceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ReachedIndex"))
         {
-            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex +1);
-            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnclokedLevel", 1)+1);
+            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex + 1);
+            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnclokedLevel", 1) + 1);
             PlayerPrefs.Save();
         }
     }

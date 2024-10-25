@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Játékos lövedék
-public class PlayerBullet : MonoBehaviour
+//Különleges lövedék
+public class PlayerSpecial : MonoBehaviour
 {
+    //Kezdő pozíció
+    Vector2 startPosition;
+
+    //Különleges lövedék robbanása
+    public GameObject specialExplosion;
+
     //Lövedék sebessége
     float speed;
+
 
     //Első frame update előtt van meghívva
     void Start()
     {
-        //Sebesség inicializálása
-        speed = 8f;
+        speed = 6f;
+
+        startPosition = transform.position;
     }
 
     //Minden frame során megvan hívva
@@ -27,8 +35,8 @@ public class PlayerBullet : MonoBehaviour
 
         //ez a játék jobb felső sarka
         Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2 (1,1));
-        //ha a töltény elhagyja a játékteret, akkor semmisüljön meg
-        if(transform.position.y >max.y)
+        //ha a töltény elhagyja a játékteret vagy ha a játékos megnyomja az 'F' gombot, akkor semmisüljön meg
+        if(transform.position.y > max.y || startPosition.y + 5f < transform.position.y || Input.GetKeyDown("f"))
         {
             Destroy(gameObject);
         }
@@ -36,12 +44,19 @@ public class PlayerBullet : MonoBehaviour
 
     }
 
-    //Ütközési esemény kezelő
+    //Ütközés kezelő
     void OnTriggerEnter2D(Collider2D col){
 
-        //Lövedék elpusztítása, ha ellenfélnek ütközik
+        //Ha ellenfélnek ütközik semmisüljön meg
         if(col.tag == "EnemyShipTag"){
             Destroy(gameObject);
         }
+
+    }
+
+    //Törlödés esetén robbanjon fel
+    private void OnDestroy() {
+        GameObject explosion = (GameObject) Instantiate(specialExplosion);
+        explosion.transform.position = transform.position;
     }
 }

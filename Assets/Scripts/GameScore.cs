@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+//Pontszámláló
 public class GameScore : MonoBehaviour
 {
-       
+    //Pontszámláló UI szöveg
     TextMeshProUGUI scoreTextUI;
 
+    //Pontok
     int score;
 
+    //Pontok setter, getter
     public int Score{
 
         get{
@@ -21,15 +24,17 @@ public class GameScore : MonoBehaviour
         }
 
     }
-    // Start is called before the first frame update
+
+    //Első frame update előtt van meghívva
     void Start()
     {
         scoreTextUI = GetComponent<TextMeshProUGUI> ();
     }
+
+    //Pontszámláló UI átírása
     void UpdateScoreTextUI(){
         string scoreStr = string.Format("{0:000000}",score);
         scoreTextUI.text = scoreStr;
-        
     }
 
 }

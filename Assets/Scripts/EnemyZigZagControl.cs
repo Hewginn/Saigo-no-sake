@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using math = System.Math;
 
-public class enemy2 : MonoBehaviour
+//Cikázó ellenség
+public class EnemyZigZagControl : MonoBehaviour
 {
+    //Pontszámoló UI szöveg
     GameObject scoreUITextGO;
+
+    //Kiiktatást számoló UI szöveg
     GameObject killsUITextGO;
 
+    //Robbanás objektum
     public GameObject ExpolsionGO;
 
+    //Ellenség sebessége
     float speed;
 
+    //Logikai változó: ellenség játékos által lett-e elpusztítva
     bool isDestroyedByPlayer = false;
 
-    // Start is called before the first frame update
+    //Első frame update előtt van meghívva
     void Start()
     {
         if (Random.Range(0, 2) == 0)
@@ -31,21 +38,23 @@ public class enemy2 : MonoBehaviour
         killsUITextGO = GameObject.FindGameObjectWithTag("DestroyedEnemies");
     }
 
-    // Update is called once per frame
+    //Minden frame során megvan hívva (Unity függvény)
     void Update()
     {
-        //az ellenség helyének meghatározása
+        //Az ellenség helyének meghatározása
         Vector2 position = transform.position;
-        //az új pocizió megállapítása
+
+        //Az új pocizió megállapítása
         position = new Vector2(position.x - speed * Time.deltaTime * 2, position.y - math.Abs(speed) * Time.deltaTime / 2);
 
-        //az ellenség új pozicióba helyezése
+        //Az ellenség új pozicióba helyezése
         transform.position = position;
 
-        //a játéktér aljának meghatározása(bal alsó sarok)
+        //A játéktér aljának meghatározása(bal alsó sarok)
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-        //ha elhagyja a játékteret törlődjön a hajó
+        
+        //Ha elhagyja a játékteret törlődjön a hajó vagy pattanjon vissza
         if (transform.position.y < min.y)
         {
             Destroy(gameObject);
@@ -55,26 +64,36 @@ public class enemy2 : MonoBehaviour
             speed *= -1;
         }
     }
+
+    //Ütközés kezelő
     void OnTriggerEnter2D(Collider2D col)
     {
-        if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag"))
+        //Játékossal való ütközési esemény megadása
+        if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag") || (col.tag == "PlayerSpecialTag"))
         {
-
+            //Robbanás lejátszása
             PlayerExplosion();
 
+            //Játékos robbantotta fel
             isDestroyedByPlayer = true;
 
+            //Törlés
             Destroy(gameObject);
         }
     }
+
+    //Robbanást inicializáló kódrész
     void PlayerExplosion()
     {
+        //Példányosítás
         GameObject explosion = (GameObject)Instantiate(ExpolsionGO);
 
+        //Robbanás helyének meghatározása(objektum helye)
         explosion.transform.position = transform.position;
     }
-        private void OnDestroy() {
 
+    //Konstruktor során lefutó kódrész
+    private void OnDestroy() {
         //Elpusztított repülők számolása
         if(isDestroyedByPlayer){
             scoreUITextGO.GetComponent<GameScore>().Score += 100;

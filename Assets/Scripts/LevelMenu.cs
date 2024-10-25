@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//Szint választó menü
 public class LevelMenu : MonoBehaviour
 {
-    // a pályák száma
+    //A pályák száma
     public Button[] buttons;
 
     private void Awake(){
-        // az első pálya feloldása
+        //Az első pálya feloldása
         int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel",1);
         // a még nem feloldott pályák száma
         for (int i =0; i < buttons.Length; i++){
@@ -21,7 +22,7 @@ public class LevelMenu : MonoBehaviour
             buttons[i].interactable = true;
         }
     }
-    //a pályák betöltése
+    //A pályák betöltése
     public void OpenLevel(int levelId)
     {
         string LevelName = "Level "+ levelId;

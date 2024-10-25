@@ -2,36 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Egyszerű ellenséges lövés
 public class EnemyGun : MonoBehaviour
 {
+    //Lövedék
     public GameObject EnemyBulletGO;
-    public GameObject Enemy2;
-    // Start is called before the first frame update
+
+    //Cikázó ellnfél
+    public bool isEnemyZigZag;
+
+    //Első frame update előtt van meghívva
     void Start()
     {
 
+        //Lövés 1 másodperc elteltével
         Invoke("FireEnemyBullet", 1f);
-        if (Enemy2)
+
+        //Ha az ellenfél cikázik 3 másodperc múlva is löjjön egyet
+        if (isEnemyZigZag)
         {
             Invoke("FireEnemyBullet", 3f);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    //Lövés
     void FireEnemyBullet()
     {
-        GameObject playerShip = GameObject.Find("PlayerGO");
+        //Játékos objektum megkeresése
+        GameObject playerPlane = GameObject.Find("PlayerGO");
 
-        if (playerShip != null)
+        //Ha létezik a játékos objektum lövedék lövése az irányába
+        if (playerPlane != null)
         {
+            //Lövedék létrehozása
             GameObject bullet = (GameObject)Instantiate(EnemyBulletGO);
             bullet.transform.position = transform.position;
 
-            Vector2 direction = playerShip.transform.position - bullet.transform.position;
+            //Lövedék irányának megadása
+            Vector2 direction = playerPlane.transform.position - bullet.transform.position;
             bullet.GetComponent<EnemyBullet>().SetDirection(direction);
         }
 
