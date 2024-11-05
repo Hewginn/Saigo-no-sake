@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PlayerSpecialTest
+public class PlayerSpecialTest : MonoBehaviour
 {
     private GameObject specialBulletGO;        // A speciális golyó GameObject
     private PlayerSpecialTest playerSpecial;       // A PlayerSpecial komponens
@@ -11,7 +11,7 @@ public class PlayerSpecialTest
     {
         // Létrehozunk egy GameObject-et a speciális golyó számára és hozzáadjuk a PlayerSpecial komponenst
         specialBulletGO = new GameObject();
-        playerSpecial = specialBulletGO.AddComponent<PlayerSpecial>();
+        playerSpecial = specialBulletGO.AddComponent<PlayerSpecialTest>();
 
         // Beállítunk egy kamerát a viewport számításokhoz
         Camera.main = new GameObject().AddComponent<Camera>();

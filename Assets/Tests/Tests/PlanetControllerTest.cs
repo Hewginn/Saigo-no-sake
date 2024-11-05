@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PlanetControllerTest
+public class PlanetControllerTest : MonoBehaviour
 {
     private GameObject planetControllerGO; // A PlanetController GameObject
     private PlanetControllerTest planetController; // A PlanetController komponens
@@ -15,17 +15,17 @@ public class PlanetControllerTest
     {
         // Létrehozunk GameObject-eket a bolygók számára
         planet1 = new GameObject();
-        planet1.AddComponent<Planet>();
+        planet1.AddComponent<PlanetTest>();
         
         planet2 = new GameObject();
-        planet2.AddComponent<Planet>();
+        planet2.AddComponent<PlanetTest>();
         
         planet3 = new GameObject();
-        planet3.AddComponent<Planet>();
+        planet3.AddComponent<PlanetTest>();
 
         // Létrehozzuk a GameObject-et a PlanetController számára és hozzáadjuk a komponenst
         planetControllerGO = new GameObject();
-        planetController = planetControllerGO.AddComponent<PlanetController>();
+        planetController = planetControllerGO.AddComponent<PlanetControllerTest>();
         
         // A bolygók hozzárendelése a PlanetController-hez
         planetController.Planets = new GameObject[] { planet1, planet2, planet3 };

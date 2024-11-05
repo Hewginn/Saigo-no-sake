@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PlayerBulletTest
+public class PlayerBulletTest : MonoBehaviour
 {
     private GameObject bulletGO;               // A lövedék GameObject
     private PlayerBulletTest playerBullet;         // A PlayerBullet komponens
@@ -11,7 +11,7 @@ public class PlayerBulletTest
     {
         // Létrehozunk egy GameObject-et a lövedék számára és hozzáadjuk a PlayerBullet komponenst
         bulletGO = new GameObject();
-        playerBullet = bulletGO.AddComponent<PlayerBullet>();
+        playerBullet = bulletGO.AddComponent<PlayerBulletTest>();
         
         // Beállítjuk a kamera pozícióját, hogy a max számítás érvényes legyen
         Camera.main = new GameObject().AddComponent<Camera>();

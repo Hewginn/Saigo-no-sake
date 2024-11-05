@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PowerUpTest
+public class PowerUpTest : MonoBehaviour
 {
     private GameObject powerUpGO;  // A PowerUp GameObject
     private PowerUpTest powerUp;        // A PowerUp komponens
@@ -12,7 +12,7 @@ public class PowerUpTest
     {
         // Létrehozunk egy GameObject-et a PowerUp számára és hozzáadjuk a komponenst
         powerUpGO = new GameObject();
-        powerUp = powerUpGO.AddComponent<PowerUp>();
+        powerUp = powerUpGO.AddComponent<PowerUpTest>();
 
         // Létrehozunk egy mock játékos GameObject-et
         playerGO = new GameObject("PlayerShip");

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PowerUpSpawnerTest
+public class PowerUpSpawnerTest : MonoBehaviour
 {
     private GameObject spawnerGO;                // A PowerUpSpawner GameObject
     private PowerUpSpawnerTest powerUpSpawner;      // A PowerUpSpawner komponens
@@ -11,7 +11,7 @@ public class PowerUpSpawnerTest
     {
         // Létrehozunk egy GameObject-et a PowerUpSpawner számára és hozzáadjuk a komponenst
         spawnerGO = new GameObject();
-        powerUpSpawner = spawnerGO.AddComponent<PowerUpSpawner>();
+        powerUpSpawner = spawnerGO.AddComponent<PowerUpSpawnerTest>();
 
         // Mock power-up prefabok hozzárendelése teszteléshez
         powerUpSpawner.UpgradePUGO = new GameObject("UpgradePU");

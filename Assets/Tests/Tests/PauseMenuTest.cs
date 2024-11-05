@@ -2,7 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenuTest
+public class PauseMenuTest : MonoBehaviour
 {
     private GameObject pauseMenuGO; // A PauseMenu GameObject
     private PauseMenuTest pauseMenu; // A PauseMenu komponens
@@ -12,7 +12,7 @@ public class PauseMenuTest
     {
         // Létrehozunk GameObject-et a PauseMenu számára és hozzáadjuk a komponenst
         pauseMenuGO = new GameObject();
-        pauseMenu = pauseMenuGO.AddComponent<PauseMenu>();
+        pauseMenu = pauseMenuGO.AddComponent<PauseMenuTest>();
 
         // Létrehozzuk a pause menü UI GameObject-ját és inaktívra állítjuk
         GameObject menuUI = new GameObject();

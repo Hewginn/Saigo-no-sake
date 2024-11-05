@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class LevelMenuTest
+public class LevelMenuTest : MonoBehaviour
 {
     private GameObject levelMenuGO; // A szintmenü GameObject
     private LevelMenuTest levelMenu; // A LevelMenu komponens

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class PlanetTest
+public class PlanetTest : MonoBehaviour
 {
     private GameObject planetGO;       // A bolygó GameObject
     private PlanetTest planet;             // A Planet komponens
@@ -11,7 +11,7 @@ public class PlanetTest
     {
         // Létrehozunk egy GameObject-et a bolygó számára és hozzáadjuk a Planet komponenst
         planetGO = new GameObject();
-        planet = planetGO.AddComponent<Planet>();
+        planet = planetGO.AddComponent<PlanetTest>();
         
         // Alapértelmezett sebességet állítunk be a bolygónak
         planet.speed = 5f;

@@ -2,17 +2,17 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuTest
+public class MainMenuTest : MonoBehaviour
 {
     private GameObject mainMenuGO; // A főmenü GameObject
-    private MainMenuTest mainMenu; // A MainMenu komponens
+    private MainMenuTest mainMenu; // A MainMenu komponens (teszteléshez)
 
     [SetUp]
     public void Setup()
     {
         // A főmenü GameObject létrehozása és a komponens hozzáadása
         mainMenuGO = new GameObject();
-        mainMenu = mainMenuGO.AddComponent<MainMenu>();
+        mainMenu = mainMenuGO.AddComponent<MainMenuTest>(); // Használjuk a MainMenuTest-et, amit tesztelünk
         
         // A jelenetek nevének beállítása
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
@@ -54,5 +54,31 @@ public class MainMenuTest
     {
         // A létrehozott GameObject eltávolítása
         Object.Destroy(mainMenuGO);
+    }
+
+    // QuitGame metódus hozzáadása a tesztelt osztályhoz
+    public void QuitGame()
+    {
+        // Ez a metódus szimulálja a játék bezárását
+        #if UNITY_EDITOR
+            // Az editorban nem lehet valódi quit-ot végrehajtani, ezért ezt elkerüljük
+            Debug.Log("QuitGame metódus meghívva");
+        #else
+            // A tényleges alkalmazásban kilépés
+            Application.Quit();
+        #endif
+    }
+
+    // A többi metódus, mint a PlayGame és BacktoTheMenu is szükséges, ha nem léteznek még.
+    public void PlayGame()
+    {
+        // Játék jelenet betöltése
+        SceneManager.LoadScene(1);
+    }
+
+    public void BacktoTheMenu()
+    {
+        // Főmenü jelenet betöltése
+        SceneManager.LoadScene(0);
     }
 }

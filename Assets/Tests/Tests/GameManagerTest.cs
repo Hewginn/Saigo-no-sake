@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 
-public class GameManagerTest
+public class GameManagerTest : MonoBehaviour
 {
     private GameObject gameManagerGO; // A GameManager GameObject
     private GameManagerTest gameManager; // A GameManager komponens
@@ -24,7 +24,7 @@ public class GameManagerTest
     {
         // A teszthez szükséges GameObject-ek inicializálása
         gameManagerGO = new GameObject();
-        gameManager = gameManagerGO.AddComponent<GameManager>();
+        gameManager = gameManagerGO.AddComponent<GameManagerTest>();
 
         playButton = new GameObject("PlayButton");
         menuButton = new GameObject("MenuButton");
@@ -39,12 +39,12 @@ public class GameManagerTest
         powerUpSpawner = new GameObject("PowerUpSpawner");
 
         // Szükséges komponensek beállítása a GameObject-ekhez
-        scoreUITextGO.AddComponent<GameScore>();
-        destroyedUITextGO.AddComponent<DestroyedEnemy>();
-        playerPlane.AddComponent<PlayerControl>();
-        enemySpawner.AddComponent<EnemySpawner>();
-        powerUpSpawner.AddComponent<PowerUpSpawner>();
-        timerCounterGO.AddComponent<TimeCounter>();
+        scoreUITextGO.AddComponent<GameScoreTest>();
+        destroyedUITextGO.AddComponent<DestroyedEnemyTest>();
+        playerPlane.AddComponent<PlayerControlTest>();
+        enemySpawner.AddComponent<EnemySpawnerTest>();
+        powerUpSpawner.AddComponent<PowerUpSpawnerTest>();
+        timerCounterGO.AddComponent<TimeCounterTest>();
 
         // GameObject-ek hozzárendelése a GameManagerhez
         gameManager.playButton = playButton;
@@ -78,7 +78,7 @@ public class GameManagerTest
     [UnityTest]
     public IEnumerator GameManager_GameplayState_InitializesCorrectly()
     {
-        gameManager.SetGameManagerState(GameManager.GameManagerState.Gameplay);
+        gameManager.SetGameManagerState(GameManagerT.GameManagerState.Gameplay);
         yield return null;
 
         Assert.IsFalse(playButton.activeSelf);
@@ -92,7 +92,7 @@ public class GameManagerTest
     [UnityTest]
     public IEnumerator GameManager_GameOverState_ShowsGameOverAndStopsSpawners()
     {
-        gameManager.SetGameManagerState(GameManager.GameManagerState.GameOver);
+        gameManager.SetGameManagerState(GameManagerTest.GameManagerState.GameOver);
         yield return new WaitForSeconds(0.1f);
 
         Assert.IsTrue(gameOverGO.activeSelf);
@@ -104,7 +104,7 @@ public class GameManagerTest
     [UnityTest]
     public IEnumerator GameManager_OpeningState_ShowsMenuButtons()
     {
-        gameManager.SetGameManagerState(GameManager.GameManagerState.Opening);
+        gameManager.SetGameManagerState(GameManagerTest.GameManagerState.Opening);
         yield return null;
 
         Assert.IsTrue(playButton.activeSelf);

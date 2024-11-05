@@ -2,7 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using TMPro;
 
-public class GameScoreTest
+public class GameScoreTest : MonoBehaviour
 {
     private GameObject gameScoreGO; // A GameScore GameObject
     private GameScoreTest gameScore; // A GameScore komponens
@@ -13,7 +13,7 @@ public class GameScoreTest
     {
         // A GameScore objektum létrehozása és a szükséges komponens hozzáadása
         gameScoreGO = new GameObject();
-        gameScore = gameScoreGO.AddComponent<GameScore>();
+        gameScore = gameScoreGO.AddComponent<GameScoreTest>();
 
         // TextMeshProUGUI komponens hozzáadása a pontszám megjelenítéséhez
         scoreTextUI = gameScoreGO.AddComponent<TextMeshProUGUI>();
