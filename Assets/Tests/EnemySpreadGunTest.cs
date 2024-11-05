@@ -1,57 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using NUnit.Framework;             // NUnit tesztelési keretrendszer
+using UnityEngine;                // Unity alapvető funkciók
+using UnityEngine.TestTools;      // Unity tesztelési eszközök
+using System.Collections;         // Gyűjteményekhez szükséges
 
-//Szoró ellenséges lövés
-public class EnemySpreadGun : MonoBehaviour
+public class EnemySpreadGunTest
 {
-    //Ellenséges lövedék
-    public GameObject EnemyBulletGO;
+    private GameObject enemyGO;          // Az ellenség GameObject
+    private EnemySpreadGun enemySpreadGun; // Az EnemySpreadGun komponens
 
-    //A lövés szórása fokban mérve
-    private float spread;
-
-    //Egyszerre kilőtt lövedékek száma
-    private int numberOfBullets; 
-    
-    //Első frame update előtt van meghívva
-    void Start()
+    [SetUp]
+    public void SetUp()
     {
-        //Inicializálás
-        spread = 20;
-        numberOfBullets = 3;
-        Invoke("FireEnemyBullet", 1f);
+        // Létrehozunk egy GameObject-et az ellenség számára és hozzáadjuk az EnemySpreadGun komponenst
+        enemyGO = new GameObject();
+        enemySpreadGun = enemyGO.AddComponent<EnemySpreadGun>();
+        enemySpreadGun.EnemyBulletGO = new GameObject("EnemyBullet");
+        enemySpreadGun.EnemyBulletGO.AddComponent<EnemyBullet>();
     }
 
-    //Szóró lövés
-    void FireEnemyBullet(){
+    [UnityTest]
+    public IEnumerator EnemySpreadGun_FiresBulletsTowardsPlayerWithSpread()
+    {
+        // Létrehozunk egy játékos GameObject-et
+        GameObject playerGO = new GameObject("PlayerGO");
+        playerGO.transform.position = Vector2.zero; // Játékos pozíciójának beállítása
 
-        //Játékos objektumának megkeresés
-        GameObject playerPlane = GameObject.Find ("PlayerGO");
+        enemyGO.transform.position = new Vector2(0, 5); // Az ellenség pozíciója
+        yield return new WaitForSeconds(1.1f); // Várakozás a lövésekhez
 
-        //Lövés, ha a játékos él még
-        if(playerPlane != null){
+        EnemyBullet[] bullets = Object.FindObjectsOfType<EnemyBullet>(); // Keresd meg az összes lövedéket
+        Assert.AreEqual(3, bullets.Length); // Ellenőrizzük, hogy három lövedék van
 
-            //Létrehozott lövedékek tömbje
-            GameObject[] bullets = new GameObject[numberOfBullets];
+        // Ellenőrizzük, hogy a lövedékek különböző irányokba repülnek
+        Vector2 direction1 = (Vector2)(bullets[0].transform.position - enemyGO.transform.position).normalized;
+        Vector2 direction2 = (Vector2)(bullets[1].transform.position - enemyGO.transform.position).normalized;
+        Vector2 direction3 = (Vector2)(bullets[2].transform.position - enemyGO.transform.position).normalized;
 
-            //Adott mennyiségű lövedék kilövése
-            for(int i = 0; i < numberOfBullets; i++){
-
-                //Lövedék létrehozása az adott pozícióban
-                bullets[i] = (GameObject) Instantiate(EnemyBulletGO);
-                bullets[i].transform.position = transform.position;
-            
-                //Lövés vektorának véletlenszerű elforgatása
-                UnityEngine.Vector2 direction = playerPlane.transform.position - bullets[i].transform.position;
-                float delta = UnityEngine.Random.Range(spread/2 * Mathf.Deg2Rad, -spread/2 * Mathf.Deg2Rad);
-                direction = new UnityEngine.Vector2
-                    (direction.x * Mathf.Cos(delta) - direction.y * Mathf.Sin(delta),
-                    direction.x * Mathf.Sin(delta) + direction.y * Mathf.Cos(delta));
-                
-                //Irány továbbítása a lövedék objektumnak
-                bullets[i].GetComponent<EnemyBullet>().SetDirection(direction);
-            }
-        }
+        Assert.AreNotEqual(direction1, direction2); // Ellenőrizzük az irányok eltérését
+        Assert.AreNotEqual(direction1, direction3);
+        Assert.AreNotEqual(direction2, direction3);
     }
 }

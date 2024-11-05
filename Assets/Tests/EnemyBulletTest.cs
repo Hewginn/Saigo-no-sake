@@ -1,61 +1,86 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
+using System.Collections;
 
-//Ellenséges lövedék
-public class EnemyBullet : MonoBehaviour
+public class EnemyBulletTest
 {
-    //Lövdék sebessége
-    float speed;
+    private GameObject bulletGO;
+    private EnemyBullet enemyBullet;
 
-    //Lövedék iránya
-    Vector2 _direction;
-
-    //Logikai változó: be van-e állítva az irány
-    bool isReady;
-
-    //Inicializáláskor kezdeti értékek megadása(sebesség, van-e irány)
-    void Awake()
+    [SetUp]
+    public void SetUp()
     {
-        speed = 5f;
-        isReady = false;
+        // Létrehozunk egy új GameObject-et és hozzáadjuk az EnemyBullet komponenst
+        bulletGO = new GameObject();
+        enemyBullet = bulletGO.AddComponent<EnemyBullet>();
+
+        // Az Awake metódus hívásának szimulálása
+        enemyBullet.Awake();
     }
 
-    //Irány beállítása (Ellenséges fegyver osztályok használják)
-    public void SetDirection(Vector2 direction)
+    [UnityTest]
+    public IEnumerator Bullet_MovesInSetDirection()
     {
-        _direction = direction.normalized;
-        isReady = true;
+        // Beállítunk egy irányt és az Update frame alapú hívást szimuláljuk
+        enemyBullet.SetDirection(Vector2.up);
+
+        Vector3 initialPosition = bulletGO.transform.position;
+
+        // Egy frame-et várunk, hogy a lövedék mozogjon
+        yield return new WaitForSeconds(0.1f);
+
+        // Ellenőrizzük, hogy a lövedék pozíciója megváltozott-e az irányban
+        Assert.Greater(bulletGO.transform.position.y, initialPosition.y, "A lövedék nem mozgott felfelé!");
     }
 
-    //Minden frame során megvan hívva
-    void Update()
+    [UnityTest]
+    public IEnumerator Bullet_DestroyedOutsideScreenBounds()
     {
-        //Ha az irány be van állítva, akkor mozogjon az irányba adott sebességgel
-        if (isReady)
+        // Beállítunk egy irányt felfelé és az Update frame alapú hívást szimuláljuk
+        enemyBullet.SetDirection(Vector2.up);
+
+        // A lövedék pozícióját a képernyőn kívülre állítjuk
+        bulletGO.transform.position = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
+
+        // Egy frame-et várunk, hogy a lövedék elérje a határokat és megsemmisüljön
+        yield return null;
+
+        // Ellenőrizzük, hogy a GameObject megsemmisült-e
+        Assert.IsTrue(bulletGO == null, "A lövedék nem lett megsemmisítve a képernyő határain kívül!");
+    }
+
+    [UnityTest]
+    public IEnumerator Bullet_DestroyedOnPlayerCollision()
+    {
+        // Létrehozunk egy új GameObject-et, amely a játékos képviselője, és beállítjuk a megfelelő tag-et
+        GameObject player = new GameObject();
+        player.tag = "PlayerShipTag";
+        player.AddComponent<BoxCollider2D>();
+
+        // Ütközéshez szükséges collider hozzáadása a lövedékhez
+        bulletGO.AddComponent<BoxCollider2D>();
+
+        // Beállítjuk a lövedéket úgy, hogy ütközzön a játékossal
+        bulletGO.transform.position = player.transform.position;
+
+        // Egy frame-et várunk, hogy az ütközés megtörténjen és a lövedék megsemmisüljön
+        yield return null;
+
+        // Ellenőrizzük, hogy a lövedék megsemmisült-e
+        Assert.IsTrue(bulletGO == null, "A lövedék nem lett megsemmisítve a játékossal való ütközéskor!");
+
+        // Tisztítás
+        Object.Destroy(player);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Teszt utáni tisztítás, ha a lövedék még létezne
+        if (bulletGO != null)
         {
-            //Mozgás az irányban
-            Vector2 position = transform.position;
-            position += _direction * speed * Time.deltaTime;
-            transform.position = position;
-
-            //Ha a lövedék túl lépné a képernyő határait, akkor törölni kell
-            //Határok
-            Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-            //Törlés
-            if (transform.position.x < min.x || transform.position.x > max.x ||
-                transform.position.y < min.y || transform.position.y > max.y)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
-
-    //Játékosnak ütközés esetén a lövedék eltünik (sebzés a PlayerControl.cs-ben)
-    void OnTriggerEnter2D(Collider2D col){
-        if(col.tag == "PlayerShipTag"){
-            Destroy(gameObject);
+            Object.Destroy(bulletGO);
         }
     }
 }

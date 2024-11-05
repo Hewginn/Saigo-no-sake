@@ -1,88 +1,80 @@
+using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TestTools;
 
-//Ellenségek létrehozását kezelő
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawnerTest
 {
-    //Első ellenség fajta
-    public GameObject EnemyGO;
+    private GameObject spawnerGO;
+    private EnemySpawner enemySpawner;
 
-    //Második ellenség fajta
-    public GameObject EnemyGO2;
-
-    //Harmadik ellenség fajta
-    public GameObject EnemyGO3;
-
-    //Ellenség létrehozási gyakoriság (alap: 5mp)
-    float maxSpawnRateInSeconds;
-
-    //Funkció az ellenség létrehozására
-    void SpawnEnemy()
+    [SetUp]
+    public void SetUp()
     {
-        //Határok meghatározása
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        // Létrehozunk egy spawner GameObject-et, és hozzáadjuk az EnemySpawner komponenst
+        spawnerGO = new GameObject();
+        enemySpawner = spawnerGO.AddComponent<EnemySpawner>();
 
-        //Első ellenség létrehozása
-        GameObject anEnemy = (GameObject)Instantiate(EnemyGO);
-        anEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Második ellenség létrehozása
-        GameObject anEnemy2 = (GameObject)Instantiate(EnemyGO2);
-        anEnemy2.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Harmadik ellenség létrehozása
-        GameObject anEnemy3 = (GameObject)Instantiate(EnemyGO3);
-        anEnemy3.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Következő létrehozás rekurzív hívása
-        ScheduleNextEnemySpawn();
+        // Három ellenségtípus prefab létrehozása a teszthez
+        enemySpawner.EnemyGO = new GameObject("Enemy1");
+        enemySpawner.EnemyGO2 = new GameObject("Enemy2");
+        enemySpawner.EnemyGO3 = new GameObject("Enemy3");
     }
 
-    //Létrehozás ütemezés
-    void ScheduleNextEnemySpawn()
+    [UnityTest]
+    public IEnumerator EnemySpawner_SpawnEnemiesAtScheduledRate()
     {
-        //Létrehozás ütemezési ideje
-        float spawnInSeconds;
+        // Ellenségek létrehozásának megkezdése
+        enemySpawner.ScheduleEnemySpawner();
 
-        if (maxSpawnRateInSeconds > 1f)
-        {
-            //Véletelnszerű ütemezés 1mp és a maximum Létrehozási gyakoriság között
-            spawnInSeconds = Random.Range(1f, maxSpawnRateInSeconds);
-        }
-        else{
-            //Létrehozási ütemezés ideje minimum 1mp
-            spawnInSeconds = 1f;
-        }
+        // Rövid várakozás az első ellenségek megjelenéséhez
+        yield return new WaitForSeconds(enemySpawner.maxSpawnRateInSeconds + 0.1f);
 
-        //Létrehozás rekurzív meghívása
-        Invoke("SpawnEnemy", spawnInSeconds);
+        // Ellenőrizzük, hogy három típusú ellenség is megjelenik-e a jelenetben
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Assert.AreEqual(3, enemies.Length, "A három ellenségtípus nem lett létrehozva az ütemezett időben.");
     }
 
-    //Létrehozási gyakoriság növelése, amíg 1mp nem lesz
-    void IncreaseSpawnRate()
+    [UnityTest]
+    public IEnumerator EnemySpawner_IncreasesSpawnRateOverTime()
     {
-        if (maxSpawnRateInSeconds > 1f)
-            maxSpawnRateInSeconds--;
-        if (maxSpawnRateInSeconds == 1f)
-            CancelInvoke("IncreaseSpawnRate");
+        // Ellenségek létrehozásának megkezdése
+        enemySpawner.ScheduleEnemySpawner();
+
+        // Várakozás a létrehozási gyakoriság csökkenésére
+        yield return new WaitForSeconds(60f);
+
+        // Ellenőrizzük, hogy a maxSpawnRateInSeconds 1-re csökkent
+        Assert.AreEqual(1f, enemySpawner.maxSpawnRateInSeconds, "A létrehozási gyakoriság nem csökkent 1 másodpercre 60 másodperc alatt.");
     }
 
-    //Ellenségek létrehozásának megkezdése
-    public void ScheduleEnemySpawner()
+    [UnityTest]
+    public IEnumerator EnemySpawner_StopsSpawningOnUnschedule()
     {
-        
-        maxSpawnRateInSeconds = 5f;
-        Invoke("SpawnEnemy", maxSpawnRateInSeconds);
-        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
+        // Ellenségek létrehozásának megkezdése
+        enemySpawner.ScheduleEnemySpawner();
 
+        // Rövid várakozás, hogy az első ellenségek létrejöjjenek
+        yield return new WaitForSeconds(enemySpawner.maxSpawnRateInSeconds + 0.1f);
+
+        // Létrehozás ütemezésének leállítása
+        enemySpawner.UnScheduleEnemySpawner();
+
+        // Újabb várakozás annak ellenőrzésére, hogy nem jelenik meg több ellenség
+        yield return new WaitForSeconds(2f);
+
+        // Ellenőrizzük, hogy új ellenségek nem jelentek meg a leállítás után
+        GameObject[] enemiesAfterStop = GameObject.FindGameObjectsWithTag("Enemy");
+        Assert.AreEqual(3, enemiesAfterStop.Length, "Több ellenség jött létre az ütemezés leállítása után.");
     }
 
-    //Ellnségek létrehozásának megszakítása
-    public void UnScheduleEnemySpawner()
+    [TearDown]
+    public void TearDown()
     {
-        CancelInvoke("SpawnEnemy");
-        CancelInvoke("IncreaseSpawnRate");
+        // Tisztítás a teszt után
+        if (spawnerGO != null) Object.Destroy(spawnerGO);
+        if (enemySpawner.EnemyGO != null) Object.Destroy(enemySpawner.EnemyGO);
+        if (enemySpawner.EnemyGO2 != null) Object.Destroy(enemySpawner.EnemyGO2);
+        if (enemySpawner.EnemyGO3 != null) Object.Destroy(enemySpawner.EnemyGO3);
     }
 }

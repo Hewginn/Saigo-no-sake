@@ -1,93 +1,117 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
+using System.Collections;
 
-//Egyszerű ellenséges mozgás
-public class EnemyControl : MonoBehaviour
+public class EnemyControlTest
 {
-    //Pontokat számláló UI szöveg
-    GameObject scoreUITextGO;
+    private GameObject enemyGO;
+    private EnemyControl enemyControl;
 
-    //Kiiktatásokat számláló UI szöveg
-    GameObject killsUITextGO;
+    private GameObject scoreUITextGO;
+    private GameScore gameScore;
 
-    //Logikai változó: Játékos pusztította-e el az ellenséget
-    bool isDestroyedByPlayer = false;
+    private GameObject killsUITextGO;
+    private DestroyedEnemy destroyedEnemy;
 
-    //Robbanás
-    public GameObject ExpolsionGO;
-
-    //Sebesség
-    float speed;
-
-    //Első frame update előtt van meghívva
-    void Start()
+    [SetUp]
+    public void SetUp()
     {
-        //Objektum létrehozásakor szükséges változók inicializálása
-        speed = 2f;
-        scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
-        killsUITextGO = GameObject.FindGameObjectWithTag("DestroyedEnemies");
+        // Létrehozunk egy GameObject-et, amelyhez hozzáadjuk az EnemyControl komponenst
+        enemyGO = new GameObject();
+        enemyControl = enemyGO.AddComponent<EnemyControl>();
+
+        // Beállítjuk a robbanás prefab-jét, amit inicializáláshoz használ
+        enemyControl.ExpolsionGO = new GameObject("Explosion");
+
+        // Létrehozzuk a pontszám és kiiktatási számlálókat, és hozzáadjuk a szükséges komponenseket
+        scoreUITextGO = new GameObject();
+        scoreUITextGO.tag = "ScoreTextTag";
+        gameScore = scoreUITextGO.AddComponent<GameScore>();
+
+        killsUITextGO = new GameObject();
+        killsUITextGO.tag = "DestroyedEnemies";
+        destroyedEnemy = killsUITextGO.AddComponent<DestroyedEnemy>();
+
+        // Az enemyControl komponenst összekapcsoljuk a pontszám és kiiktatás számlálóval
+        enemyControl.Start();
     }
 
-    //Minden frame során megvan hívva
-    void Update()
+    [UnityTest]
+    public IEnumerator Enemy_MovesDownward()
     {
-        //Az ellenség helyének meghatározása
-        Vector2 position = transform.position;
+        // Rögzítjük az ellenség kezdeti pozícióját
+        Vector3 initialPosition = enemyGO.transform.position;
 
-        //Az új pocizió megállapítása
-        position = new Vector2(position.x, position.y - speed * Time.deltaTime);
+        // Egy frame-et várunk, hogy a mozgás végbemenjen
+        yield return new WaitForSeconds(0.1f);
 
-        //Az ellenség új pozicióba helyezése
-        transform.position = position;
-
-        //A játéktér aljának meghatározása(bal alsó sarok)
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-
-        //Ha elhagyja a játékteret törlődjön a repülő
-        if (transform.position.y < min.y)
-        {
-            Destroy(gameObject);
-        }
+        // Ellenőrizzük, hogy az ellenség lefelé mozdult-e
+        Assert.Less(enemyGO.transform.position.y, initialPosition.y, "Az ellenség nem mozdult lefelé.");
     }
 
-    //Ütközési esemény kezelő
-    void OnTriggerEnter2D(Collider2D col)
+    [UnityTest]
+    public IEnumerator Enemy_DestroyedOutsideScreenBounds()
     {
-        //Játékossal való ütközési esemény megadása
-        if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag") || (col.tag == "PlayerSpecialTag"))
-        {
-            //Robbanás lejátszása
-            PlayerExplosion();
+        // Az ellenséget a képernyő alá helyezzük, hogy a következő frame-ben törlődjön
+        enemyGO.transform.position = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, -0.1f));
 
-            //Játékos robbantotta fel
-            isDestroyedByPlayer = true;
+        // Egy frame-et várunk, hogy a törlés végbemenjen
+        yield return null;
 
-            //Törlés
-            Destroy(gameObject);
-        }
+        // Ellenőrizzük, hogy az ellenség megsemmisült-e
+        Assert.IsTrue(enemyGO == null, "Az ellenség nem lett megsemmisítve a képernyő határán kívül.");
     }
 
-    //Robbanást inicializáló kódrész
-    void PlayerExplosion()
+    [UnityTest]
+    public IEnumerator Enemy_DestroyedOnPlayerCollision()
     {
-        //Példányosítás
-        GameObject explosion = (GameObject)Instantiate(ExpolsionGO);
+        // Létrehozunk egy új játékos lövedéket a szükséges `PlayerBulletTag` tag-gel
+        GameObject playerBullet = new GameObject();
+        playerBullet.tag = "PlayerBulletTag";
+        playerBullet.AddComponent<BoxCollider2D>();
 
-        //Robbanás helyének meghatározása (objektum helye)
-        explosion.transform.position = transform.position;
+        // Ütközéshez szükséges collider hozzáadása az ellenséghez
+        enemyGO.AddComponent<BoxCollider2D>();
+
+        // Az ellenség pozícióját a játékos lövedék pozíciójára állítjuk
+        enemyGO.transform.position = playerBullet.transform.position;
+
+        // Egy frame-et várunk az ütközés és megsemmisítés szimulálásához
+        yield return null;
+
+        // Ellenőrizzük, hogy az ellenség megsemmisült-e az ütközés után
+        Assert.IsTrue(enemyGO == null, "Az ellenség nem lett megsemmisítve a játékossal való ütközéskor.");
+
+        // Tisztítás
+        Object.Destroy(playerBullet);
     }
 
-    //Konstruktor során lefutó kódrész
-    private void OnDestroy() {
+    [UnityTest]
+    public IEnumerator ScoreAndKills_IncreasedOnPlayerDestruction()
+    {
+        // Előzetes értékek mentése
+        int initialScore = gameScore.Score;
+        int initialKills = destroyedEnemy.Kills;
 
-        //Elpusztított repülők számolása
-        if(isDestroyedByPlayer){
+        // Szimuláljuk az ellenség megsemmisítését a játékos által
+        enemyControl.isDestroyedByPlayer = true;
 
-            scoreUITextGO.GetComponent<GameScore>().Score += 100;
-            killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+        // Egy frame-et várunk, hogy a megsemmisítés során lefusson a `OnDestroy` metódus
+        Object.Destroy(enemyGO);
+        yield return null;
 
-        }
-        
+        // Ellenőrizzük, hogy a pontszám és a kiiktatás számláló növekedett
+        Assert.AreEqual(initialScore + 100, gameScore.Score, "A pontszám nem növekedett megfelelően.");
+        Assert.AreEqual(initialKills + 1, destroyedEnemy.Kills, "A kiiktatási számláló nem növekedett megfelelően.");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Tisztítás a teszt után, ha az objektum még létezne
+        if (enemyGO != null) Object.Destroy(enemyGO);
+        if (scoreUITextGO != null) Object.Destroy(scoreUITextGO);
+        if (killsUITextGO != null) Object.Destroy(killsUITextGO);
     }
 }

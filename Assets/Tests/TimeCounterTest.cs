@@ -3,63 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-//Időszámláló
-public class TimeCounter : MonoBehaviour
+// Időszámláló
+public class TimeCounterTest : MonoBehaviour
 {
+    // UI szöveg a idő megjelenítésére
+    private TextMeshProUGUI timeUI;
 
-    //Idő mutatása UI szöveg
-    TextMeshProUGUI timeUI;
+    // Kezdő idő, amikor a számláló elindul
+    private float startTime;
 
-    //Kezdeti idő
-    float startTime;
+    // Eltelt idő a számláló indítása óta
+    private float elapsedTime;
 
-    //Játék idő
-    float ellapsedTime;
+    // Logikai változó, hogy a számláló fut-e
+    private bool isCounterRunning;
 
-    //Logikai változó: Időszámláló fut-e
-    bool startCounter;
+    // Eltelt idő percei és másodpercei
+    private int minutes;
+    private int seconds;
 
-    //Eltelt idő percei
-    int minutes;
-
-    //Eltelt idő másodpercei
-    int seconds;
-
-    //Első frame update előtt van meghívva
+    // Az első frame frissítése előtt hívódik meg
     void Start()
     {
-        //Inicializálás
-        startCounter = false;
+        // Inicializálás
+        isCounterRunning = false;
         timeUI = GetComponent<TextMeshProUGUI>();
+        timeUI.text = "00:00"; // A szöveg alapértelmezett értéke
     }
 
-    //Számláló elinditása
+    // A számláló elindítása
     public void StartTimeCounter()
-    {   
-        startTime = Time.time;
-        startCounter = true;
+    {
+        if (!isCounterRunning) // Megakadályozza a többszöri indítást, ha már fut
+        {
+            startTime = Time.time;
+            isCounterRunning = true;
+        }
     }
 
-    //Számláló megállítása
+    // A számláló leállítása
     public void StopTimeCounter()
     {
-        startCounter = false;
+        isCounterRunning = false;
     }
 
-
-    //Minden frame során megvan hívva
+    // Frissítés minden frame során
     void Update()
     {
-        if(startCounter){
+        if (isCounterRunning)
+        {
+            // Eltelt idő kiszámítása
+            elapsedTime = Time.time - startTime;
 
-           //Eltelt idő kiszámítása
-           ellapsedTime =  Time.time - startTime;
+            // Eltelt idő percek és másodpercek átkonvertálása
+            minutes = (int)(elapsedTime / 60);
+            seconds = (int)(elapsedTime % 60);
 
-           //Eltelt idő kiírása
-           minutes = (int)ellapsedTime / 60;
-           seconds = (int)ellapsedTime % 60;
-           timeUI.text = string.Format("{0:00}:{1:00}", minutes,seconds);
+            // UI szöveg frissítése
+            timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
-        
     }
 }

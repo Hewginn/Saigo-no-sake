@@ -1,49 +1,93 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
-
-public class PlanetController : MonoBehaviour
+public class PlanetControllerTest
 {
+    private GameObject planetControllerGO; // A PlanetController GameObject
+    private PlanetController planetController; // A PlanetController komponens
 
-    public GameObject[] Planets;
+    private GameObject planet1; // Az első bolygó GameObject
+    private GameObject planet2; // A második bolygó GameObject
+    private GameObject planet3; // A harmadik bolygó GameObject
 
-    Queue<GameObject> availablePlanets = new Queue<GameObject>();
-
-
-    // Start is called before the first frame update
-    void Start()
+    [SetUp]
+    public void Setup()
     {
-        availablePlanets.Enqueue (Planets [0]);
-        availablePlanets.Enqueue (Planets [1]);
-        availablePlanets.Enqueue (Planets [2]);
-
-        InvokeRepeating("MovePlanetDown", 0,20f);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        // Létrehozunk GameObject-eket a bolygók számára
+        planet1 = new GameObject();
+        planet1.AddComponent<Planet>();
         
+        planet2 = new GameObject();
+        planet2.AddComponent<Planet>();
+        
+        planet3 = new GameObject();
+        planet3.AddComponent<Planet>();
+
+        // Létrehozzuk a GameObject-et a PlanetController számára és hozzáadjuk a komponenst
+        planetControllerGO = new GameObject();
+        planetController = planetControllerGO.AddComponent<PlanetController>();
+        
+        // A bolygók hozzárendelése a PlanetController-hez
+        planetController.Planets = new GameObject[] { planet1, planet2, planet3 };
+
+        // A Queue inicializálása, hogy biztosítsuk, hogy minden bolygó elérhető
+        planetController.Start();
     }
 
-    void MovePlanetDown(){
-        EnqueuePlanets();
-        if(availablePlanets.Count==0)
-            return;
-
-        GameObject aPlanet = availablePlanets.Dequeue ();
-
-        aPlanet.GetComponent<Planet> ().isMoving = true;
-
+    [Test]
+    public void Start_InitializesAvailablePlanetsQueue()
+    {
+        // Ellenőrizzük, hogy a sor a bolygókkal van inicializálva
+        Assert.AreEqual(3, planetController.availablePlanets.Count);
     }
-    void EnqueuePlanets(){
-        foreach(GameObject aPlanet in Planets){
-            if((aPlanet.transform.position.y <0) && (!aPlanet.GetComponent<Planet>().isMoving)){
-                aPlanet.GetComponent<Planet>().ResetPosition();
 
-                availablePlanets.Enqueue(aPlanet);
-            }
-        }
+    [Test]
+    public void MovePlanetDown_DequeuesPlanetAndMovesIt()
+    {
+        // Meghívjuk a MovePlanetDown metódust
+        planetController.MovePlanetDown();
+
+        // Ellenőrizzük, hogy egy bolygó ki lett dequeuelve és mozgásra van állítva
+        Assert.AreEqual(2, planetController.availablePlanets.Count);
+        Assert.IsTrue(planet1.GetComponent<Planet>().isMoving);
+    }
+
+    [Test]
+    public void EnqueuePlanets_ResetsPositionOfMovedPlanets()
+    {
+        // A bolygót a küszöb alá állítjuk
+        planet1.transform.position = new Vector3(0, -1, 0);
+        planet1.GetComponent<Planet>().isMoving = false;
+
+        // Meghívjuk az EnqueuePlanets-t
+        planetController.EnqueuePlanets();
+
+        // Ellenőrizzük, hogy a bolygó pozíciója vissza lett állítva
+        Assert.AreEqual(Vector3.zero, planet1.transform.position); // Feltételezve, hogy a ResetPosition az origóra állítja
+        Assert.AreEqual(1, planetController.availablePlanets.Count);
+    }
+
+    [Test]
+    public void MovePlanetDown_OnlyMovesAvailablePlanets()
+    {
+        // A bolygót a küszöb alá állítjuk
+        planet1.transform.position = new Vector3(0, -1, 0);
+        planet1.GetComponent<Planet>().isMoving = true; // Mozgásra állítjuk
+
+        // Meghívjuk a MovePlanetDown-t
+        planetController.MovePlanetDown();
+
+        // Ellenőrizzük, hogy a planet1 nem lett dequeuelve, mivel már mozgásban van
+        Assert.AreEqual(3, planetController.availablePlanets.Count);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Tisztítsuk meg a létrehozott GameObject-eket
+        Object.Destroy(planetControllerGO);
+        Object.Destroy(planet1);
+        Object.Destroy(planet2);
+        Object.Destroy(planet3);
     }
 }

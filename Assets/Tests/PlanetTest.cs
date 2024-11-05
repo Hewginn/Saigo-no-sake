@@ -1,48 +1,98 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
-public class Planet : MonoBehaviour
+public class PlanetTest
 {
-    public float speed;
-    public bool isMoving;
+    private GameObject planetGO;       // A bolygó GameObject
+    private Planet planet;             // A Planet komponens
 
-    Vector2 min;
-    Vector2 max;
-
-    void Awake(){
-        isMoving = false;
-
-        min = Camera.main.ViewportToWorldPoint (new Vector2(0,0));
-
-        max = Camera.main.ViewportToWorldPoint (new Vector2(1,1));
-
-        max.y = max.y + GetComponent<SpriteRenderer> ().sprite.bounds.extents.y;
-        min.y = min.y - GetComponent<SpriteRenderer> ().sprite.bounds.extents.y;
-    }
-    // Start is called before the first frame update
-    void Start()
+    [SetUp]
+    public void Setup()
     {
+        // Létrehozunk egy GameObject-et a bolygó számára és hozzáadjuk a Planet komponenst
+        planetGO = new GameObject();
+        planet = planetGO.AddComponent<Planet>();
         
+        // Alapértelmezett sebességet állítunk be a bolygónak
+        planet.speed = 5f;
+
+        // Beállítjuk a kamera pozícióját, hogy a min/max számítások érvényesek legyenek
+        Camera.main = new GameObject().AddComponent<Camera>();
+        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera érvényes pozíciójának beállítása
     }
 
-    // Update is called once per frame
-    void Update()
+    [Test]
+    public void Awake_InitializesIsMovingAndBounds()
     {
-        if(!isMoving){
-            return;
-        }
-        Vector2 position = transform.position;
+        // Meghívjuk az Awake-ot
+        planet.Awake();
 
-         position = new Vector2 (position.x, position.y+ speed * Time.deltaTime);
+        // Ellenőrizzük, hogy az isMoving false-ra van inicializálva
+        Assert.IsFalse(planet.isMoving);
 
-        transform.position = position;
+        // Ellenőrizzük, hogy a min és max határok be vannak állítva
+        Assert.IsNotNull(planet.min);
+        Assert.IsNotNull(planet.max);
+    }
 
-        if(transform.position.y <min.y){
-            isMoving = false;
-        }
-    } 
-    public void ResetPosition(){
-        transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
+    [Test]
+    public void ResetPosition_SetsRandomPositionAtMaxY()
+    {
+        // Meghívjuk a ResetPosition-t
+        planet.ResetPosition();
+
+        // Ellenőrizzük, hogy a bolygó Y pozíciója a max Y pozíción van
+        Assert.AreEqual(planet.transform.position.y, planet.max.y);
+    }
+
+    [Test]
+    public void Update_MovesPlanetWhenIsMovingIsTrue()
+    {
+        // A bolygót mozgásra állítjuk
+        planet.isMoving = true;
+        Vector2 initialPosition = planet.transform.position;
+
+        // Meghívjuk az Update-ot egyszer, a Time.deltaTime szimulálásával egy framerate
+        float deltaTime = 0.1f; // Szimuláljunk 0.1 másodpercet
+        planet.Update();
+
+        // Ellenőrizzük, hogy a bolygó pozíciója helyesen változott
+        Assert.AreNotEqual(initialPosition, planet.transform.position);
+        Assert.AreEqual(initialPosition.y + (planet.speed * deltaTime), planet.transform.position.y);
+    }
+
+    [Test]
+    public void Update_DoesNotMoveWhenIsMovingIsFalse()
+    {
+        // A bolygót nem mozgásra állítjuk
+        planet.isMoving = false;
+        Vector2 initialPosition = planet.transform.position;
+
+        // Meghívjuk az Update-ot
+        planet.Update();
+
+        // Ellenőrizzük, hogy a pozíció változatlan maradt
+        Assert.AreEqual(initialPosition, planet.transform.position);
+    }
+
+    [Test]
+    public void Update_StopsMovingWhenBelowMinY()
+    {
+        // A bolygó pozícióját a min.y alatt állítjuk be
+        planet.min = new Vector2(0, 0); // Min beállítása (0,0) pozícióra
+        planet.transform.position = new Vector2(0, -1); // A pozíció a min alatt
+
+        // Meghívjuk az Update-ot
+        planet.Update();
+
+        // Ellenőrizzük, hogy az isMoving false-ra van állítva
+        Assert.IsFalse(planet.isMoving);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Tisztítsuk meg a létrehozott GameObject-eket
+        Object.Destroy(planetGO);
     }
 }

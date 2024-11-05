@@ -1,40 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using TMPro;
 
-//Pontszámláló
-public class GameScore : MonoBehaviour
+public class GameScoreTest
 {
-    //Pontszámláló UI szöveg
-    TextMeshProUGUI scoreTextUI;
+    private GameObject gameScoreGO; // A GameScore GameObject
+    private GameScore gameScore; // A GameScore komponens
+    private TextMeshProUGUI scoreTextUI; // A pontszám megjelenítésére szolgáló UI komponens
 
-    //Pontok
-    int score;
-
-    //Pontok setter, getter
-    public int Score{
-
-        get{
-            return this.score;
-        }
-        set{
-            this.score = value;
-            UpdateScoreTextUI();
-        }
-
-    }
-
-    //Első frame update előtt van meghívva
-    void Start()
+    [SetUp]
+    public void Setup()
     {
-        scoreTextUI = GetComponent<TextMeshProUGUI> ();
+        // A GameScore objektum létrehozása és a szükséges komponens hozzáadása
+        gameScoreGO = new GameObject();
+        gameScore = gameScoreGO.AddComponent<GameScore>();
+
+        // TextMeshProUGUI komponens hozzáadása a pontszám megjelenítéséhez
+        scoreTextUI = gameScoreGO.AddComponent<TextMeshProUGUI>();
     }
 
-    //Pontszámláló UI átírása
-    void UpdateScoreTextUI(){
-        string scoreStr = string.Format("{0:000000}",score);
-        scoreTextUI.text = scoreStr;
+    [Test]
+    public void GameScore_SetScore_UpdatesScoreTextUI()
+    {
+        // A pontszám beállítása
+        gameScore.Score = 12345;
+
+        // Ellenőrizzük, hogy a megjelenített szöveg megfelel a formázott pontszámnak
+        Assert.AreEqual("012345", scoreTextUI.text);
     }
 
+    [Test]
+    public void GameScore_SetScore_FormatsScoreWithLeadingZeros()
+    {
+        // Alacsonyabb pontszám beállítása és ellenőrizzük, hogy a vezető nullák helyesen lettek-e hozzáadva
+        gameScore.Score = 42;
+
+        // Ellenőrizzük, hogy a formázott string vezető nullákat tartalmaz
+        Assert.AreEqual("000042", scoreTextUI.text);
+    }
+
+    [Test]
+    public void GameScore_InitialScore_IsZero()
+    {
+        // Ellenőrizzük a kezdeti pontszámot (implicit módon 0) és ellenőrizzük a megjelenített formát
+        Assert.AreEqual(0, gameScore.Score);
+        Assert.AreEqual("000000", scoreTextUI.text);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Tisztítsuk meg a létrehozott GameObject-et
+        Object.Destroy(gameScoreGO);
+    }
 }

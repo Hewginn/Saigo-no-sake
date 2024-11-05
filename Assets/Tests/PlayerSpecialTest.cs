@@ -1,62 +1,98 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
-//Különleges lövedék
-public class PlayerSpecial : MonoBehaviour
+public class PlayerSpecialTest
 {
-    //Kezdő pozíció
-    Vector2 startPosition;
+    private GameObject specialBulletGO;        // A speciális golyó GameObject
+    private PlayerSpecial playerSpecial;       // A PlayerSpecial komponens
 
-    //Különleges lövedék robbanása
-    public GameObject specialExplosion;
-
-    //Lövedék sebessége
-    float speed;
-
-
-    //Első frame update előtt van meghívva
-    void Start()
+    [SetUp]
+    public void Setup()
     {
-        speed = 6f;
+        // Létrehozunk egy GameObject-et a speciális golyó számára és hozzáadjuk a PlayerSpecial komponenst
+        specialBulletGO = new GameObject();
+        playerSpecial = specialBulletGO.AddComponent<PlayerSpecial>();
 
-        startPosition = transform.position;
+        // Beállítunk egy kamerát a viewport számításokhoz
+        Camera.main = new GameObject().AddComponent<Camera>();
+        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
+
+        // Hozzárendelünk egy speciális robbanás prefabot a teszteléshez
+        playerSpecial.specialExplosion = new GameObject(); // A robbanás prefab helyettesítője
+        playerSpecial.specialExplosion.AddComponent<SpriteRenderer>(); // SpriteRenderer hozzáadása a teszteléshez
     }
 
-    //Minden frame során megvan hívva
-    void Update()
+    [Test]
+    public void Start_SetsInitialValues()
     {
-        // a lövedék jelenlegi helyzete
-        Vector2 position = transform.position;
-        // a lövedék új helyének meghatározása
-        position = new Vector2(position.x, position.y + speed * Time.deltaTime);
-        // a lövedék új helyének beállítása
-        transform.position = position;
-
-        //ez a játék jobb felső sarka
-        Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2 (1,1));
-        //ha a töltény elhagyja a játékteret vagy ha a játékos megnyomja az 'F' gombot, akkor semmisüljön meg
-        if(transform.position.y > max.y || startPosition.y + 5f < transform.position.y || Input.GetKeyDown("f"))
-        {
-            Destroy(gameObject);
-        }
-
-
+        // Ellenőrizzük, hogy a kezdő pozíció helyesen van-e beállítva
+        Assert.AreEqual(specialBulletGO.transform.position, playerSpecial.startPosition);
     }
 
-    //Ütközés kezelő
-    void OnTriggerEnter2D(Collider2D col){
-
-        //Ha ellenfélnek ütközik semmisüljön meg
-        if(col.tag == "EnemyShipTag"){
-            Destroy(gameObject);
-        }
-
+    [Test]
+    public void Update_MovesSpecialBullet()
+    {
+        // Szimuláljuk egy frame frissítést
+        playerSpecial.Update();
+        
+        // Ellenőrizzük, hogy a pozíció megváltozott-e
+        Assert.Greater(specialBulletGO.transform.position.y, playerSpecial.startPosition.y);
     }
 
-    //Törlödés esetén robbanjon fel
-    private void OnDestroy() {
-        GameObject explosion = (GameObject) Instantiate(specialExplosion);
-        explosion.transform.position = transform.position;
+    [Test]
+    public void Update_DestroyBulletOffScreen()
+    {
+        // A golyó pozícióját beállítjuk, hogy éppen a képernyő teteje fölött legyen
+        specialBulletGO.transform.position = new Vector2(0, 10);
+        playerSpecial.Update(); // Meghívjuk az Update-ot a mozgás szimulálásához
+        
+        // Ellenőrizzük, hogy a golyónak el kell tűnnie, amikor a képernyőről kifelé megy
+        Assert.IsNull(specialBulletGO);
+    }
+
+    [Test]
+    public void Update_DestroyBulletOnKeyPress()
+    {
+        // Szimuláljuk az 'F' billentyű lenyomását
+        Input.SetKeyDown(KeyCode.F);
+        playerSpecial.Update(); // Meghívjuk az Update-ot a bemenet ellenőrzésére
+        
+        // Ellenőrizzük, hogy a golyónak el kell tűnnie
+        Assert.IsNull(specialBulletGO);
+    }
+
+    [Test]
+    public void OnTriggerEnter2D_DestroyOnEnemyCollision()
+    {
+        // Létrehozunk egy ellenség GameObject-et az ütközéshez
+        GameObject enemyGO = new GameObject { tag = "EnemyShipTag" };
+        enemyGO.AddComponent<BoxCollider2D>().isTrigger = true;
+
+        // Szimuláljuk az ütközést
+        playerSpecial.OnTriggerEnter2D(enemyGO.GetComponent<Collider2D>());
+        
+        // Ellenőrizzük, hogy a golyónak el kell tűnnie
+        Assert.IsNull(specialBulletGO);
+    }
+
+    [Test]
+    public void OnDestroy_InstantiateExplosion()
+    {
+        // Előkészítjük a robbanás létrehozásának rögzítését
+        GameObject explosionPrefab = playerSpecial.specialExplosion;
+        
+        // Meghívjuk az OnDestroy-t, hogy elindítsuk a robbanást
+        playerSpecial.OnDestroy();
+        
+        // Ellenőrizzük, hogy a robbanás a megfelelő helyen lett-e létrehozva
+        Assert.AreEqual(specialBulletGO.transform.position, explosionPrefab.transform.position);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Tisztítsuk meg a létrehozott GameObject-eket
+        if (specialBulletGO != null)
+            Object.Destroy(specialBulletGO);
     }
 }

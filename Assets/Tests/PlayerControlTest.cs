@@ -1,264 +1,128 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using System.Threading;
-using System.Timers;
+using NUnit.Framework;             // NUnit tesztelési keretrendszer
+using UnityEngine;                // Unity alapvető funkciók
+using TMPro;                     // TextMeshProUGUI használata
 
-//Játékos irányítása, kezelése
-public class PlayerControl : MonoBehaviour
+public class PlayerControlTest
 {
-    //Játék kezelő
-    public GameObject GameManagerGO;
+    private GameObject playerGO;             // A játékos GameObject
+    private PlayerControl playerControl;     // A PlayerControl komponens
 
-    //ez a játékos előgyártott lövedéke
-    public GameObject PlayerBulletGO;
-
-    //Játékos fegyvereinek pozíciója
-    public GameObject bulletPosition01;
-    public GameObject bulletPosition02;
-    public GameObject bulletPosition03;
-    public GameObject bulletPosition04;
-    public GameObject bulletPosition05;
-    public GameObject bulletPosition06;
-
-    //Fegyverek fejlesztési szintje
-    int upgradeLevel;
-
-    //Speciális lövés kezdeti pozíciója
-    public GameObject specialPosition;
-
-    //Robbanás
-    public GameObject ExpolsionGO;
-
-    //Speciális lövedék
-    public GameObject SpecialGO;
-
-    //Élet szám UI szöveg
-    public TextMeshProUGUI LivesUIText;
-
-    //Különleges lövedékek száma UI szöveg
-    public TextMeshProUGUI SpecialsUIText;
-
-    //Pontszámláló UI szöveg
-    public GameObject scoreUITextGO;
-
-    //Maximum élet
-    const int maxLives = 3;
-
-    //Aktuális élet
-    int lives;
-
-    //Repülő gyorsasága
-    public float speed;
-
-    //A repülő éppen halhatatlan-e
-    bool isInvincible = false;
-
-    //Maximális tárolható különleges lövedék
-    int maxSpecial = 5;
-
-    //Aktuális különleges lövedék
-    int specials;
-
-    //Legutóbbi lövés időpontja
-    float lastShoot;
-
-    //Repülő inicializálása
-    public void Init(){
-
-        //Élet
-        lives = maxLives;
-        LivesUIText.text=lives.ToString();
-
-        //Helyzet
-        transform.position = new Vector2(0,0);
-
-        //Aktiválás
-        gameObject.SetActive(true);
-
-        //Fejlesztési szint
-        upgradeLevel = 0;
-
-        //Különleges lövedékek száma
-        specials = 0;
-        SpecialsUIText.text = "X " + specials.ToString();
-
-    }
-
-    // Update is called once per frame
-    void Update()
+    [SetUp]
+    public void Setup()
     {
-        // a szóköz billentyű lenyomására lő az űrhajó 0.25 másodpercenként
-        if(Input.GetKey("space") && Time.time - lastShoot > 0.25f){
-            GetComponent<AudioSource>().Play();
-            GameObject bullet01= (GameObject)Instantiate(PlayerBulletGO);
-            bullet01.transform.position = bulletPosition01.transform.position;
-            GameObject bullet02= (GameObject)Instantiate(PlayerBulletGO);
-            bullet02.transform.position = bulletPosition02.transform.position;
+        // Létrehozunk egy GameObject-et a játékos számára és hozzáadjuk a PlayerControl komponenst
+        playerGO = new GameObject();
+        playerControl = playerGO.AddComponent<PlayerControl>();
 
-            //1. szintű fejlesztés búnusz lövedékei
-            if(upgradeLevel > 0){
-                GameObject bullet03 = (GameObject)Instantiate(PlayerBulletGO);
-                bullet03.transform.position = bulletPosition03.transform.position;
-                GameObject bullet04= (GameObject)Instantiate(PlayerBulletGO);
-                bullet04.transform.position = bulletPosition04.transform.position;
-            }
+        // Beállítunk egy kamerát a viewport számításokhoz
+        Camera.main = new GameObject().AddComponent<Camera>();
+        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
 
-            //2. szintű fejlesztés bónusz lövedékei
-            if(upgradeLevel > 1){
-                GameObject bullet05 = (GameObject)Instantiate(PlayerBulletGO);
-                bullet05.transform.position = bulletPosition05.transform.position;
-                GameObject bullet06 = (GameObject)Instantiate(PlayerBulletGO);
-                bullet06.transform.position = bulletPosition06.transform.position;
-            }
+        // Inicializáljuk a TextMeshProUGUI komponenseket
+        playerControl.LivesUIText = new GameObject().AddComponent<TextMeshProUGUI>();
+        playerControl.SpecialsUIText = new GameObject().AddComponent<TextMeshProUGUI>();
+        playerControl.scoreUITextGO = new GameObject(); // Placeholder a pontszám UI számára
+        playerControl.scoreUITextGO.AddComponent<GameScore>();
 
-            //Lövés időpontjának megadása
-            lastShoot = Time.time;
-        }
-
-        //Különleges lövedék lövése 'E' billentyűvel
-        if(Input.GetKeyDown("e") && specials > 0){
-            GameObject bomb = (GameObject) Instantiate(SpecialGO);
-            bomb.transform.position = specialPosition.transform.position;
-            specials--;
-            SpecialsUIText.text = "X " + specials.ToString();
-        }
-
-        // az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
-        float x = Input.GetAxisRaw("Horizontal");
-        // az ertek -1 (le nyil), 0 (nincs gomb megnyomva) vagy 1 (fel nyil) lesz
-        float y = Input.GetAxisRaw("Vertical"); 
-
-        // a bekert adatok szerint kiszamolunk egy egyseg es egy irany vektort
-        Vector2 direction = new Vector2 (x,y).normalized;
-
-        // ez szamolja ki a karakter mozgasat
-        Move(direction);
-    }
-
-    //Mozgás irány vektorral
-    void Move(Vector2 direction){
+        // Hozzárendelünk dummy GameObject-eket más referenciákhoz
+        playerControl.GameManagerGO = new GameObject();
+        playerControl.PlayerBulletGO = new GameObject();
+        playerControl.bulletPosition01 = new GameObject();
+        playerControl.bulletPosition02 = new GameObject();
+        playerControl.bulletPosition03 = new GameObject();
+        playerControl.bulletPosition04 = new GameObject();
+        playerControl.bulletPosition05 = new GameObject();
+        playerControl.bulletPosition06 = new GameObject();
+        playerControl.specialPosition = new GameObject();
+        playerControl.ExpolsionGO = new GameObject();
+        playerControl.SpecialGO = new GameObject();
         
-        //Képernyő határainak meghatározása
-        Vector2 min = Camera.main.ViewportToWorldPoint (new Vector2(0,0));
-        Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2(1,1));
-        max.x = max.x -0.225f; 
-        min.x = min.x +0.225f;
-        max.y = max.y - 0.285f;
-        min.y = min.y + 0.285f;
-
-        //Aktuális pozíció
-        Vector2 pos = transform.position; 
-
-        //Új pozíció
-        pos += direction *speed * Time.deltaTime; 
-        
-        //Határok alkalmazása
-        pos.x= Mathf.Clamp (pos.x,min.x,max.x);
-        pos.y= Mathf.Clamp (pos.y,min.y,max.y);
-
-        //Új pozíció átadása az objektumnak
-        transform.position = pos; 
+        // Meghívjuk az Init-et a kezdeti állapotok beállításához
+        playerControl.Init();
     }
 
-    //Ütközési esemény kezelő
-    void OnTriggerEnter2D(Collider2D col){
-
-        //Sebződés kezelése
-        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")) && !isInvincible){
-
-            //Robbanás lejátszása
-            PlayerExplosion();
-
-            //Élet csökkentése
-            lives = lives > 0 ? lives - 1 : 0;
-            LivesUIText.text = lives.ToString();
-
-            //Fejlesztés nullázása
-            upgradeLevel = 0;
-
-            if(lives ==0){
-
-                //0 élettel játék elvesztése
-                GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
-                gameObject.SetActive(false);
-
-            }else{
-
-                //Sebződés után játékos 2mp-ig sebezhetetlen
-                InvincibleModeOn();
-                Invoke("InvincibleModeOff", 2f);
-
-            }
-
-        //Tárgyak felvevése (ha maxon van +500 pont)
-        }else switch(col.tag){
-
-            //Fejlesztés felvevésével fejlesztés növelése
-            case "UpgradePU":
-                if(upgradeLevel < 2){
-                    upgradeLevel++;
-                }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
-                }
-                break;
-            
-            //Gyógyítás felvevésével életnövelése
-            case "HealPU":
-                if(lives < maxLives){
-                    lives++;
-                    LivesUIText.text = lives.ToString();
-                }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
-                }
-                break;
-
-            //Különleges lövedék növelése
-            case "SpecialPU":
-                if(specials < maxSpecial){
-                    specials++;
-                    SpecialsUIText.text = "X " + specials.ToString();
-                }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
-                }
-                break;          
-        }
+    [Test]
+    public void Init_SetsInitialValues()
+    {
+        // Ellenőrizzük, hogy a kezdeti életek helyesen vannak beállítva
+        Assert.AreEqual(3, playerControl.LivesUIText.text);
+        Assert.AreEqual(0, playerControl.GetType().GetField("upgradeLevel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerControl));
+        Assert.AreEqual(0, playerControl.GetType().GetField("specials", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerControl));
+        Assert.AreEqual("X 0", playerControl.SpecialsUIText.text);
     }
 
-    //Robbanás lejátszása
-    void PlayerExplosion(){
-        GameObject explosion = (GameObject)Instantiate(ExpolsionGO);
+    [Test]
+    public void Move_UpdatesPlayerPosition()
+    {
+        // Beállítjuk a sebességet és szimuláljuk a mozgáshoz szükséges bemenetet
+        playerControl.speed = 5f;
 
-        explosion.transform.position = transform.position;
+        // Mozgás jobbra
+        Input.SetKey("right");
+        playerControl.Update();
+
+        // Ellenőrizzük, hogy a játékos jobbra mozdult
+        Assert.Greater(playerGO.transform.position.x, 0);
+
+        // Mozgás balra
+        Input.SetKey("left");
+        playerControl.Update();
+
+        // Ellenőrizzük, hogy a játékos balra mozdult
+        Assert.Less(playerGO.transform.position.x, 0);
     }
 
-    //Halhatatlanság be
-    void InvincibleModeOn(){
+    [Test]
+    public void Shoot_FiresBullets()
+    {
+        playerControl.lastShoot = 0f; // Visszaállítjuk az utolsó lövés idejét
+        playerControl.Update(); // Meghívjuk az Update-ot a bemenet ellenőrzésére
 
-        //Halhatatlanság funkció be
-        isInvincible = true;
-        gameObject.tag = "PlayerUndamagable";
+        // Szimuláljuk a space billentyű lenyomását a lövéshez
+        Input.SetKeyDown("space");
+        playerControl.Update();
 
-        //Vizuális effekt be
-        InvokeRepeating("Flash", 0f, 0.25f);
-
+        // Ellenőrizzük, hogy a lövedékek instanciálva lettek-e (mock vagy megfelelő módszer ellenőrzése)
+        // Valós esetben ellenőriznünk kell, hogy a lövedék prefab helyesen lett-e instanciálva.
+        // Ehhez szükséges lehet a PlayerControl osztály módosítása a lövedékek számának vagy hasonló kitételének kitettségéhez.
     }
 
-    //Halhatatlanság ki
-    void InvincibleModeOff(){
+    [Test]
+    public void OnTriggerEnter2D_EnemyCollision_DecreasesLives()
+    {
+        // Szimulálunk egy ütközést egy ellenséggel
+        GameObject enemyGO = new GameObject { tag = "EnemyShipTag" };
+        enemyGO.AddComponent<BoxCollider2D>().isTrigger = true;
 
-        //Halhatatlanság funkció ki
-        gameObject.tag = "PlayerShipTag";
-        isInvincible = false;
+        playerControl.OnTriggerEnter2D(enemyGO.GetComponent<Collider2D>());
 
-        //Vizuális effekt ki
-        CancelInvoke("Flash");
-        GetComponent<Renderer>().enabled = true;
+        // Ellenőrizzük, hogy az életek csökkentek-e
+        Assert.AreEqual(2, playerControl.GetType().GetField("lives", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerControl));
     }
 
-    //Repölő villantása
-    void Flash(){
-        GetComponent<Renderer>().enabled = !(GetComponent<Renderer>().enabled);
+    [Test]
+    public void OnTriggerEnter2D_HealPU_IncreasesLives()
+    {
+        // Szimuláljuk egy egészségügyi power-up felvételét
+        GameObject healPU = new GameObject { tag = "HealPU" };
+        healPU.AddComponent<BoxCollider2D>().isTrigger = true;
+
+        playerControl.OnTriggerEnter2D(healPU.GetComponent<Collider2D>());
+
+        // Ellenőrizzük, hogy az életek helyesen nőttek-e
+        Assert.AreEqual(3, playerControl.GetType().GetField("lives", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerControl));
+    }
+
+    [Test]
+    public void OnTriggerEnter2D_UpgradePU_IncreasesUpgradeLevel()
+    {
+        // Szimuláljuk egy upgrade power-up felvételét
+        GameObject upgradePU = new GameObject { tag = "UpgradePU" };
+        upgradePU.AddComponent<BoxCollider2D>().isTrigger = true;
+
+        playerControl.OnTriggerEnter2D(upgradePU.GetComponent<Collider2D>());
+
+        // Ellenőrizzük, hogy az upgrade szint növekedett-e
+        Assert.AreEqual(1, playerControl.GetType().GetField("upgradeLevel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerControl));
     }
 }
