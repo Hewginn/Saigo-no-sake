@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;
 public class LevelMenuTest : MonoBehaviour
 {
     private GameObject levelMenuGO; // A szintmenü GameObject
-    private LevelMenuTest levelMenu; // A LevelMenu komponens
-    private Button[] buttons; // A szintválasztó gombok
+    private LevelMenuTest levelMenu;    // A LevelMenu komponens
+    private Button[] buttons;       // A szintválasztó gombok
 
     [SetUp]
     public void Setup()
     {
         // A szintmenü GameObject létrehozása és a komponens hozzáadása
         levelMenuGO = new GameObject();
-        levelMenu = levelMenuGO.AddComponent<LevelMenuTest>();
+        levelMenu = levelMenuGO.AddComponent<LevelMenuTest>(); // LevelMenu hozzáadása
 
         // Gombok létrehozása a teszteléshez
         buttons = new Button[5]; // Például 5 gomb
@@ -48,7 +48,7 @@ public class LevelMenuTest : MonoBehaviour
     [Test]
     public void OpenLevel_LoadsCorrectScene()
     {
-        // Feltételezve, hogy a szín neve "Level 1"
+        // Feltételezve, hogy a szint neve "Level 1"
         levelMenu.OpenLevel(1);
 
         // Ellenőrizzük, hogy a jelenet helyesen lett betöltve

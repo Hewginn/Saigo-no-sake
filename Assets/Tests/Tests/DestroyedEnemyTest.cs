@@ -1,66 +1,138 @@
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-
-public class DestroyedEnemyTest
+public class DestroyedEnemyTest : MonoBehaviour
 {
-    private GameObject gameManagerGO;
-    private GameObject player;
-    private GameObject destroyedEnemyGO;
-    private DestroyedEnemyTest destroyedEnemy;
-    private GameManagerTest gameManager;
+    private GameObject enemyGameObject; // A DestroyedEnemy GameObject
+    private DestroyedEnemyTest destroyedEnemy; // A DestroyedEnemy komponens
+    private GameObject GameManagerGO; // Mock GameManager GameObject
+    private GameObject playerGO; // Mock Player GameObject
+    //Játékos
+    public GameObject Player;
+
+    //Kiiktatást számláló UI szöveg
+    TextMeshProUGUI killsTextUI;
+    
+    int kills; //Kiiktatásokat számláló
+    public int Kills{
+
+        get{
+            return this.kills;
+        }
+        set{
+            this.kills = value;
+            UpdateScoreTextUI();
+        }
+
+
+
+    }
+
+    void UpdateScoreTextUI(){
+
+        //UI frissítés
+        string killsStr = string.Format("{0:0}",kills);
+        killsTextUI.text = killsStr;
+
+        //Küldetés teljesítése elért kiiktatással
+        if(killsStr=="100"){
+
+                //Játék megszakítása
+                GameManagerGO.GetComponent<GameManagerTest>().SetGameManagerState(GameManagerTest.GameManagerState.GameOver);
+                Player.SetActive(false);
+
+                //Új szint feloldása
+                UnlockNewLevel();
+                
+            }
+    }
+    //Új szint feloldása és feloldott szintek elmentése
+    void UnlockNewLevel(){
+        if(SceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ReachedIndex"))
+        {
+            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex + 1);
+            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnclokedLevel", 1) + 1);
+            PlayerPrefs.Save();
+        }
+    }
+
 
     [SetUp]
-    public void SetUp()
+    public void Setup()
     {
-        // Létrehozza a GameManager, Player és DestroyedEnemy játékobjektumokat
-        gameManagerGO = new GameObject();
-        gameManager = gameManagerGO.AddComponent<GameManager>();
-        
-        player = new GameObject();
-        player.AddComponent<PlayerControl>(); // Player vezérlés szimulálása
+        // Létrehozunk egy GameObject-et a DestroyedEnemy-hez és hozzáadjuk a komponenst
+        enemyGameObject = new GameObject();
+        destroyedEnemy = enemyGameObject.AddComponent<DestroyedEnemyTest>();
 
-        destroyedEnemyGO = new GameObject();
-        destroyedEnemy = destroyedEnemyGO.AddComponent<DestroyedEnemy>();
+        // Létrehozunk egy mock GameManager GameObject-et
+        GameManagerGO = new GameObject();
+        GameManagerGO.AddComponent<GameManagerTest>(); // Feltételezve, hogy a GameManager már definiálva van
 
-        // TextMeshProUGUI szöveg elem hozzáadása a kiiktatások számlálásához
-        var killsText = destroyedEnemyGO.AddComponent<TextMeshProUGUI>();
-        
-        // Referenciák beállítása
-        destroyedEnemy.GameManagerGO = gameManagerGO;
-        destroyedEnemy.Player = player;
+        // Létrehozunk egy mock Player GameObject-et
+        playerGO = new GameObject();
 
-        // GameOverGO objektum hozzáadása a GameManager-hez
-        gameManager.GameOverGO = new GameObject();
-        gameManager.GameOverGO.SetActive(false); // Alapértelmezésben inaktív
+        // Hozzárendeljük a GameManager és Player hivatkozásokat
+        destroyedEnemy.GameManagerGO = GameManagerGO;
+        destroyedEnemy.Player = playerGO;
 
-        // DestroyedEnemy UI elem beállítása
-        destroyedEnemyGO.GetComponent<TextMeshProUGUI>().text = "0";
+        // Inicializáljuk a kills szöveg UI-t
+        var textMeshProUGUI = enemyGameObject.AddComponent<TextMeshProUGUI>();
+        textMeshProUGUI.text = "0"; // Kezdeti szöveg a kills számlálóhoz
+
+        // Biztosítjuk, hogy a PlayerPrefs ne zavarja meg a teszteket
+        PlayerPrefs.DeleteAll();
     }
 
     [Test]
-    public void Kills_SetKillsTo100_TriggersGameOver()
+    public void Kills_Grow_IfSet()
     {
-        // Kiiktatások számlálójának beállítása 100-ra
+        // Előkészítés
+        destroyedEnemy.Kills = 0;
+
+        // Művelet
+        destroyedEnemy.Kills = 5;
+
+        // Ellenőrzés
+        Assert.AreEqual(5, destroyedEnemy.Kills);
+    }
+
+    [Test]
+    public void Kills_UIUpdate()
+    {
+        // Előkészítés
+        var textMeshProUGUI = enemyGameObject.GetComponent<TextMeshProUGUI>();
+
+        // Művelet
+        destroyedEnemy.Kills = 10;
+
+        // Ellenőrzés
+        Assert.AreEqual("10", textMeshProUGUI.text);
+    }
+
+    [Test]
+    public void Kills_Reach_100_GameOver_State()
+    {
+        // Előkészítés
+        var gameManager = GameManagerGO.GetComponent<GameManagerTest>();
+        destroyedEnemy.Kills = 99;
+
+        // Művelet
         destroyedEnemy.Kills = 100;
 
-        // Ellenőrizzük, hogy a GameOverGO aktívvá vált-e
-        Assert.IsTrue(gameManager.GameOverGO.activeSelf, "GameOverGO nem aktív!");
-
-        // Ellenőrizzük, hogy a játékos objektum inaktív-e
-        Assert.IsFalse(destroyedEnemy.Player.activeSelf, "A játékos objektum nem lett inaktív!");
+        // Ellenőrzés
+        Assert.AreEqual(GameManagerTest.GameManagerState.GameOver, GameManagerTest.CurrentState);
+        Assert.IsFalse(playerGO.activeSelf); // A játékos inaktív kell, hogy legyen
     }
 
     [TearDown]
     public void TearDown()
     {
-        // Tisztítás, az összes létrehozott objektum megsemmisítése a tesztek után
-        Object.Destroy(gameManagerGO);
-        Object.Destroy(player);
-        Object.Destroy(destroyedEnemyGO);
+        // A létrehozott GameObject eltávolítása
+        Object.Destroy(enemyGameObject);
+        Object.Destroy(GameManagerGO);
+        Object.Destroy(playerGO);
     }
 }

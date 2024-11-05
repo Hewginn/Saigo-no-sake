@@ -9,6 +9,23 @@ public class EnemyGunTest : MonoBehaviour
     private EnemyGunTest enemyGun;
     private GameObject playerGO;
 
+    //Cikázó ellnfél
+    public bool isEnemyZigZag;
+
+    //Első frame update előtt van meghívva
+    void Start()
+    {
+
+        //Lövés 1 másodperc elteltével
+        Invoke("FireEnemyBullet", 1f);
+
+        //Ha az ellenfél cikázik 3 másodperc múlva is löjjön egyet
+        if (isEnemyZigZag)
+        {
+            Invoke("FireEnemyBullet", 3f);
+        }
+    }
+
     [SetUp]
     public void SetUp()
     {
@@ -30,7 +47,7 @@ public class EnemyGunTest : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
 
         // Ellenőrizzük, hogy van-e egy új lövedék a jelenetben
-        EnemyBullet bullet = GameObject.FindObjectOfType<EnemyBullet>();
+        EnemyBulletTest bullet = GameObject.FindObjectOfType<EnemyBulletTest>();
         Assert.IsNotNull(bullet, "A lövedék nem lett létrehozva 1 másodperc elteltével.");
     }
 
@@ -47,7 +64,7 @@ public class EnemyGunTest : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
 
         // Ellenőrizzük a lövedék irányát
-        EnemyBullet bullet = GameObject.FindObjectOfType<EnemyBullet>();
+        EnemyBulletTest bullet = GameObject.FindObjectOfType<EnemyBulletTest>();
         Assert.IsNotNull(bullet, "A lövedék nem lett létrehozva a játékos felé irányítva.");
 
         Vector2 expectedDirection = (playerGO.transform.position - bullet.transform.position).normalized;

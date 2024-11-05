@@ -26,7 +26,7 @@ public class EnemySpreadGunTest : MonoBehaviour
         enemyGO.transform.position = new Vector2(0, 5); // Set enemy position
         yield return new WaitForSeconds(1.1f); // Wait for the shots
 
-        EnemyBullet[] bullets = Object.FindObjectsOfType<EnemyBullet>(); // Find all bullets
+        EnemyBulletTest[] bullets = Object.FindObjectsOfType<EnemyBulletTest>(); // Find all bullets
         Assert.AreEqual(3, bullets.Length); // Check that there are three bullets
 
         // Check that the bullets are flying in different directions

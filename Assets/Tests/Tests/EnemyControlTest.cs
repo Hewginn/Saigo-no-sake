@@ -11,8 +11,25 @@ public class EnemyControlTest : MonoBehaviour
     private GameObject scoreUITextGO;
     private GameScoreTest gameScore; // Megfelelő típust használd
 
+     //Logikai változó: Játékos pusztította-e el az ellenséget
+    bool isDestroyedByPlayer = false;
     private GameObject killsUITextGO;
     private DestroyedEnemyTest destroyedEnemy; // Megfelelő típust használd
+
+    //Robbanás
+    public GameObject ExpolsionGO;
+
+     //Sebesség
+    float speed;
+
+    //Első frame update előtt van meghívva
+    void Start()
+    {
+        //Objektum létrehozásakor szükséges változók inicializálása
+        speed = 2f;
+        scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
+        killsUITextGO = GameObject.FindGameObjectWithTag("DestroyedEnemies");
+    }
 
     [SetUp]
     public void SetUp()
@@ -27,11 +44,11 @@ public class EnemyControlTest : MonoBehaviour
         // Létrehozzuk a pontszám és kiiktatási számlálókat, és hozzáadjuk a szükséges komponenseket
         scoreUITextGO = new GameObject();
         scoreUITextGO.tag = "ScoreTextTag";
-        gameScore = scoreUITextGO.AddComponent<GameScore>();
+        gameScore = scoreUITextGO.AddComponent<GameScoreTest>();
 
         killsUITextGO = new GameObject();
         killsUITextGO.tag = "DestroyedEnemies";
-        destroyedEnemy = killsUITextGO.AddComponent<DestroyedEnemy>();
+        destroyedEnemy = killsUITextGO.AddComponent<DestroyedEnemyTest>();
 
         // Az enemyControl komponenst összekapcsoljuk a pontszám és kiiktatás számlálóval
         enemyControl.Start();

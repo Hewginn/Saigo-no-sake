@@ -10,6 +10,9 @@ public class PlanetControllerTest : MonoBehaviour
     private GameObject planet2; // A második bolygó GameObject
     private GameObject planet3; // A harmadik bolygó GameObject
 
+
+    
+
     [SetUp]
     public void Setup()
     {
@@ -28,7 +31,7 @@ public class PlanetControllerTest : MonoBehaviour
         planetController = planetControllerGO.AddComponent<PlanetControllerTest>();
         
         // A bolygók hozzárendelése a PlanetController-hez
-        planetController.Planets = new GameObject[] { planet1, planet2, planet3 };
+        planetController.PlanetTest = new GameObject[] { planet1, planet2, planet3 };
 
         // A Queue inicializálása, hogy biztosítsuk, hogy minden bolygó elérhető
         planetController.Start();
@@ -49,7 +52,7 @@ public class PlanetControllerTest : MonoBehaviour
 
         // Ellenőrizzük, hogy egy bolygó ki lett dequeuelve és mozgásra van állítva
         Assert.AreEqual(2, planetController.availablePlanets.Count);
-        Assert.IsTrue(planet1.GetComponent<Planet>().isMoving);
+        Assert.IsTrue(planet1.GetComponent<PlanetTest>().isMoving);
     }
 
     [Test]
@@ -57,7 +60,7 @@ public class PlanetControllerTest : MonoBehaviour
     {
         // A bolygót a küszöb alá állítjuk
         planet1.transform.position = new Vector3(0, -1, 0);
-        planet1.GetComponent<Planet>().isMoving = false;
+        planet1.GetComponent<PlanetTest>().isMoving = false;
 
         // Meghívjuk az EnqueuePlanets-t
         planetController.EnqueuePlanets();
@@ -72,7 +75,7 @@ public class PlanetControllerTest : MonoBehaviour
     {
         // A bolygót a küszöb alá állítjuk
         planet1.transform.position = new Vector3(0, -1, 0);
-        planet1.GetComponent<Planet>().isMoving = true; // Mozgásra állítjuk
+        planet1.GetComponent<PlanetTest>().isMoving = true; // Mozgásra állítjuk
 
         // Meghívjuk a MovePlanetDown-t
         planetController.MovePlanetDown();

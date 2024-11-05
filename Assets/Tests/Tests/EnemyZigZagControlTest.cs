@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.TestTools;
 
-public class EnemyZigZagControlTest
+public class EnemyZigZagControlTest : MonoBehaviour
 {
     private GameObject enemyGO;
     private EnemyZigZagControlTest enemyZigZagControl; // Itt a helyes típust használd
@@ -18,11 +18,11 @@ public class EnemyZigZagControlTest
 
         scoreUITextGO = new GameObject("ScoreUITextGO");
         scoreUITextGO.tag = "ScoreTextTag";
-        scoreUITextGO.AddComponent<GameScore>();
+        scoreUITextGO.AddComponent<GameScoreTest>();
 
         killsUITextGO = new GameObject("KillsUITextGO");
         killsUITextGO.tag = "DestroyedEnemies";
-        killsUITextGO.AddComponent<DestroyedEnemy>();
+        killsUITextGO.AddComponent<DestroyedEnemyTest>();
     }
 
     [UnityTest]
@@ -58,8 +58,8 @@ public class EnemyZigZagControlTest
 
         yield return new WaitForFixedUpdate();
 
-        Assert.AreEqual(100, scoreUITextGO.GetComponent<GameScore>().Score);
-        Assert.AreEqual(1, killsUITextGO.GetComponent<DestroyedEnemy>().Kills);
+        Assert.AreEqual(100, scoreUITextGO.GetComponent<GameScoreTest>().Score);
+        Assert.AreEqual(1, killsUITextGO.GetComponent<DestroyedEnemyTest>().Kills);
     }
 
     [TearDown]
