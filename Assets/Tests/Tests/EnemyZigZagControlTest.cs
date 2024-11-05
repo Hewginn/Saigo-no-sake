@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 public class EnemyZigZagControlTest
 {
     private GameObject enemyGO;
-    private EnemyZigZagControl enemyZigZagControl;
+    private EnemyZigZagControlTest enemyZigZagControl; // Itt a helyes típust használd
     private GameObject scoreUITextGO;
     private GameObject killsUITextGO;
 
@@ -14,9 +14,8 @@ public class EnemyZigZagControlTest
     public void SetUp()
     {
         enemyGO = new GameObject();
-        enemyZigZagControl = enemyGO.AddComponent<EnemyZigZagControl>();
-        enemyZigZagControl.ExpolsionGO = new GameObject("Explosion");
-        
+        enemyZigZagControl = enemyGO.AddComponent<EnemyZigZagControlTest>();
+
         scoreUITextGO = new GameObject("ScoreUITextGO");
         scoreUITextGO.tag = "ScoreTextTag";
         scoreUITextGO.AddComponent<GameScore>();
@@ -69,7 +68,5 @@ public class EnemyZigZagControlTest
         Object.Destroy(enemyGO);
         Object.Destroy(scoreUITextGO);
         Object.Destroy(killsUITextGO);
-        GameObject explosionGO = GameObject.Find("Explosion");
-        if (explosionGO != null) Object.Destroy(explosionGO);
     }
 }

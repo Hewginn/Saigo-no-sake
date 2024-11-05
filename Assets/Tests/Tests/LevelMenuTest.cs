@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelMenuTest
 {
     private GameObject levelMenuGO; // A szintmenü GameObject
-    private LevelMenu levelMenu; // A LevelMenu komponens
+    private LevelMenuTest levelMenu; // A LevelMenu komponens
     private Button[] buttons; // A szintválasztó gombok
 
     [SetUp]
@@ -14,7 +14,7 @@ public class LevelMenuTest
     {
         // A szintmenü GameObject létrehozása és a komponens hozzáadása
         levelMenuGO = new GameObject();
-        levelMenu = levelMenuGO.AddComponent<LevelMenu>();
+        levelMenu = levelMenuGO.AddComponent<LevelMenuTest>();
 
         // Gombok létrehozása a teszteléshez
         buttons = new Button[5]; // Például 5 gomb

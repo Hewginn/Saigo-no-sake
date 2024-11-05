@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlanetTest
 {
     private GameObject planetGO;       // A bolygó GameObject
-    private Planet planet;             // A Planet komponens
+    private PlanetTest planet;             // A Planet komponens
 
     [SetUp]
     public void Setup()

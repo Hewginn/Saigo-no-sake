@@ -3,23 +3,23 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 
-public class EnemyControlTest
+public class EnemyControlTest : MonoBehaviour
 {
     private GameObject enemyGO;
-    private EnemyControl enemyControl;
+    private EnemyControlTest enemyControl; // Itt a megfelelő osztályt használjuk
 
     private GameObject scoreUITextGO;
-    private GameScore gameScore;
+    private GameScoreTest gameScore; // Megfelelő típust használd
 
     private GameObject killsUITextGO;
-    private DestroyedEnemy destroyedEnemy;
+    private DestroyedEnemyTest destroyedEnemy; // Megfelelő típust használd
 
     [SetUp]
     public void SetUp()
     {
         // Létrehozunk egy GameObject-et, amelyhez hozzáadjuk az EnemyControl komponenst
         enemyGO = new GameObject();
-        enemyControl = enemyGO.AddComponent<EnemyControl>();
+        enemyControl = enemyGO.AddComponent<EnemyControlTest>();
 
         // Beállítjuk a robbanás prefab-jét, amit inicializáláshoz használ
         enemyControl.ExpolsionGO = new GameObject("Explosion");

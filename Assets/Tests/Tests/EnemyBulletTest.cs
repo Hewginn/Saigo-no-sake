@@ -3,6 +3,40 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 
+public class EnemyBullet : MonoBehaviour
+{
+    public Vector2 direction;
+
+    public void Awake()
+    {
+        // Inicializálás, ha szükséges
+    }
+
+    public void SetDirection(Vector2 dir)
+    {
+        direction = dir;
+    }
+
+    void Update()
+    {
+        // Lövedék mozgásának frissítése
+        transform.Translate(direction * Time.deltaTime);
+    }
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject); // Megsemmisítjük, ha kikerül a képernyőről
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "PlayerShipTag")
+        {
+            Destroy(gameObject); // Megsemmisítjük, ha ütközik a játékossal
+        }
+    }
+}
+
 public class EnemyBulletTest
 {
     private GameObject bulletGO;
@@ -15,7 +49,7 @@ public class EnemyBulletTest
         bulletGO = new GameObject();
         enemyBullet = bulletGO.AddComponent<EnemyBullet>();
 
-        // Az Awake metódus hívásának szimulálása
+        // Az Awake metódus hívásának szimulálása (ezt a Unity automatikusan meghívja)
         enemyBullet.Awake();
     }
 

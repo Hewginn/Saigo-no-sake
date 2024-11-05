@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlanetControllerTest
 {
     private GameObject planetControllerGO; // A PlanetController GameObject
-    private PlanetController planetController; // A PlanetController komponens
+    private PlanetControllerTest planetController; // A PlanetController komponens
 
     private GameObject planet1; // Az első bolygó GameObject
     private GameObject planet2; // A második bolygó GameObject

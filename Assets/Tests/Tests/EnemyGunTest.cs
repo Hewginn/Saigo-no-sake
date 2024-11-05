@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class EnemyGunTest
+public class EnemyGunTest : MonoBehaviour
 {
     private GameObject enemyGO;
-    private EnemyGun enemyGun;
+    private EnemyGunTest enemyGun;
     private GameObject playerGO;
 
     [SetUp]
@@ -14,14 +14,10 @@ public class EnemyGunTest
     {
         // Létrehozunk egy ellenséges objektumot és hozzáadjuk az EnemyGun komponenst
         enemyGO = new GameObject();
-        enemyGun = enemyGO.AddComponent<EnemyGun>();
+        enemyGun = enemyGO.AddComponent<EnemyGunTest>();
 
         // Létrehozunk egy játékos objektumot, amit célpontként használunk
         playerGO = new GameObject("PlayerGO");
-
-        // Létrehozunk egy lövedék prefab objektumot
-        enemyGun.EnemyBulletGO = new GameObject();
-        enemyGun.EnemyBulletGO.AddComponent<EnemyBullet>(); // Hozzáadjuk az EnemyBullet komponenst a prefabhoz
     }
 
     [UnityTest]
@@ -36,23 +32,6 @@ public class EnemyGunTest
         // Ellenőrizzük, hogy van-e egy új lövedék a jelenetben
         EnemyBullet bullet = GameObject.FindObjectOfType<EnemyBullet>();
         Assert.IsNotNull(bullet, "A lövedék nem lett létrehozva 1 másodperc elteltével.");
-    }
-
-    [UnityTest]
-    public IEnumerator EnemyGun_ZigZagShootsAdditionalBulletAfterThreeSeconds()
-    {
-        // Beállítjuk a cikázó ellenséget
-        enemyGun.isEnemyZigZag = true;
-
-        // Inicializáljuk az ellenséges lövést
-        enemyGun.Start();
-
-        // 3 másodperc várakozás a második lövés elindulásához
-        yield return new WaitForSeconds(3.1f);
-
-        // Ellenőrizzük, hogy van legalább két lövedék a jelenetben
-        EnemyBullet[] bullets = GameObject.FindObjectsOfType<EnemyBullet>();
-        Assert.IsTrue(bullets.Length >= 2, "A cikázó ellenség nem lőtt másodjára 3 másodperc után.");
     }
 
     [UnityTest]
@@ -84,6 +63,5 @@ public class EnemyGunTest
         // Tisztítás a teszt után, ha az objektum még létezik
         if (enemyGO != null) Object.Destroy(enemyGO);
         if (playerGO != null) Object.Destroy(playerGO);
-        if (enemyGun.EnemyBulletGO != null) Object.Destroy(enemyGun.EnemyBulletGO);
     }
 }

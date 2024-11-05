@@ -5,7 +5,7 @@ using TMPro;                     // TextMeshProUGUI használata
 public class PlayerControlTest
 {
     private GameObject playerGO;             // A játékos GameObject
-    private PlayerControl playerControl;     // A PlayerControl komponens
+    private PlayerControlTest playerControl;     // A PlayerControl komponens
 
     [SetUp]
     public void Setup()

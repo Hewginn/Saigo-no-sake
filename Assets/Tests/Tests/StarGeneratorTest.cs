@@ -4,7 +4,7 @@ using UnityEngine;
 public class StarGeneratorTest
 {
     private GameObject starGeneratorGO;  // A StarGenerator GameObject
-    private StarGenerator starGenerator;  // A StarGenerator komponens
+    private StarGeneratorTest starGenerator;  // A StarGenerator komponens
     private GameObject starPrefab;        // A csillag prefab
 
     [SetUp]

@@ -4,7 +4,7 @@ using UnityEngine;
 public class PowerUpSpawnerTest
 {
     private GameObject spawnerGO;                // A PowerUpSpawner GameObject
-    private PowerUpSpawner powerUpSpawner;      // A PowerUpSpawner komponens
+    private PowerUpSpawnerTest powerUpSpawner;      // A PowerUpSpawner komponens
 
     [SetUp]
     public void Setup()

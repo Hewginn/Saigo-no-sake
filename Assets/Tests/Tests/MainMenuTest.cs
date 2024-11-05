@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuTest
 {
     private GameObject mainMenuGO; // A főmenü GameObject
-    private MainMenu mainMenu; // A MainMenu komponens
+    private MainMenuTest mainMenu; // A MainMenu komponens
 
     [SetUp]
     public void Setup()

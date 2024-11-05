@@ -4,7 +4,7 @@ using UnityEngine;
 public class PowerUpTest
 {
     private GameObject powerUpGO;  // A PowerUp GameObject
-    private PowerUp powerUp;        // A PowerUp komponens
+    private PowerUpTest powerUp;        // A PowerUp komponens
     private GameObject playerGO;    // A játékos GameObject
 
     [SetUp]

@@ -1,6 +1,16 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using System.Collections;
+
+public class Destroyer : MonoBehaviour // MonoBehaviour öröklés hozzáadva
+{
+    public void DestroyGameObject()
+    {
+        // A GameObject megsemmisítése
+        Destroy(gameObject);
+    }
+}
 
 public class DestroyerTest
 {
@@ -12,7 +22,7 @@ public class DestroyerTest
     {
         // Létrehozunk egy GameObject-et, amelyhez hozzáadjuk a Destroyer komponenst
         destroyerGO = new GameObject();
-        destroyer = destroyerGO.AddComponent<Destroyer>();
+        destroyer = destroyerGO.AddComponent<Destroyer>(); // Destroyer hozzáadása a GameObject-hez
     }
 
     [UnityTest]

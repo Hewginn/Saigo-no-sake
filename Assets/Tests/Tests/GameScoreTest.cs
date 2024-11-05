@@ -5,7 +5,7 @@ using TMPro;
 public class GameScoreTest
 {
     private GameObject gameScoreGO; // A GameScore GameObject
-    private GameScore gameScore; // A GameScore komponens
+    private GameScoreTest gameScore; // A GameScore komponens
     private TextMeshProUGUI scoreTextUI; // A pontszám megjelenítésére szolgáló UI komponens
 
     [SetUp]

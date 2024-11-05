@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 //Egyszerű ellenséges lövés
 public class EnemyGun : MonoBehaviour
 {

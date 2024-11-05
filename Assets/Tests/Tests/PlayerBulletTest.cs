@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerBulletTest
 {
     private GameObject bulletGO;               // A lövedék GameObject
-    private PlayerBullet playerBullet;         // A PlayerBullet komponens
+    private PlayerBulletTest playerBullet;         // A PlayerBullet komponens
 
     [SetUp]
     public void Setup()

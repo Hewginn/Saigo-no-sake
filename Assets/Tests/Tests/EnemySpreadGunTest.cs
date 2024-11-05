@@ -3,17 +3,17 @@ using UnityEngine;                // Unity alapvető funkciók
 using UnityEngine.TestTools;      // Unity tesztelési eszközök
 using System.Collections;         // Gyűjteményekhez szükséges
 
-public class EnemySpreadGunTest
+public class EnemySpreadGunTest : MonoBehaviour
 {
     private GameObject enemyGO;          // Az ellenség GameObject
-    private EnemySpreadGun enemySpreadGun; // Az EnemySpreadGun komponens
+    private EnemySpreadGunTest enemySpreadGun; // Az EnemySpreadGun komponens
 
     [SetUp]
     public void SetUp()
     {
         // Létrehozunk egy GameObject-et az ellenség számára és hozzáadjuk az EnemySpreadGun komponenst
         enemyGO = new GameObject();
-        enemySpreadGun = enemyGO.AddComponent<EnemySpreadGun>();
+        enemySpreadGun = enemyGO.AddComponent<EnemySpreadGunTest>();
         enemySpreadGun.EnemyBulletGO = new GameObject("EnemyBullet");
         enemySpreadGun.EnemyBulletGO.AddComponent<EnemyBullet>();
     }

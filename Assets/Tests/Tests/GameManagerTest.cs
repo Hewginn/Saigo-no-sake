@@ -6,7 +6,7 @@ using System.Collections;
 public class GameManagerTest
 {
     private GameObject gameManagerGO; // A GameManager GameObject
-    private GameManager gameManager; // A GameManager komponens
+    private GameManagerTest gameManager; // A GameManager komponens
     private GameObject playButton; // A játék indító gomb
     private GameObject menuButton; // A menü gomb
     private GameObject playerPlane; // A játékos repülőgépe

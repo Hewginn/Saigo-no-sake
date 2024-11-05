@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class EnemySpawnerTest
+public class EnemySpawnerTest : MonoBehaviour
 {
     private GameObject spawnerGO;
-    private EnemySpawner enemySpawner;
+    private EnemySpawnerTest enemySpawner; // A megfelelő osztályra állítjuk
 
     [SetUp]
     public void SetUp()

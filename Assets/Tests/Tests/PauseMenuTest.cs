@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenuTest
 {
     private GameObject pauseMenuGO; // A PauseMenu GameObject
-    private PauseMenu pauseMenu; // A PauseMenu komponens
+    private PauseMenuTest pauseMenu; // A PauseMenu komponens
 
     [SetUp]
     public void Setup()

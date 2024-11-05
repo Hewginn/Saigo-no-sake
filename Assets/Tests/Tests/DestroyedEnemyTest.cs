@@ -2,14 +2,17 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class DestroyedEnemyTest
 {
     private GameObject gameManagerGO;
     private GameObject player;
     private GameObject destroyedEnemyGO;
-    private DestroyedEnemy destroyedEnemy;
-    private GameManager gameManager;
+    private DestroyedEnemyTest destroyedEnemy;
+    private GameManagerTest gameManager;
 
     [SetUp]
     public void SetUp()

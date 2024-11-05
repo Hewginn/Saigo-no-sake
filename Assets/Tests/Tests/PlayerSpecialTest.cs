@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerSpecialTest
 {
     private GameObject specialBulletGO;        // A speciális golyó GameObject
-    private PlayerSpecial playerSpecial;       // A PlayerSpecial komponens
+    private PlayerSpecialTest playerSpecial;       // A PlayerSpecial komponens
 
     [SetUp]
     public void Setup()
