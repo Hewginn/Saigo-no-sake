@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PowerUpTest : MonoBehaviour
 {
+
+    //Tárgyak sebessége
+    float speed;
     private GameObject powerUpGO;  // A PowerUp GameObject
     private PowerUpTest powerUp;        // A PowerUp komponens
     private GameObject playerGO;    // A játékos GameObject
@@ -21,6 +24,34 @@ public class PowerUpTest : MonoBehaviour
         // Beállítunk egy kamerát a viewport számításokhoz
         Camera.main = new GameObject().AddComponent<Camera>();
         Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
+    }
+
+
+    //Minden frame során megvan hívva
+    void Update()
+    {
+        //Mozgás
+        MoveForward();
+    }
+
+    //Az objektum folyamatos lefele mozgását leíró függvény
+    void MoveForward(){
+
+        //Régi pozíció
+        Vector2 position = transform.position;
+
+        //Határ meghatározása
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0,0));
+
+        //Új pozíció megadása
+        position.y -= speed * Time.deltaTime;
+        transform.position = position;
+        
+        //Határ alkalmazása
+        if(transform.position.y < min.y){
+            Destroy(gameObject);
+        }
+
     }
 
     [Test]
@@ -55,6 +86,16 @@ public class PowerUpTest : MonoBehaviour
 
         // Ellenőrizzük, hogy a power-up el lett-e távolítva
         Assert.IsTrue(powerUpGO == null || powerUpGO.transform == null, "A PowerUp-nak el kell tűnnie, amikor a határon kívülre kerül.");
+    }
+
+    //Ütközés kezelő
+    void OnTriggerEnter2D(Collider2D col){
+
+        //Ha a játékosnak ütközik fegye fel (törlődjön)
+        if(col.tag == "PlayerShipTag" || col.tag == "PlayerUndamagable"){
+            Destroy(gameObject);
+        }
+        
     }
 
     [Test]

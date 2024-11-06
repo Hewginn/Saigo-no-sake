@@ -5,8 +5,14 @@ using System.Collections.Generic;
 
 public class PlayerSpecialTest : MonoBehaviour
 {
+
+    //Kezdő pozíció
+    Vector2 startPosition;
     private GameObject specialBulletGO;        // A speciális golyó GameObject
     private PlayerSpecialTest playerSpecial;       // A PlayerSpecial komponens
+
+    //Lövedék sebessége
+    float speed;
 
     //Különleges lövedék robbanása
     public GameObject specialExplosion;

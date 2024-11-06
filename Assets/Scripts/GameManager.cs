@@ -51,6 +51,8 @@ public class GameManager : MonoBehaviour
         GameOver,
     }
 
+    
+
     //Játék állapota
     GameManagerState GMState;
 

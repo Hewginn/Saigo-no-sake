@@ -19,6 +19,48 @@ public class GameManagerTest : MonoBehaviour
     private GameObject pauseButton; // A szünet gomb
     private GameObject powerUpSpawner; // A power-up generáló
 
+
+    //
+
+    
+
+    
+
+    //Vereség pop-up
+    public GameObject GameOverGO;
+
+    //Időt számláló UI
+    public GameObject TimerCounterGO;
+
+    //Cím kiirás
+    public GameObject GameTitleGO;
+
+    //Megállító gomb
+    public GameObject PauseButton;
+
+    //Játék állapotok tipus
+    public enum GameManagerState{
+
+        //Kezdő menü
+        Opening,
+
+        //Játék
+        Gameplay,
+
+        //Játék vége
+        GameOver,
+    }
+
+    //Játék állapota
+    GameManagerState GMState;
+    //Első frame update előtt van meghívva
+    void Start()
+    {
+        GMState = GameManagerState.Opening;
+    }
+
+
+
     [SetUp]
     public void Setup()
     {
@@ -60,11 +102,85 @@ public class GameManagerTest : MonoBehaviour
         gameManager.powerUpSpawner = powerUpSpawner;
     }
 
+     //A játék állapotának megváltoztatása
+    void UpdateGameManagerState(){
+
+        switch(GMState)
+        {
+            //Kezdeti állapot beállítása
+            case GameManagerState.Opening:
+
+                playButton.SetActive(true);
+
+                menuButton.SetActive(true);
+
+                GameTitleGO.SetActive(true);
+
+                GameOverGO.SetActive(false);
+
+                PauseButton.SetActive(false);
+
+                break;
+
+            //Játékmenet beállítása
+            case GameManagerState.Gameplay:
+
+                scoreUITextGO.GetComponent<GameScoreTest>().Score = 0;
+                destroyedUITextGO.GetComponent<DestroyedEnemyTest>().Kills = 0;
+
+                playButton.SetActive(false);
+
+                menuButton.SetActive(false);
+
+                GameTitleGO.SetActive(false);
+                PauseButton.SetActive(true);
+
+                playerPlane.GetComponent<PlayerControlTest>().Init();
+
+                enemySpawner.GetComponent<EnemySpawnerTest>().ScheduleEnemySpawner();
+
+                powerUpSpawner.GetComponent<PowerUpSpawnerTest>().SchedulePowerUpSpawner();
+
+                TimerCounterGO.GetComponent<TimeCounterTest>().StartTimeCounter();
+    
+                break;
+            //Játékvége beállítása
+            case GameManagerState.GameOver:
+
+                TimerCounterGO.GetComponent<TimeCounterTest>().StopTimeCounter();
+
+                enemySpawner.GetComponent<EnemySpawnerTest>().UnScheduleEnemySpawner();
+
+                powerUpSpawner.GetComponent<PowerUpSpawnerTest>().UnSchedulePowerUpSpawner();
+
+                GameOverGO.SetActive(true);
+
+                PauseButton.SetActive(false);
+
+                Invoke("ChangeToOpeningState",8f);
+                
+                break;
+        }
+    }
+
+    //Játék állapot beállítása adott állapotra
+    public void SetGameManagerState(GameManagerState state)
+    {
+        GMState = state;
+        UpdateGameManagerState();
+    }
+
+    //Játék állapotának beállítása játékmenetre
+    public void StartGamePlay(){
+        GMState = GameManagerState.Gameplay;
+        UpdateGameManagerState();
+    }
+
     [Test]
     public void GameManager_InitialStateIsOpening()
     {
         gameManager.Start();
-        Assert.AreEqual(GameManager.GameManagerState.Opening, gameManager.GMState);
+        Assert.AreEqual(GameManagerTest.GameManagerState.Opening, gameManager.GMState);
     }
 
     [UnityTest]
@@ -72,21 +188,21 @@ public class GameManagerTest : MonoBehaviour
     {
         gameManager.StartGamePlay();
         yield return null;
-        Assert.AreEqual(GameManager.GameManagerState.Gameplay, gameManager.GMState);
+        Assert.AreEqual(GameManagerTest.GameManagerState.Gameplay, gameManager.GMState);
     }
 
     [UnityTest]
     public IEnumerator GameManager_GameplayState_InitializesCorrectly()
     {
-        gameManager.SetGameManagerState(GameManagerT.GameManagerState.Gameplay);
+        gameManager.SetGameManagerState(GameManagerTest.GameManagerState.Gameplay);
         yield return null;
 
         Assert.IsFalse(playButton.activeSelf);
         Assert.IsFalse(menuButton.activeSelf);
         Assert.IsFalse(gameTitleGO.activeSelf);
         Assert.IsTrue(pauseButton.activeSelf);
-        Assert.AreEqual(0, scoreUITextGO.GetComponent<GameScore>().Score);
-        Assert.AreEqual(0, destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills);
+        Assert.AreEqual(0, scoreUITextGO.GetComponent<GameScoreTest>().Score);
+        Assert.AreEqual(0, destroyedUITextGO.GetComponent<DestroyedEnemyTest>().Kills);
     }
 
     [UnityTest]
@@ -97,8 +213,8 @@ public class GameManagerTest : MonoBehaviour
 
         Assert.IsTrue(gameOverGO.activeSelf);
         Assert.IsFalse(pauseButton.activeSelf);
-        Assert.IsFalse(enemySpawner.GetComponent<EnemySpawner>().IsInvoking("SpawnEnemy"));
-        Assert.IsFalse(powerUpSpawner.GetComponent<PowerUpSpawner>().IsInvoking("SpawnPowerUp"));
+        Assert.IsFalse(enemySpawner.GetComponent<EnemySpawnerTest>().IsInvoking("SpawnEnemy"));
+        Assert.IsFalse(powerUpSpawner.GetComponent<PowerUpSpawnerTest>().IsInvoking("SpawnPowerUp"));
     }
 
     [UnityTest]

@@ -1,16 +1,20 @@
 using NUnit.Framework;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlanetControllerTest : MonoBehaviour
 {
     private GameObject planetControllerGO; // A PlanetController GameObject
     private PlanetControllerTest planetController; // A PlanetController komponens
 
+    public GameObject[] PlanetTest;
     private GameObject planet1; // Az első bolygó GameObject
     private GameObject planet2; // A második bolygó GameObject
     private GameObject planet3; // A harmadik bolygó GameObject
 
-
+    public GameObject[] Planets;
+     Queue<GameObject> availablePlanets = new Queue<GameObject>();
     
 
     [SetUp]
@@ -35,6 +39,37 @@ public class PlanetControllerTest : MonoBehaviour
 
         // A Queue inicializálása, hogy biztosítsuk, hogy minden bolygó elérhető
         planetController.Start();
+    }
+
+     // Start is called before the first frame update
+    void Start()
+    {
+        availablePlanets.Enqueue (Planets [0]);
+        availablePlanets.Enqueue (Planets [1]);
+        availablePlanets.Enqueue (Planets [2]);
+
+        InvokeRepeating("MovePlanetDown", 0,20f);
+    }
+
+    
+    void MovePlanetDown(){
+        EnqueuePlanets();
+        if(availablePlanets.Count==0)
+            return;
+
+        GameObject aPlanet = availablePlanets.Dequeue ();
+
+        aPlanet.GetComponent<PlanetTest> ().isMoving = true;
+
+    }
+    void EnqueuePlanets(){
+        foreach(GameObject aPlanet in Planets){
+            if((aPlanet.transform.position.y <0) && (!aPlanet.GetComponent<PlanetTest>().isMoving)){
+                aPlanet.GetComponent<PlanetTest>().ResetPosition();
+
+                availablePlanets.Enqueue(aPlanet);
+            }
+        }
     }
 
     [Test]

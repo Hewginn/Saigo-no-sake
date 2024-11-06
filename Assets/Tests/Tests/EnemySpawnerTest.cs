@@ -5,8 +5,13 @@ using UnityEngine.TestTools;
 
 public class EnemySpawnerTest : MonoBehaviour
 {
+    //Első ellenség fajta
+    public GameObject EnemyGO;
     private GameObject spawnerGO;
     private EnemySpawnerTest enemySpawner; // A megfelelő osztályra állítjuk
+
+    //Ellenség létrehozási gyakoriság (alap: 5mp)
+    float maxSpawnRateInSeconds;
 
     [SetUp]
     public void SetUp()
@@ -33,7 +38,22 @@ public class EnemySpawnerTest : MonoBehaviour
         Assert.AreEqual(1, enemies.Length, "Az ellenség nem lett létrehozva az ütemezett időben.");
     }
 
-    // További tesztek...
+    //Ellenségek létrehozásának megkezdése
+    public void ScheduleEnemySpawner()
+    {
+        
+        maxSpawnRateInSeconds = 5f;
+        Invoke("SpawnEnemy", maxSpawnRateInSeconds);
+        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
+
+    }
+
+    //Ellnségek létrehozásának megszakítása
+    public void UnScheduleEnemySpawner()
+    {
+        CancelInvoke("SpawnEnemy");
+        CancelInvoke("IncreaseSpawnRate");
+    }
 
     [TearDown]
     public void TearDown()

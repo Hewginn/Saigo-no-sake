@@ -8,6 +8,22 @@ public class GameScoreTest : MonoBehaviour
     private GameScoreTest gameScore; // A GameScore komponens
     private TextMeshProUGUI scoreTextUI; // A pontszám megjelenítésére szolgáló UI komponens
 
+    //Pontok
+    int score;
+
+    //Pontok setter, getter
+    public int Score{
+
+        get{
+            return this.score;
+        }
+        set{
+            this.score = value;
+            UpdateScoreTextUI();
+        }
+
+    }
+
     [SetUp]
     public void Setup()
     {
@@ -39,6 +55,12 @@ public class GameScoreTest : MonoBehaviour
         Assert.AreEqual("000042", scoreTextUI.text);
     }
 
+    //Pontszámláló UI átírása
+    void UpdateScoreTextUI(){
+        string scoreStr = string.Format("{0:000000}",score);
+        scoreTextUI.text = scoreStr;
+    }
+
     [Test]
     public void GameScore_InitialScore_IsZero()
     {
@@ -46,6 +68,8 @@ public class GameScoreTest : MonoBehaviour
         Assert.AreEqual(0, gameScore.Score);
         Assert.AreEqual("000000", scoreTextUI.text);
     }
+
+    
 
     [TearDown]
     public void TearDown()

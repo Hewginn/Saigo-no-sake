@@ -9,6 +9,19 @@ public class LevelMenuTest : MonoBehaviour
     private LevelMenuTest levelMenu;    // A LevelMenu komponens
     private Button[] buttons;       // A szintválasztó gombok
 
+    private void Awake(){
+        //Az első pálya feloldása
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel",1);
+        // a még nem feloldott pályák száma
+        for (int i =0; i < buttons.Length; i++){
+            buttons[i].interactable = false;
+        }
+        // a feloldott pályák száma
+        for (int i = 0; i< unlockedLevel; i++){
+            buttons[i].interactable = true;
+        }
+    }
+
     [SetUp]
     public void Setup()
     {
@@ -28,7 +41,12 @@ public class LevelMenuTest : MonoBehaviour
         // Kezdeti PlayerPrefs érték beállítása
         PlayerPrefs.SetInt("UnlockedLevel", 3); // Három szint feloldása
     }
-
+    //A pályák betöltése
+    public void OpenLevel(int levelId)
+    {
+        string LevelName = "Level "+ levelId;
+        SceneManager.LoadScene(LevelName);
+    }
     [Test]
     public void Awake_UnlocksCorrectLevels()
     {

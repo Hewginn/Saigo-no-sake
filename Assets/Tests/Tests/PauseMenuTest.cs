@@ -1,11 +1,43 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Collections;
+using System.Collections.Generic;
 public class PauseMenuTest : MonoBehaviour
 {
+
+    [SerializeField] GameObject pauseMenu;
     private GameObject pauseMenuGO; // A PauseMenu GameObject
-    private PauseMenuTest pauseMenu; // A PauseMenu komponens
+   
+
+    // Update is called once per frame
+    //vissza a menübe gomb
+
+
+     public void Pause()
+    {
+         // a pause menü megjelenítése
+        pauseMenu.SetActive(true);
+        // a játék megállítása
+        Time.timeScale=0;
+
+    }
+    public void Home()
+    {
+        SceneManager.LoadScene("MainMenu");
+        //a folyamatok folytatása
+        Time.timeScale=1;
+    }
+   
+
+
+         //játék folytatása
+    public void Resume()
+    {
+        pauseMenu.SetActive(false); 
+        //a játék folytatása
+        Time.timeScale=1;
+    }
 
     [SetUp]
     public void Setup()
@@ -35,6 +67,8 @@ public class PauseMenuTest : MonoBehaviour
         // Ellenőrizzük, hogy az idő skálája 0-ra van állítva
         Assert.AreEqual(0, Time.timeScale);
     }
+
+   
 
     [Test]
     public void Resume_HidesPauseMenuAndResumesGame()

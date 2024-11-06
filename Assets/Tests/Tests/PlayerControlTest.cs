@@ -54,6 +54,28 @@ public class PlayerControlTest : MonoBehaviour
     //Aktuális különleges lövedék
     int specials;
 
+    //Repülő inicializálása
+    public void Init(){
+
+        //Élet
+        lives = maxLives;
+        LivesUIText.text=lives.ToString();
+
+        //Helyzet
+        transform.position = new Vector2(0,0);
+
+        //Aktiválás
+        gameObject.SetActive(true);
+
+        //Fejlesztési szint
+        upgradeLevel = 0;
+
+        //Különleges lövedékek száma
+        specials = 0;
+        SpecialsUIText.text = "X " + specials.ToString();
+
+    }
+
     [SetUp]
     public void Setup()
     {

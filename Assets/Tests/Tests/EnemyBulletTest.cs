@@ -8,13 +8,16 @@ public class EnemyBulletTest : MonoBehaviour
     private GameObject bulletGO;         // A lövedék GameObject
     private EnemyBulletTest enemyBullet;     // Az EnemyBullet komponens
 
+    //Lövedék iránya
+    Vector2 _direction;
+
     [SetUp]
     public void SetUp()
     {
         // Létrehozunk egy új GameObject-et a lövedék számára és hozzáadjuk az EnemyBullet komponenst
         bulletGO = new GameObject();
         enemyBullet = bulletGO.AddComponent<EnemyBulletTest>();
-        enemyBullet.direction = Vector2.up; // Beállítjuk az irányt felfelé
+        enemyBullet._direction = Vector2.up; // Beállítjuk az irányt felfelé
     }
 
     [UnityTest]
