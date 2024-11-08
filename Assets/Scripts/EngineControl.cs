@@ -9,7 +9,7 @@ public class EngineControl : MonoBehaviour
     int health;
 
     //Max élet
-    int maxHealth = 1;
+    int maxHealth = 20;
 
     //Legutóbb kapott sebzés
     float lastDamaged;

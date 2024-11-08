@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.Threading;
 using System.Timers;
+using Unity.VisualScripting;
 
 //Játékos irányítása, kezelése
 public class PlayerControl : MonoBehaviour
@@ -120,7 +121,7 @@ public class PlayerControl : MonoBehaviour
         //Különleges lövedék lövése 'E' billentyűvel
         if(Input.GetKeyDown("e") && specials > 0){
             GameObject bomb = (GameObject) Instantiate(SpecialGO);
-            bomb.transform.position = specialPosition.transform.position;
+            bomb.GetComponent<PlayerSpecial>().Init(specialPosition.transform.position, new Vector2(0,1), 6f);
             specials--;
             SpecialsUIText.text = "X " + specials.ToString();
         }

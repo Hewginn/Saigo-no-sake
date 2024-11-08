@@ -96,7 +96,7 @@ public class BomberBossControl : MonoBehaviour
 
     //Főellenség támadásai
     public void actions(){
-        int actionSelector = Random.Range(1,3);
+        int actionSelector = Random.Range(1,4);
         switch(actionSelector){
 
             //Hajtóművek sugárlövése
@@ -110,12 +110,20 @@ public class BomberBossControl : MonoBehaviour
 
             //Szoró lövés
             case 2:
-                StartCoroutine(shootRows());
+                StartCoroutine(BulletRain());
+                break;
+            case 3:
+                if(gameObject.transform.GetComponentInChildren<BossBigTurretControl>() != null){
+                    gameObject.transform.GetComponentInChildren<BossBigTurretControl>().HellFireTrigger();
+                }else{
+                    Invoke("actions", 0f);
+                }
                 break;
         }
     }
 
-    private IEnumerator shootRows(){
+    //Szort lövés
+    private IEnumerator BulletRain(){
 
         bool oddRow = false;
 
@@ -138,7 +146,7 @@ public class BomberBossControl : MonoBehaviour
                 bullet.GetComponent<EnemyBullet>().Speed = 2f;
 
                 shootPosition.transform.position = new Vector2(
-                    shootPosition.transform.position.x + 1f,
+                    shootPosition.transform.position.x + 1.25f,
                     shootPosition.transform.position.y
                 );
 

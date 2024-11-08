@@ -98,6 +98,8 @@ public class BossSmallTurretControl : MonoBehaviour
             case "PlayerSpecialTag":
                 health-=5;
                 break;
+            default:
+                break;
         }
         
         if(health <= 0){

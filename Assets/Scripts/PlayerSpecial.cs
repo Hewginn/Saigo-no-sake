@@ -1,42 +1,26 @@
+using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 //Különleges lövedék
-public class PlayerSpecial : MonoBehaviour
+public class PlayerSpecial : Bomb
 {
-    //Kezdő pozíció
-    Vector2 startPosition;
 
-    //Különleges lövedék robbanása
-    public GameObject specialExplosion;
-
-    //Lövedék sebessége
-    float speed;
-
-
-    //Első frame update előtt van meghívva
-    void Start()
+    public override void Init(Vector2 _position, Vector2 _direction, float _speed)
     {
-        speed = 6f;
-
-        startPosition = transform.position;
+        base.Init(_position, _direction, _speed);
     }
 
     //Minden frame során megvan hívva
-    void Update()
+    protected override void Update()
     {
-        // a lövedék jelenlegi helyzete
-        Vector2 position = transform.position;
-        // a lövedék új helyének meghatározása
-        position = new Vector2(position.x, position.y + speed * Time.deltaTime);
-        // a lövedék új helyének beállítása
-        transform.position = position;
+        base.Update();
 
-        //ez a játék jobb felső sarka
-        Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2 (1,1));
-        //ha a töltény elhagyja a játékteret vagy ha a játékos megnyomja az 'F' gombot, akkor semmisüljön meg
-        if(transform.position.y > max.y || startPosition.y + 5f < transform.position.y || Input.GetKeyDown("f"))
+        //ha a játékos megnyomja az 'F' gombot, akkor semmisüljön meg
+        if(Input.GetKeyDown("f"))
         {
             Destroy(gameObject);
         }
@@ -54,9 +38,15 @@ public class PlayerSpecial : MonoBehaviour
 
     }
 
+    public void SetDirection(Vector2 dir){
+        direction = dir.normalized;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, direction * -1);
+    }
+    
     //Törlödés esetén robbanjon fel
-    private void OnDestroy() {
-        GameObject explosion = (GameObject) Instantiate(specialExplosion);
+    void OnDestroy() {
+        GameObject explosion = (GameObject) Instantiate(Explosion);
         explosion.transform.position = transform.position;
+        explosion.tag = "PlayerSpecialTag";
     }
 }
