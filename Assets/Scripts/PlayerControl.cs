@@ -166,7 +166,7 @@ public class PlayerControl : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col){
 
         //Sebződés kezelése
-        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag")) && !isInvincible){
+        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag") || (col.tag == "BossBlastTag")) && !isInvincible){
 
             //Robbanás lejátszása
             PlayerExplosion();

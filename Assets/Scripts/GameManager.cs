@@ -38,6 +38,12 @@ public class GameManager : MonoBehaviour
     //Felhető tárgyakat létrehozó
     public GameObject powerUpSpawner;
 
+    //Főellenség asset
+    public GameObject BossPrefab;
+
+    //Főellenség objektum
+    GameObject BossInstance;
+
     //Játék állapotok tipus
     public enum GameManagerState{
 
@@ -49,6 +55,9 @@ public class GameManager : MonoBehaviour
 
         //Játék vége
         GameOver,
+
+        //Fő ellenség
+        Bossfight,
     }
 
     //Játék állapota
@@ -91,6 +100,7 @@ public class GameManager : MonoBehaviour
                 menuButton.SetActive(false);
 
                 GameTitleGO.SetActive(false);
+
                 PauseButton.SetActive(true);
 
                 playerPlane.GetComponent<PlayerControl>().Init();
@@ -107,16 +117,38 @@ public class GameManager : MonoBehaviour
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
-                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-
                 powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
+
+                if(BossInstance == null){
+                    enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+                    
+                }else{
+                    BossInstance.GetComponent<BomberBossControl>().DestroyFinalBoss();
+                }
 
                 GameOverGO.SetActive(true);
 
                 PauseButton.SetActive(false);
 
+                playerPlane.SetActive(false);
+
                 Invoke("ChangeToOpeningState",8f);
                 
+                break;
+
+            //Utolsó küzdelem megkezdése
+            case GameManagerState.Bossfight:
+
+                //Ellenséges repülők létrehozásának megállítása
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+                
+                //Főellenség létrehozása
+                BossInstance = Instantiate(BossPrefab);
+
+                Vector2 position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,1));
+
+                BossInstance.transform.position = new Vector2(position.x, position.y + 2f);
+
                 break;
         }
     }

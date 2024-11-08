@@ -44,14 +44,14 @@ public class DestroyedEnemy : MonoBehaviour
         killsTextUI.text = killsStr;
 
         //Küldetés teljesítése elért kiiktatással
-        if(killsStr=="100"){
+        if(killsStr=="2"){
 
                 //Játék megszakítása
-                GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
-                Player.SetActive(false);
+                GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Bossfight);
+                //Player.SetActive(false);
 
                 //Új szint feloldása
-                UnlockNewLevel();
+                //UnlockNewLevel();
                 
             }
     }
