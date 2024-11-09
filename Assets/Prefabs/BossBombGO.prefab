@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 7099699323413464186}
   - component: {fileID: 6690842011019915382}
   - component: {fileID: 8840576173909661451}
-  - component: {fileID: 6872365707558166377}
   - component: {fileID: -6737609345807173810}
+  - component: {fileID: 6822158423318485667}
   m_Layer: 0
-  m_Name: SpecialGO
-  m_TagString: PlayerSpecialTag
+  m_Name: BossBombGO
+  m_TagString: EnemyBulletTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1511189823
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 540359a4dac295341afaad83a51bea11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -132,19 +132,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.23, y: 0.32}
   m_EdgeRadius: 0
---- !u!114 &6872365707558166377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8635537552159150856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8a9c7e7b0f85f94eb7d81eedf12644e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  specialExplosion: {fileID: 784265174094879923, guid: 0183b1453ef44bb44bc75edc188ea237, type: 3}
 --- !u!50 &-6737609345807173810
 Rigidbody2D:
   serializedVersion: 4
@@ -172,3 +159,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6822158423318485667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635537552159150856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71b0559b5391414d8eb0e6a2758fa3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 784265174094879923, guid: 0183b1453ef44bb44bc75edc188ea237, type: 3}
