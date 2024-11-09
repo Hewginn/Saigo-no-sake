@@ -16,8 +16,7 @@ TagManager:
   - HealPU
   - PlayerSpecialTag
   - PlayerUndamagable
-  - BossBlastTag
-  - BossEngines
+  - HighScoreTextTag
   layers:
   - Default
   - TransparentFX
@@ -54,12 +53,6 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Background
-    uniqueID: 3555135681
-    locked: 0
-  - name: Boss
-    uniqueID: 991534891
     locked: 0
   - name: GamePlay
     uniqueID: 2783777473

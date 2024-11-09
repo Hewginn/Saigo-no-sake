@@ -40,7 +40,7 @@ public class PlayerBullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col){
 
         //Lövedék elpusztítása, ha ellenfélnek ütközik
-        if(col.tag == "EnemyShipTag" || col.tag == "BossEngines"){
+        if(col.tag == "EnemyShipTag"){
             Destroy(gameObject);
         }
     }

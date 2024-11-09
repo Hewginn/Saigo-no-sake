@@ -8,15 +8,6 @@ public class EnemyBullet : MonoBehaviour
     //Lövdék sebessége
     float speed;
 
-    public float Speed{
-        get{
-            return this.speed;
-        }
-        set{
-            this.speed = value;
-        }
-    }
-
     //Lövedék iránya
     Vector2 _direction;
 

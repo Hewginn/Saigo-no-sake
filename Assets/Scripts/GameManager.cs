@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     //Felhető tárgyakat létrehozó
     public GameObject powerUpSpawner;
 
-
     //A következő szint betöltése gomb
     public GameObject nextLevelButton;
 
@@ -48,13 +47,6 @@ public class GameManager : MonoBehaviour
 
     // a küldetés leírása és a küldetés teljeítésének szövege
     public TextMeshProUGUI description;
-
-    //Főellenség asset
-    public GameObject BossPrefab;
-
-    //Főellenség objektum
-    GameObject BossInstance;
-
 
     //Játék állapotok tipus
     public enum GameManagerState
@@ -68,12 +60,8 @@ public class GameManager : MonoBehaviour
 
         //Játék vége
         GameOver,
-
+        //Küldetés teljesítve
         Win,
-
-
-        Bossfight,
-
     }
 
     //Játék állapota
@@ -104,11 +92,11 @@ public class GameManager : MonoBehaviour
         }*/
 
         // a beolvasndó fájl
-        jsonFile = File.ReadAllText(Application.dataPath + "/persistentDataPath/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         MissionDescription();
-        SaveToJson(data);
+
 
 
         GMState = GameManagerState.Opening;
@@ -132,14 +120,14 @@ public class GameManager : MonoBehaviour
                 PauseButton.SetActive(false);
 
                 // Kiírjuk a szöveget a Mission objektumba
-                //MissionDescription();
+                MissionDescription();
 
                 break;
 
             //Játékmenet beállítása
             case GameManagerState.Gameplay:
 
-                scoreUITextGO.GetComponent<GameScore>().Score = 0;
+                scoreUITextGO.GetComponent<GameScore>().Score = data.score;
                 destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
 
                 playButton.SetActive(false);
@@ -165,24 +153,17 @@ public class GameManager : MonoBehaviour
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+
                 powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
-
-                if (BossInstance == null)
-                {
-                    enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-
-                }
-                else
-                {
-                    BossInstance.GetComponent<BomberBossControl>().DestroyFinalBoss();
-                }
 
                 GameOverGO.SetActive(true);
 
                 PauseButton.SetActive(false);
 
-
                 Invoke("ChangeToOpeningState", 8f);
+
+                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, false);
 
                 break;
 
@@ -201,28 +182,7 @@ public class GameManager : MonoBehaviour
 
                 nextLevelButton.SetActive(true);
 
-
-
-
-                playerPlane.SetActive(false);
-
-                Invoke("ChangeToOpeningState", 8f);
-
-
-                break;
-
-            //Utolsó küzdelem megkezdése
-            case GameManagerState.Bossfight:
-
-                //Ellenséges repülők létrehozásának megállítása
-                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-
-                //Főellenség létrehozása
-                BossInstance = Instantiate(BossPrefab);
-
-                Vector2 position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5, 1));
-
-                BossInstance.transform.position = new Vector2(position.x, position.y + 2f);
+                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
 
                 break;
         }
@@ -286,13 +246,25 @@ public class GameManager : MonoBehaviour
 
 
 
-    public void SaveToJson(Missions data)
+    public void SaveToJson(int score, bool success)
     {
         Missions data1 = data;
-        data1.score = 10;
+        if (success)
+        {
+            data1.score += score;
+        }
+        else { data1.score = 0; }
+        for (int i = 0; i < data.highscores.Length; i++)
+        {
+            if (score > data1.highscores[i])
+            {
+                data1.highscores[i] = score;
+                break;
+            }
+        }
 
         string json = JsonUtility.ToJson(data1, true);
-        File.WriteAllText(Application.dataPath + "/persistentDataPath/story.json", json);
+        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
     }
 }
 
