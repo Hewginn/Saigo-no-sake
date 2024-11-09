@@ -1,0 +1,26 @@
+{
+    "title": "Saigo no Sake",
+    "missions": [
+        {
+            "id": 0,
+            "description": "1941. december 7. Pearl Harbor\nKüldetésed az amerikai ellenséges repülőgépek kiiktatása. Pusztítsd el, mind a 40 elit vadászgépet és pusztísd el az ellenséges hajókat!",
+            "successed": "A küldetés sikerrel zárult, sajnos nagy veszteségek árán, de győzedelmeskedtünk. Térj vissza a főhadiszállásra és várd a további parancsokat!"
+        },
+        {
+            "id": 1,
+            "description": "1942. február 27. Java-tenger\nA küldetés az ellenség zászlós hajójának kiktatása. Két percig tarsd a frontot, amíg megérkezik az erősítés, hogy közös erővel pusztítsátok el a hajót!",
+            "successed": "A küldtés ismételten sikerrel zárult! Egy gellert kapott golyó miatt sajnos kórházba kell küldenünk!"
+        },
+        {
+            "id": 2,
+            "description": "1945. augusztus 6. Hirosima\nHíreink szerint az amerikaiak kifejlesztették az atombombát, ami eddig nem látott pusztításra képes! Küldetésed a bombát cipelő repülőgép megálítása, mielőtt eléri a várost!",
+            "successed": "Hiába volt sikeres minden, a bomba ledobása elkerülhetetlen volt, és bár hősünk mindent megtett hazája megvédése érdekében, mégis hősies halállal távozott a túlvilágra!"
+        }
+    ],
+    "score": 10,
+    "highscores": [
+        0,
+        0,
+        0
+    ]
+}

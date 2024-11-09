@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using UnityEngine.UI;
+using TMPro;
+using System;
 
 //Játékkezelő
 public class GameManager : MonoBehaviour
@@ -29,17 +33,24 @@ public class GameManager : MonoBehaviour
     //Időt számláló UI
     public GameObject TimerCounterGO;
 
-    //Cím kiirás
-    public GameObject GameTitleGO;
-
     //Megállító gomb
     public GameObject PauseButton;
 
     //Felhető tárgyakat létrehozó
     public GameObject powerUpSpawner;
 
+    //A következő szint betöltése gomb
+    public GameObject nextLevelButton;
+
+    //A pálya száma történetmesélés és küldetés szempontjából
+    public int id;
+
+    // a küldetés leírása és a küldetés teljeítésének szövege
+    public TextMeshProUGUI description;
+
     //Játék állapotok tipus
-    public enum GameManagerState{
+    public enum GameManagerState
+    {
 
         //Kezdő menü
         Opening,
@@ -49,21 +60,53 @@ public class GameManager : MonoBehaviour
 
         //Játék vége
         GameOver,
+        //Küldetés teljesítve
+        Win,
     }
 
     //Játék állapota
     GameManagerState GMState;
 
+
+
+    string jsonFile;// a json fájl elérési útvonala
+    Missions data; //a történetet, és más adatokat tartalmazó osztály
+
     //Első frame update előtt van meghívva
     void Start()
     {
+        /*
+        // A fájl betöltése a Resources mappából
+        TextAsset jsonFile = Resources.Load<TextAsset>("story");
+        if (jsonFile != null)
+        {
+            // Deszerializáljuk a JSON-t a C# osztályba
+            story = JsonUtility.FromJson<Missions>(jsonFile.text);
+            // Kiírjuk a szöveget a Mission objektumba
+            MissionDescription();
+
+        }
+        else
+        {
+            Debug.LogError("Nem található a JSON fájl!");
+        }*/
+
+        // a beolvasndó fájl
+        jsonFile = File.ReadAllText(Application.dataPath + "/persistentDataPath/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+        MissionDescription();
+        SaveToJson(data);
+
+
         GMState = GameManagerState.Opening;
     }
 
     //A játék állapotának megváltoztatása
-    void UpdateGameManagerState(){
+    void UpdateGameManagerState()
+    {
 
-        switch(GMState)
+        switch (GMState)
         {
             //Kezdeti állapot beállítása
             case GameManagerState.Opening:
@@ -72,11 +115,12 @@ public class GameManager : MonoBehaviour
 
                 menuButton.SetActive(true);
 
-                GameTitleGO.SetActive(true);
-
                 GameOverGO.SetActive(false);
 
                 PauseButton.SetActive(false);
+
+                // Kiírjuk a szöveget a Mission objektumba
+                //MissionDescription();
 
                 break;
 
@@ -90,8 +134,10 @@ public class GameManager : MonoBehaviour
 
                 menuButton.SetActive(false);
 
-                GameTitleGO.SetActive(false);
                 PauseButton.SetActive(true);
+
+                // a küldetés szövegének eltüntetése
+                description.enabled = false;
 
                 playerPlane.GetComponent<PlayerControl>().Init();
 
@@ -100,7 +146,7 @@ public class GameManager : MonoBehaviour
                 powerUpSpawner.GetComponent<PowerUpSpawner>().SchedulePowerUpSpawner();
 
                 TimerCounterGO.GetComponent<TimeCounter>().StartTimeCounter();
-    
+
                 break;
             //Játékvége beállítása
             case GameManagerState.GameOver:
@@ -115,8 +161,27 @@ public class GameManager : MonoBehaviour
 
                 PauseButton.SetActive(false);
 
-                Invoke("ChangeToOpeningState",8f);
-                
+                Invoke("ChangeToOpeningState", 8f);
+
+                break;
+
+            //Küldetés teljesítve beállítások
+            case GameManagerState.Win:
+
+                TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
+
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+
+                PauseButton.SetActive(false);
+
+                MissionSuccessed();
+
+                menuButton.SetActive(true);
+
+                nextLevelButton.SetActive(true);
+
+
+
                 break;
         }
     }
@@ -129,22 +194,63 @@ public class GameManager : MonoBehaviour
     }
 
     //Játék állapotának beállítása játékmenetre
-    public void StartGamePlay(){
+    public void StartGamePlay()
+    {
         GMState = GameManagerState.Gameplay;
         UpdateGameManagerState();
     }
 
     //Játék beállítása kezdeti állapotra
-    public void ChangeToOpeningState(){
+    public void ChangeToOpeningState()
+    {
         SetGameManagerState(GameManagerState.Opening);
     }
 
-    //Új szint feloldása
-    /*void UnlockNewLevel(){
-        if(SceneManager.GetActiveScene().buildIndex>=PlayerPrefs.GetInt("ReachedIndex")){
-            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex +1);
-            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnlockedLevel") +1);
-            PlayerPrefs.Save();
+    // a küldetés leírásának betöltése a Mission objektumba küldetésenként
+    public void MissionDescription()
+    {
+
+        description.enabled = true;
+        if (id == 1)
+        {
+            description.text = data.missions[0].description;
         }
-    }*/
+
+        else if (id == 2)
+        {
+            description.text = data.missions[1].description;
+        }
+        else if (id == 3)
+        {
+            description.text = data.missions[2].description;
+        }
+    }
+    // a küldetés sikerrel zárult történetének a betöltése a Mission objektumba küldetésenként
+    public void MissionSuccessed()
+    {
+
+        description.enabled = true;
+        if (id == 1)
+            description.text = data.missions[0].successed;
+        else if (id == 2)
+        {
+            description.text = data.missions[1].successed;
+        }
+        else if (id == 3)
+        {
+            description.text = data.missions[2].successed;
+        }
+    }
+
+
+
+    public void SaveToJson(Missions data)
+    {
+        Missions data1 = data;
+        data1.score = 10;
+
+        string json = JsonUtility.ToJson(data1, true);
+        File.WriteAllText(Application.dataPath + "/persistentDataPath/story.json", json);
+    }
 }
+
