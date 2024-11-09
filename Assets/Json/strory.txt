@@ -1,0 +1,61 @@
+{
+    "title": "Saigo no Sake",
+    "misson": "Save the country and win the war! You are a pilot in Japan, who fight in the II. World War to save his country from the americans!",
+    "highScores": [
+        10500,
+        7500,
+        6000
+    ],
+    "missions": [
+        {
+            "id": 0,
+            "level": 1,
+            "unlocked": true,
+            "description": "Destroy all the 20 enemies, then destroy all the cannons and landing zones!",
+            "score": 2000,
+            "enemies": ["Figters", "Cannons"]
+        },
+        {
+            "id": 1,
+            "level": 2,
+            "unlocked": true,
+            "description": "Clear the sky until the reiforcement arrive then destroy athe enemy's flagship!",
+            "score": 1500,
+            "enemies": ["Figters", "Cannons","Scouts","Boat"]
+        },
+        {
+            "id": 2,
+            "level": 3,
+            "unlocked": false,
+            "description": "Destroy all the enemies, and stop the plane that carrying the atomic bomb, before it reaches his target!",
+            "score": 4000,
+            "enemies": ["Figters", "Cannons","Scouts","Bombers","Carrier"]
+        }
+    ],
+    "powerUps": [
+        "spreadShooter",
+        "shield",
+        "fastMoving",
+        "extraLife"
+    ],
+    "difficulties": [
+        {
+            "name": "easy",
+            "enemyBulletSpeed": 3,
+            "enemySize": 100,
+            "spawnTime": 8
+        },
+        {
+            "name": "medium",
+            "enemyBulletSpeed": 4,
+            "enemySize": 90,
+            "spawnTime": 6
+        },
+        {
+            "name": "hard",
+            "enemyBulletSpeed": 6,
+            "enemySize": 75,
+            "spawnTime": 5
+        }
+    ]
+}
