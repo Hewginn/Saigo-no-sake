@@ -22,6 +22,9 @@ public class EngineControl : MonoBehaviour
 
     //Gyógyulás effekt
     public GameObject Heal;
+
+    //Játékos lötte le
+    bool isDestroyedByPlayer;
     
     //Inicializálás
     public void Init(){
@@ -32,7 +35,11 @@ public class EngineControl : MonoBehaviour
         lastHeal = Time.time;
 
         Heal.SetActive(false);
+
+        isDestroyedByPlayer = false;
     }
+
+
     
     
     
@@ -70,6 +77,7 @@ public class EngineControl : MonoBehaviour
             health -= 5;
         }
         if(health <= 0){
+                isDestroyedByPlayer = true;
                 Destroy(gameObject);
         }
         lastDamaged = Time.time;
@@ -87,7 +95,9 @@ public class EngineControl : MonoBehaviour
     }
 
     private void OnDestroy() {
-        transform.parent.gameObject.GetComponent<BomberBossControl>().NumberOfEngines -= 1;
+        if(isDestroyedByPlayer){
+            transform.parent.gameObject.GetComponent<BomberBossControl>().NumberOfEngines -= 1;
+        }
     }
     
 }

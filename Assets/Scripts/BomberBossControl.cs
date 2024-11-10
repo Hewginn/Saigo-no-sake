@@ -21,6 +21,7 @@ public class BomberBossControl : MonoBehaviour
         set{
             this.numberOfEngines = value;
             if(numberOfEngines <= 0){
+                DestroyFinalBoss();
                 GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Win);
             }
         }

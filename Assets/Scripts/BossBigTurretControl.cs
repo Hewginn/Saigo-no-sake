@@ -36,7 +36,7 @@ public class BossBigTurretControl : MonoBehaviour
         isHellFireOn = false;
         health = 1;
         isDestroyedByPlayer = false;
-        InvokeRepeating("FireBomb", 2f, Random.Range(3f, 7f));
+        InvokeRepeating("FireBomb", 5f, Random.Range(3f, 7f));
         scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
     }
 
