@@ -123,6 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Blast: {fileID: 6169753234265344170, guid: 6ea7aeaaed0cad7499980b716514673e, type: 3}
   Heal: {fileID: 4748428962457141026}
+  ExplosionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
 --- !u!61 &5034743662843487608
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -428,6 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Blast: {fileID: 6169753234265344170, guid: 6ea7aeaaed0cad7499980b716514673e, type: 3}
   Heal: {fileID: 6379542111572062854}
+  ExplosionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
 --- !u!61 &2801155593071741689
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -901,6 +903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Blast: {fileID: 6169753234265344170, guid: 6ea7aeaaed0cad7499980b716514673e, type: 3}
   Heal: {fileID: 4397883434317029492}
+  ExplosionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
 --- !u!61 &7633748929593837262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1662,6 +1665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Blast: {fileID: 6169753234265344170, guid: 6ea7aeaaed0cad7499980b716514673e, type: 3}
   Heal: {fileID: 354278533142406892}
+  ExplosionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
 --- !u!61 &2765684834838630561
 BoxCollider2D:
   m_ObjectHideFlags: 0
