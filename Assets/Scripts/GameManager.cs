@@ -43,10 +43,10 @@ public class GameManager : MonoBehaviour
     public GameObject nextLevelButton;
 
     //A pálya száma történetmesélés és küldetés szempontjából
-    public int id; 
+    public int id;
 
     // a küldetés leírása és a küldetés teljeítésének szövege
-    public TextMeshProUGUI description; 
+    public TextMeshProUGUI description;
 
     //Főellenség asset
     public GameObject BossPrefab;
@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour
     GameObject BossInstance;
 
     //Játék állapotok tipus
-    public enum GameManagerState{
+    public enum GameManagerState
+    {
 
         //Kezdő menü
         Opening,
@@ -75,33 +76,30 @@ public class GameManager : MonoBehaviour
     //Játék állapota
     GameManagerState GMState;
 
-    Missions story; //a történetet tárolja a json fájlból
+    string jsonFile;// a json fájl elérési útvonala
+
+    Missions data; //a történetet tárolja a json fájlból
 
     //Első frame update előtt van meghívva
     void Start()
     {
-        // A fájl betöltése a Resources mappából
-        TextAsset jsonFile = Resources.Load<TextAsset>("story");
-        if (jsonFile != null)
-        {
-        // Deszerializáljuk a JSON-t a C# osztályba
-        story = JsonUtility.FromJson<Missions>(jsonFile.text); 
-        // Kiírjuk a szöveget a Mission objektumba
-        MissionDescription();   
-         
-        }
-    else
-        {
-            Debug.LogError("Nem található a JSON fájl!");
-        }
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+        MissionDescription();
+
+
+
+        GMState = GameManagerState.Opening;
 
         GMState = GameManagerState.Opening;
     }
 
     //A játék állapotának megváltoztatása
-    void UpdateGameManagerState(){
+    void UpdateGameManagerState()
+    {
 
-        switch(GMState)
+        switch (GMState)
         {
             //Kezdeti állapot beállítása
             case GameManagerState.Opening:
@@ -132,7 +130,7 @@ public class GameManager : MonoBehaviour
                 PauseButton.SetActive(true);
 
                 // a küldetés szövegének eltüntetése
-                description.enabled= false;
+                description.enabled = false;
 
                 playerPlane.GetComponent<PlayerControl>().Init();
 
@@ -141,7 +139,7 @@ public class GameManager : MonoBehaviour
                 powerUpSpawner.GetComponent<PowerUpSpawner>().SchedulePowerUpSpawner();
 
                 TimerCounterGO.GetComponent<TimeCounter>().StartTimeCounter();
-    
+
                 break;
             //Játékvége beállítása
             case GameManagerState.GameOver:
@@ -150,10 +148,13 @@ public class GameManager : MonoBehaviour
 
                 powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
 
-                if(BossInstance == null){
+                if (BossInstance == null)
+                {
                     enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-                    
-                }else{
+
+                }
+                else
+                {
                     BossInstance.GetComponent<BomberBossControl>().DestroyFinalBoss();
                 }
 
@@ -163,8 +164,10 @@ public class GameManager : MonoBehaviour
 
                 playerPlane.SetActive(false);
 
-                Invoke("ChangeToOpeningState",8f);
-                
+                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, false);
+
+                Invoke("ChangeToOpeningState", 8f);
+
                 break;
 
             //Utolsó küzdelem megkezdése
@@ -172,32 +175,34 @@ public class GameManager : MonoBehaviour
 
                 //Ellenséges repülők létrehozásának megállítása
                 enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-                
+
                 //Főellenség létrehozása
                 BossInstance = Instantiate(BossPrefab);
 
-                Vector2 position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,1));
+                Vector2 position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5, 1));
 
                 BossInstance.transform.position = new Vector2(position.x, position.y + 2f);
 
                 break;
-            
+
             //Küldetés teljesítve beállítások
-             case GameManagerState.Win:
+            case GameManagerState.Win:
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
                 enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
 
                 PauseButton.SetActive(false);
-                
+
                 MissionSuccessed();
 
                 menuButton.SetActive(true);
 
                 nextLevelButton.SetActive(true);
 
-            break;
+                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
+
+                break;
         }
     }
 
@@ -209,40 +214,76 @@ public class GameManager : MonoBehaviour
     }
 
     //Játék állapotának beállítása játékmenetre
-    public void StartGamePlay(){
+    public void StartGamePlay()
+    {
         GMState = GameManagerState.Gameplay;
         UpdateGameManagerState();
     }
 
     //Játék beállítása kezdeti állapotra
-    public void ChangeToOpeningState(){
+    public void ChangeToOpeningState()
+    {
         SetGameManagerState(GameManagerState.Opening);
     }
 
-     // a küldetés leírásának betöltése a Mission objektumba küldetésenként
-    public void MissionDescription(){
-        description.enabled= true;
-        if(id==1){
-            description.text = story.missions[0].description;
+    // a küldetés leírásának betöltése a Mission objektumba küldetésenként
+    public void MissionDescription()
+    {
+
+        description.enabled = true;
+        if (id == 1)
+        {
+            description.text = data.missions[0].description;
         }
 
-        else if(id==2){
-            description.text = story.missions[1].description;
+        else if (id == 2)
+        {
+            description.text = data.missions[1].description;
         }
-        else if(id==3){
-            description.text = story.missions[2].description;
+        else if (id == 3)
+        {
+            description.text = data.missions[2].description;
         }
     }
     // a küldetés sikerrel zárult történetének a betöltése a Mission objektumba küldetésenként
-     public void MissionSuccessed(){
-        description.enabled= true;
-        if(id==1)
-          description.text = story.missions[0].successed;
-        else if(id==2){
-            description.text = story.missions[1].successed;
+    public void MissionSuccessed()
+    {
+
+        description.enabled = true;
+        if (id == 1)
+            description.text = data.missions[0].successed;
+        else if (id == 2)
+        {
+            description.text = data.missions[1].successed;
         }
-        else if(id==3){
-            description.text = story.missions[2].successed;
+        else if (id == 3)
+        {
+            description.text = data.missions[2].successed;
         }
     }
+
+
+
+    public void SaveToJson(int score, bool success)
+    {
+        Missions data1 = data;
+        if (success)
+        {
+            data1.score += score;
+        }
+        else { data1.score = 0; }
+        for (int i = 0; i < data.highscores.Length; i++)
+        {
+            if (score > data1.highscores[i])
+            {
+                data1.highscores[i] = score;
+                break;
+            }
+        }
+
+        string json = JsonUtility.ToJson(data1, true);
+        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+    }
 }
+
+

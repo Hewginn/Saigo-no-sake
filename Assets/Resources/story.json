@@ -1,11 +1,10 @@
 {
     "title": "Saigo no Sake",
-    "info": "Egy Fujin nevezetű japán pilótáról szól a történetünk, aki a hazája védelmében és a császár becsületéért száll harcba a Szövetségesek megszámlálhatatlan mennyiségű létszámával.",
     "missions": [
         {
             "id": 0,
             "description": "1941. december 7. Pearl Harbor\nKüldetésed az amerikai ellenséges repülőgépek kiiktatása. Pusztítsd el, mind a 40 elit vadászgépet és pusztísd el az ellenséges hajókat!",
-            "successed": "A küldetés sikerrel zárult, sajnos nagy veszteségek árán, de győzedelmeskedtünk. Térj vissza a főhadiszállásra és várd a további parancsokat!" 
+            "successed": "A küldetés sikerrel zárult, sajnos nagy veszteségek árán, de győzedelmeskedtünk. Térj vissza a főhadiszállásra és várd a további parancsokat!"
         },
         {
             "id": 1,
@@ -17,7 +16,11 @@
             "description": "1945. augusztus 6. Hirosima\nHíreink szerint az amerikaiak kifejlesztették az atombombát, ami eddig nem látott pusztításra képes! Küldetésed a bombát cipelő repülőgép megálítása, mielőtt eléri a várost!",
             "successed": "Hiába volt sikeres minden, a bomba ledobása elkerülhetetlen volt, és bár hősünk mindent megtett hazája megvédése érdekében, mégis hősies halállal távozott a túlvilágra!"
         }
+    ],
+    "score": 0,
+    "highscores": [
+        1300,
+        1200,
+        1200
     ]
-    
-    
 }
