@@ -21,7 +21,7 @@ public class BomberBossControl : MonoBehaviour
         set{
             this.numberOfEngines = value;
             if(numberOfEngines <= 0){
-                GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
+                GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Win);
             }
         }
     }
