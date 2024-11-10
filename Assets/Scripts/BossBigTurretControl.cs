@@ -34,7 +34,7 @@ public class BossBigTurretControl : MonoBehaviour
     //Éledéskor inicializálás beállítása
     private void Start() {
         isHellFireOn = false;
-        health = 1;
+        health = 50;
         isDestroyedByPlayer = false;
         InvokeRepeating("FireBomb", 5f, Random.Range(3f, 7f));
         scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");

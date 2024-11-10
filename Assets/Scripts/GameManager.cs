@@ -5,10 +5,6 @@ using System.IO;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using System.IO;
-using UnityEngine.UI;
-using TMPro;
-using System;
 
 //Játékkezelő
 public class GameManager : MonoBehaviour
@@ -57,15 +53,6 @@ public class GameManager : MonoBehaviour
 
     //Főellenség objektum
     GameObject BossInstance;
-    
-    //A következő szint betöltése gomb
-    public GameObject nextLevelButton;
-
-    //A pálya száma történetmesélés és küldetés szempontjából
-    public int id; 
-
-    // a küldetés leírása és a küldetés teljeítésének szövege
-    public TextMeshProUGUI description; 
 
     //Játék állapotok tipus
     public enum GameManagerState{
@@ -83,8 +70,6 @@ public class GameManager : MonoBehaviour
 
         //Fő ellenség
         Bossfight,
-        //Küldetés teljesítve
-        Win,
     }
 
     //Játék állapota
@@ -211,27 +196,6 @@ public class GameManager : MonoBehaviour
                 menuButton.SetActive(true);
 
                 nextLevelButton.SetActive(true);
-
-            break;
-                
-                break;
-            
-            //Küldetés teljesítve beállítások
-             case GameManagerState.Win:
-
-                TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
-
-                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-
-                PauseButton.SetActive(false);
-                
-                MissionSuccessed();
-
-                menuButton.SetActive(true);
-
-                nextLevelButton.SetActive(true);
-
- 
 
             break;
         }

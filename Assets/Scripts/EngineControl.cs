@@ -25,6 +25,8 @@ public class EngineControl : MonoBehaviour
 
     //Játékos lötte le
     bool isDestroyedByPlayer;
+
+    public GameObject ExplosionGO;
     
     //Inicializálás
     public void Init(){
@@ -97,7 +99,18 @@ public class EngineControl : MonoBehaviour
     private void OnDestroy() {
         if(isDestroyedByPlayer){
             transform.parent.gameObject.GetComponent<BomberBossControl>().NumberOfEngines -= 1;
+            PlayerExplosion();
         }
+    }
+
+    //Robbanást inicializáló kódrész
+    void PlayerExplosion()
+    {
+        //Példányosítás
+        GameObject explosion = (GameObject)Instantiate(ExplosionGO);
+
+        //Robbanás helyének meghatározása (objektum helye)
+        explosion.transform.position = transform.position;
     }
     
 }
