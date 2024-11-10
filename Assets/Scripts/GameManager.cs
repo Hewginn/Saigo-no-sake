@@ -187,6 +187,8 @@ public class GameManager : MonoBehaviour
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+
                 PauseButton.SetActive(false);
                 
                 MissionSuccessed();
@@ -225,6 +227,9 @@ public class GameManager : MonoBehaviour
 
         else if(id==2){
             description.text = story.missions[1].description;
+        }
+        else if(id==3){
+            description.text = story.missions[2].description;
         }
         else if(id==3){
             description.text = story.missions[2].description;
