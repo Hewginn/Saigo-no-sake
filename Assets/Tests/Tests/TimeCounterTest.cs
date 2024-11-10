@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-// Időszámláló
 public class TimeCounterTest : MonoBehaviour
 {
-    // UI szöveg a idő megjelenítésére
-    private TextMeshProUGUI timeUI;
-
     // Kezdő idő, amikor a számláló elindul
     private float startTime;
 
@@ -27,8 +23,9 @@ public class TimeCounterTest : MonoBehaviour
     {
         // Inicializálás
         isCounterRunning = false;
-        timeUI = GetComponent<TextMeshProUGUI>();
-        timeUI.text = "00:00"; // A szöveg alapértelmezett értéke
+
+        // Ha nincs UI, akkor logoljunk
+        Debug.Log("Számláló indítva: 00:00");
     }
 
     // A számláló elindítása
@@ -59,8 +56,8 @@ public class TimeCounterTest : MonoBehaviour
             minutes = (int)(elapsedTime / 60);
             seconds = (int)(elapsedTime % 60);
 
-            // UI szöveg frissítése
-            timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            // Kiírás a konzolra (UI helyett)
+            Debug.Log(string.Format("Eltelt idő: {0:00}:{1:00}", minutes, seconds));
         }
     }
 }

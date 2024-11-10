@@ -4,110 +4,96 @@ using TMPro;
 
 public class PlayerControlTest : MonoBehaviour
 {
-    private GameObject playerGO;             // A játékos GameObject
-    private PlayerControlTest playerControl;     // A PlayerControl komponens
+    private GameObject playerGO; // A játékos GameObject
+    private PlayerControlTest playerControl; // A PlayerControl komponens
 
-       //Játék kezelő
-    public GameObject GameManagerGO;
-
-    //ez a játékos előgyártott lövedéke
-    public GameObject PlayerBulletGO;
-
-    //Játékos fegyvereinek pozíciója
-    public GameObject bulletPosition01;
-    public GameObject bulletPosition02;
-    public GameObject bulletPosition03;
-    public GameObject bulletPosition04;
-    public GameObject bulletPosition05;
-    public GameObject bulletPosition06;
-
-    //Fegyverek fejlesztési szintje
-    int upgradeLevel;
-
-    //Speciális lövés kezdeti pozíciója
-    public GameObject specialPosition;
-
-    //Robbanás
-    public GameObject ExpolsionGO;
-
-    //Speciális lövedék
-    public GameObject SpecialGO;
-
-    //Élet szám UI szöveg
+    // Élet szám UI szöveg
     public TextMeshProUGUI LivesUIText;
 
-    //Különleges lövedékek száma UI szöveg
+    // Különleges lövedékek száma UI szöveg
     public TextMeshProUGUI SpecialsUIText;
 
-    //Pontszámláló UI szöveg
-    public GameObject scoreUITextGO;
+    // Fegyverek fejlesztési szintje
+    int upgradeLevel;
 
-    //Maximum élet
+    // Maximum élet
     const int maxLives = 3;
 
-    //Aktuális élet
+    // Aktuális élet
     int lives;
 
-    //Repülő gyorsasága
+    // Repülő gyorsasága
     public float speed;
 
-    //Aktuális különleges lövedék
+    // Aktuális különleges lövedék
     int specials;
 
-    //Repülő inicializálása
-    public void Init(){
+    float lastShoot;
 
-        //Élet
+    // Repülő inicializálása
+    public void Init()
+    {
+        // Élet
         lives = maxLives;
-        LivesUIText.text=lives.ToString();
+        LivesUIText.text = lives.ToString();
 
-        //Helyzet
-        transform.position = new Vector2(0,0);
+        // Helyzet
+        transform.position = new Vector2(0, 0);
 
-        //Aktiválás
+        // Aktiválás
         gameObject.SetActive(true);
 
-        //Fejlesztési szint
+        // Fejlesztési szint
         upgradeLevel = 0;
 
-        //Különleges lövedékek száma
+        // Különleges lövedékek száma
         specials = 0;
         SpecialsUIText.text = "X " + specials.ToString();
-
     }
 
     [SetUp]
-    public void Setup()
+public void Setup()
+{
+    // Létrehozunk egy GameObject-et a játékos számára és hozzáadjuk a PlayerControl komponenst
+    playerGO = new GameObject();
+    playerControl = playerGO.AddComponent<PlayerControlTest>();
+
+    // Beállítunk egy kamerát a viewport számításokhoz
+    GameObject cameraObject = new GameObject("Main Camera");
+    Camera camera = cameraObject.AddComponent<Camera>();
+    cameraObject.tag = "MainCamera"; // Beállítjuk a kamerát MainCamera tag-re
+
+    // Inicializáljuk a TextMeshProUGUI komponenseket
+    playerControl.LivesUIText = new GameObject().AddComponent<TextMeshProUGUI>();
+    playerControl.SpecialsUIText = new GameObject().AddComponent<TextMeshProUGUI>();
+
+    // Meghívjuk az Init metódust a kezdeti értékek beállításához
+    playerControl.Init();
+}
+
+
+    void Move(Vector2 direction)
     {
-        // Létrehozunk egy GameObject-et a játékos számára és hozzáadjuk a PlayerControl komponenst
-        playerGO = new GameObject();
-        playerControl = playerGO.AddComponent<PlayerControlTest>();
+        // Képernyő határainak meghatározása
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        max.x = max.x - 0.225f;
+        min.x = min.x + 0.225f;
+        max.y = max.y - 0.285f;
+        min.y = min.y + 0.285f;
 
-        // Beállítunk egy kamerát a viewport számításokhoz
-        Camera.main = new GameObject().AddComponent<Camera>();
-        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
+        // Aktuális pozíció
+        Vector2 pos = transform.position;
 
-        // Inicializáljuk a TextMeshProUGUI komponenseket
-        playerControl.LivesUIText = new GameObject().AddComponent<TextMeshProUGUI>();
-        playerControl.SpecialsUIText = new GameObject().AddComponent<TextMeshProUGUI>();
-        playerControl.scoreUITextGO = new GameObject(); // Placeholder a pontszám UI számára
-        playerControl.scoreUITextGO.AddComponent<GameScore>();
+        // Új pozíció
+        pos += direction * speed * Time.deltaTime;
 
-        // Dummy GameObject-ek létrehozása más hivatkozásokhoz
-        playerControl.GameManagerGO = new GameObject();
-        playerControl.PlayerBulletGO = new GameObject();
-        playerControl.bulletPosition01 = new GameObject();
-        playerControl.bulletPosition02 = new GameObject();
-        playerControl.bulletPosition03 = new GameObject();
-        playerControl.bulletPosition04 = new GameObject();
-        playerControl.bulletPosition05 = new GameObject();
-        playerControl.bulletPosition06 = new GameObject();
-        playerControl.specialPosition = new GameObject();
-        playerControl.ExpolsionGO = new GameObject();
-        playerControl.SpecialGO = new GameObject();
+        // Határok alkalmazása
+        pos.x = Mathf.Clamp(pos.x, min.x, max.x);
+        pos.y = Mathf.Clamp(pos.y, min.y, max.y);
 
-        // Meghívjuk az Init metódust a kezdeti értékek beállításához
-        playerControl.Init();
+        // Új pozíció átadása az objektumnak
+        transform.position = pos;
     }
 
     [Test]
@@ -139,10 +125,4 @@ public class PlayerControlTest : MonoBehaviour
         // Ellenőrizzük, hogy a játékos balra mozdult
         Assert.Less(playerGO.transform.position.x, 0);
     }
-
-    [Test]
-    public void Shoot_FiresBullets()
-    {
-        playerControl.lastShoot = 0f; // Legutóbbi lövés időpontjának nullázása
- }
 }

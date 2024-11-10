@@ -1,58 +1,51 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
-using System.Collections.Generic;
-public class PauseMenuTest : MonoBehaviour
+
+public class PauseMenuTests : MonoBehaviour
 {
+    [SerializeField] GameObject pauseMenu;  // A pause menü objektuma
+    private GameObject pauseMenuGO;         // A pause menü GameObject objektuma
 
-    [SerializeField] GameObject pauseMenu;
-    private GameObject pauseMenuGO; // A PauseMenu GameObject
-   
-
-    // Update is called once per frame
-    //vissza a menübe gomb
-
-
-     public void Pause()
+    // Pause metódus: a játék megállítása és a pause menü megjelenítése
+    public void Pause()
     {
-         // a pause menü megjelenítése
         pauseMenu.SetActive(true);
-        // a játék megállítása
-        Time.timeScale=0;
-
+        Time.timeScale = 0;
     }
+
+    // Home metódus: visszalépés a főmenübe, és a játék folytatása
     public void Home()
     {
         SceneManager.LoadScene("MainMenu");
-        //a folyamatok folytatása
-        Time.timeScale=1;
+        Time.timeScale = 1;
     }
-   
 
-
-         //játék folytatása
+    // Resume metódus: a pause menü elrejtése és a játék folytatása
     public void Resume()
     {
-        pauseMenu.SetActive(false); 
-        //a játék folytatása
-        Time.timeScale=1;
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    // Restart metódus: az aktuális jelenet újratöltése és a játék folytatása
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
     }
 
     [SetUp]
     public void Setup()
     {
-        // Létrehozunk GameObject-et a PauseMenu számára és hozzáadjuk a komponenst
-        pauseMenuGO = new GameObject();
-        pauseMenu = pauseMenuGO.AddComponent<PauseMenuTest>();
+        // Létrehozunk egy új GameObject-et a PauseMenu számára
+        pauseMenuGO = new GameObject("PauseMenu");
+        pauseMenu = pauseMenuGO;
 
-        // Létrehozzuk a pause menü UI GameObject-ját és inaktívra állítjuk
-        GameObject menuUI = new GameObject();
-        pauseMenuGO.SetActive(false);
-        pauseMenuGO.transform.SetParent(menuUI.transform);
-        pauseMenu.pauseMenu = pauseMenuGO;
+        // A pause menü inaktívra állítása teszt előtt
+        pauseMenu.SetActive(false);
 
-        // Inicializáljuk a Time.timeScale-t
+        // Inicializáljuk a Time.timeScale-t alaphelyzetbe
         Time.timeScale = 1;
     }
 
@@ -60,27 +53,25 @@ public class PauseMenuTest : MonoBehaviour
     public void Pause_DisplaysPauseMenuAndPausesGame()
     {
         // Meghívjuk a Pause metódust
-        pauseMenu.Pause();
+        Pause();
 
         // Ellenőrizzük, hogy a pause menü aktív-e
-        Assert.IsTrue(pauseMenuGO.activeSelf);
+        Assert.IsTrue(pauseMenu.activeSelf);
         // Ellenőrizzük, hogy az idő skálája 0-ra van állítva
         Assert.AreEqual(0, Time.timeScale);
     }
 
-   
-
     [Test]
     public void Resume_HidesPauseMenuAndResumesGame()
     {
-        // Először meghívjuk a Pause-t, hogy a menü aktív legyen
-        pauseMenu.Pause();
+        // Először meghívjuk a Pause metódust, hogy a menü aktív legyen
+        Pause();
 
         // Meghívjuk a Resume metódust
-        pauseMenu.Resume();
+        Resume();
 
         // Ellenőrizzük, hogy a pause menü inaktív-e
-        Assert.IsFalse(pauseMenuGO.activeSelf);
+        Assert.IsFalse(pauseMenu.activeSelf);
         // Ellenőrizzük, hogy az idő skálája vissza van állítva 1-re
         Assert.AreEqual(1, Time.timeScale);
     }
@@ -89,7 +80,7 @@ public class PauseMenuTest : MonoBehaviour
     public void Home_LoadsMainMenuSceneAndResetsTimeScale()
     {
         // Meghívjuk a Home metódust
-        pauseMenu.Home();
+        Home();
 
         // Ellenőrizzük, hogy a jelenlegi aktív jelenet a Főmenü jelenet
         Assert.AreEqual("MainMenu", SceneManager.GetActiveScene().name);
@@ -101,9 +92,9 @@ public class PauseMenuTest : MonoBehaviour
     public void Restart_RestartsCurrentSceneAndResetsTimeScale()
     {
         // Meghívjuk a Restart metódust
-        pauseMenu.Restart();
+        Restart();
 
-        // Ellenőrizzük, hogy a jelenlegi aktív jelenet ugyanaz, mint korábban
+        // Ellenőrizzük, hogy a jelenlegi aktív jelenet újratöltődött
         Assert.AreEqual(SceneManager.GetActiveScene().buildIndex, SceneManager.GetActiveScene().buildIndex);
         // Ellenőrizzük, hogy az idő skálája vissza van állítva 1-re
         Assert.AreEqual(1, Time.timeScale);
@@ -112,7 +103,7 @@ public class PauseMenuTest : MonoBehaviour
     [TearDown]
     public void TearDown()
     {
-        // Tisztítsuk meg a létrehozott GameObject-et
+        // Tisztítjuk a létrehozott GameObject-eket
         Object.Destroy(pauseMenuGO);
     }
 }

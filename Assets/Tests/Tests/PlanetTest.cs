@@ -3,39 +3,43 @@ using UnityEngine;
 
 public class PlanetTest : MonoBehaviour
 {
-
-    
     Vector2 min;
     Vector2 max;
 
-    //Gyógyítás
+    // Gyógyítás
     public GameObject HealPUGO;
     public bool isMoving;
     public float speed;
     private GameObject planetGO;       // A bolygó GameObject
 
-    //Különleges lövedék
+    // Különleges lövedék
     public GameObject SpecialPUGO;
     private PlanetTest planet;             // A Planet komponens
 
-    
+    // Fejlesztés
+    public GameObject UpgradePUGO;
+
+    // Maximális ütemezési idő a power-up létrehozására
+    private float maxSpawnRateInSeconds = 5f; // Definiáljuk a változót
 
     // Update is called once per frame
     void Update()
     {
-        if(!isMoving){
+        if (!isMoving)
+        {
             return;
         }
         Vector2 position = transform.position;
 
-         position = new Vector2 (position.x, position.y+ speed * Time.deltaTime);
+        position = new Vector2(position.x, position.y + speed * Time.deltaTime);
 
         transform.position = position;
 
-        if(transform.position.y <min.y){
+        if (transform.position.y < min.y)
+        {
             isMoving = false;
         }
-    } 
+    }
 
     void SpawnPowerUp()
     {
@@ -43,14 +47,15 @@ public class PlanetTest : MonoBehaviour
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
-        //Egy véletelenszerű tárgy kiválasztására szám
+        // Egy véletelenszerű tárgy kiválasztására szám
         int powerUpSwitch = Random.Range(0, 3);
 
-        //A tárgy
+        // A tárgy
         GameObject aPowerUp = null;
 
-        //A tárgy értékadása
-        switch(powerUpSwitch){
+        // A tárgy értékadása
+        switch (powerUpSwitch)
+        {
             case 0:
                 aPowerUp = (GameObject)Instantiate(UpgradePUGO);
                 break;
@@ -62,37 +67,32 @@ public class PlanetTest : MonoBehaviour
                 break;
         }
 
-        //Létrehozás véletelnszerű helyen a határok közöttt
+        // Létrehozás véletelnszerű helyen a határok között
         aPowerUp.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
 
-        //Kövekező tárgy rekurzív ütemezése
+        // Következő tárgy rekurzív ütemezése
         ScheduleNextPowerUpSpawn();
     }
 
-
-     //Következő tárgy ütemezése
+    // Következő tárgy ütemezése
     void ScheduleNextPowerUpSpawn()
     {
         //Létrehozási idő mp-ben
         float spawnInSeconds;
 
-        //értéke legalább 1mp
+        // Értéke legalább 1mp
         if (maxSpawnRateInSeconds > 1f)
-        {   
+        {
             spawnInSeconds = Random.Range(1f, maxSpawnRateInSeconds);
         }
-        else{
+        else
+        {
             spawnInSeconds = 1f;
         }
 
-        //Létrehozás rekurzív meghívása x mp-en belül
+        // Létrehozás rekurzív meghívása x mp-en belül
         Invoke("SpawnPowerUp", spawnInSeconds);
     }
-
-    //Fejlesztés
-    public GameObject UpgradePUGO;
-
-    
 
     [SetUp]
     public void Setup()
@@ -100,33 +100,38 @@ public class PlanetTest : MonoBehaviour
         // Létrehozunk egy GameObject-et a bolygó számára és hozzáadjuk a Planet komponenst
         planetGO = new GameObject();
         planet = planetGO.AddComponent<PlanetTest>();
-        
+
         // Alapértelmezett sebességet állítunk be a bolygónak
         planet.speed = 5f;
 
-        // Beállítjuk a kamera pozícióját, hogy a min/max számítások érvényesek legyenek
-        Camera.main = new GameObject().AddComponent<Camera>();
-        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera érvényes pozíciójának beállítása
+        // Fő kamerát hozunk létre és pozícionáljuk
+        GameObject cameraGO = new GameObject("MainCamera");
+        Camera cameraComponent = cameraGO.AddComponent<Camera>();
+        cameraGO.tag = "MainCamera"; // Ez teszi "fő kamerává" a teszt során
+
+        cameraComponent.transform.position = new Vector3(0, 0, -10);
     }
-    public void ResetPosition(){
+
+    public void ResetPosition()
+    {
         transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
     }
 
-    void Awake(){
+    void Awake()
+    {
         isMoving = false;
 
-        min = Camera.main.ViewportToWorldPoint (new Vector2(0,0));
+        min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
 
-        max = Camera.main.ViewportToWorldPoint (new Vector2(1,1));
+        max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
-        max.y = max.y + GetComponent<SpriteRenderer> ().sprite.bounds.extents.y;
-        min.y = min.y - GetComponent<SpriteRenderer> ().sprite.bounds.extents.y;
+        max.y = max.y + GetComponent<SpriteRenderer>().sprite.bounds.extents.y;
+        min.y = min.y - GetComponent<SpriteRenderer>().sprite.bounds.extents.y;
     }
 
     [Test]
     public void Awake_InitializesIsMovingAndBounds()
     {
-
         // Ellenőrizzük, hogy az isMoving false-ra van inicializálva
         Assert.IsFalse(planet.isMoving);
 
@@ -154,7 +159,7 @@ public class PlanetTest : MonoBehaviour
 
         // Meghívjuk az Update-ot egyszer, a Time.deltaTime szimulálásával egy framerate
         float deltaTime = 0.1f; // Szimuláljunk 0.1 másodpercet
-        //planet.Update();
+        planet.Update();
 
         // Ellenőrizzük, hogy a bolygó pozíciója helyesen változott
         Assert.AreNotEqual(initialPosition, planet.transform.position);

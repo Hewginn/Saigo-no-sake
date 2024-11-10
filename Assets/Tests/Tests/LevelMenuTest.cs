@@ -5,19 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class LevelMenuTest : MonoBehaviour
 {
-    private GameObject levelMenuGO; // A szintmenü GameObject
-    private LevelMenuTest levelMenu;    // A LevelMenu komponens
-    private Button[] buttons;       // A szintválasztó gombok
+    private GameObject levelMenuGO;  // A szintmenü GameObject
+    private LevelMenuTest levelMenu;     // A LevelMenu komponens
+    private Button[] buttons;        // A szintválasztó gombok
 
-    private void Awake(){
-        //Az első pálya feloldása
-        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel",1);
-        // a még nem feloldott pályák száma
-        for (int i =0; i < buttons.Length; i++){
+    private void Awake()
+    {
+        if (buttons == null) return;  // Ellenőrizzük, hogy a gombok már inicializálva lettek-e
+
+        // Az első pálya feloldása
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+        // A még nem feloldott pályák száma
+        for (int i = 0; i < buttons.Length; i++)
+        {
             buttons[i].interactable = false;
         }
-        // a feloldott pályák száma
-        for (int i = 0; i< unlockedLevel; i++){
+        // A feloldott pályák száma
+        for (int i = 0; i < unlockedLevel; i++)
+        {
             buttons[i].interactable = true;
         }
     }
@@ -27,26 +32,28 @@ public class LevelMenuTest : MonoBehaviour
     {
         // A szintmenü GameObject létrehozása és a komponens hozzáadása
         levelMenuGO = new GameObject();
-        levelMenu = levelMenuGO.AddComponent<LevelMenuTest>(); // LevelMenu hozzáadása
+        levelMenu = levelMenuGO.AddComponent<LevelMenuTest>();  // LevelMenu hozzáadása
 
         // Gombok létrehozása a teszteléshez
-        buttons = new Button[5]; // Például 5 gomb
+        buttons = new Button[5];  // Például 5 gomb
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i] = new GameObject("Button" + i).AddComponent<Button>();
-            buttons[i].interactable = false; // Kezdetben nem interaktívan inicializálva
+            buttons[i].interactable = false;  // Kezdetben nem interaktívan inicializálva
         }
-        levelMenu.buttons = buttons; // Gombok hozzárendelése a LevelMenu-hoz
+        levelMenu.buttons = buttons;  // Gombok hozzárendelése a LevelMenu-hoz
 
         // Kezdeti PlayerPrefs érték beállítása
-        PlayerPrefs.SetInt("UnlockedLevel", 3); // Három szint feloldása
+        PlayerPrefs.SetInt("UnlockedLevel", 3);  // Három szint feloldása
     }
-    //A pályák betöltése
+
+    // A pályák betöltése
     public void OpenLevel(int levelId)
     {
-        string LevelName = "Level "+ levelId;
+        string LevelName = "Level " + levelId;
         SceneManager.LoadScene(LevelName);
     }
+
     [Test]
     public void Awake_UnlocksCorrectLevels()
     {
@@ -78,6 +85,6 @@ public class LevelMenuTest : MonoBehaviour
     {
         // A létrehozott GameObject eltávolítása
         Object.Destroy(levelMenuGO);
-        PlayerPrefs.DeleteAll(); // A PlayerPrefs törlése a tesztek után
+        PlayerPrefs.DeleteAll();  // A PlayerPrefs törlése a tesztek után
     }
 }

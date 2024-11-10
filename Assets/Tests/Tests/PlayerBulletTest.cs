@@ -3,21 +3,20 @@ using UnityEngine;
 
 public class PlayerBulletTest : MonoBehaviour
 {
+    // Lövedék sebessége
+    private float speed;
 
-    //Lövedék sebessége
-    float speed;
-
-    //Első frame update előtt van meghívva
+    // Első frame update előtt van meghívva
     void Start()
     {
-        //Sebesség inicializálása
+        // Sebesség inicializálása
         speed = 8f;
     }
+
     private GameObject bulletGO;               // A lövedék GameObject
     private PlayerBulletTest playerBullet;         // A PlayerBullet komponens
 
-    
-    //Minden frame során megvan hívva
+    // Minden frame során megvan hívva
     void Update()
     {
         // a lövedék jelenlegi helyzete
@@ -27,15 +26,22 @@ public class PlayerBulletTest : MonoBehaviour
         // a lövedék új helyének beállítása
         transform.position = position;
 
-        //ez a játék jobb felső sarka
-        Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2 (1,1));
-        //ha a töltény elhagyja a játékteret, akkor semmisüljön meg
-        if(transform.position.y >max.y)
+        // ez a játék jobb felső sarka
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        // ha a töltény elhagyja a játékteret, akkor semmisüljön meg
+        if (transform.position.y > max.y)
         {
             Destroy(gameObject);
         }
+    }
 
+    //Ütközési esemény kezelő
+    void OnTriggerEnter2D(Collider2D col){
 
+        //Lövedék elpusztítása, ha ellenfélnek ütközik
+        if(col.tag == "EnemyShipTag"){
+            Destroy(gameObject);
+        }
     }
 
     [SetUp]
@@ -44,18 +50,21 @@ public class PlayerBulletTest : MonoBehaviour
         // Létrehozunk egy GameObject-et a lövedék számára és hozzáadjuk a PlayerBullet komponenst
         bulletGO = new GameObject();
         playerBullet = bulletGO.AddComponent<PlayerBulletTest>();
-        
-        // Beállítjuk a kamera pozícióját, hogy a max számítás érvényes legyen
-        Camera.main = new GameObject().AddComponent<Camera>();
-        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera érvényes pozíciójának beállítása
+
+        // Létrehozunk egy új GameObject-et és hozzárendeljük a Camera komponenst
+        GameObject cameraGO = new GameObject("TestCamera");
+        cameraGO.AddComponent<Camera>();  // Hozzáadjuk a Camera komponenst
+        cameraGO.transform.position = new Vector3(0, 0, -10);  // Beállítjuk a pozícióját
     }
+
+    
 
     [Test]
     public void Start_SetsInitialSpeed()
     {
         // Meghívjuk a Start-ot
         playerBullet.Start();
-        
+
         // Ellenőrizzük, hogy a sebesség helyesen van inicializálva
         Assert.AreEqual(8f, playerBullet.GetType().GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerBullet));
     }
@@ -65,7 +74,7 @@ public class PlayerBulletTest : MonoBehaviour
     {
         // Meghívjuk a Start-ot a sebesség inicializálásához
         playerBullet.Start();
-        
+
         // Elmentjük a kezdeti pozíciót
         Vector2 initialPosition = bulletGO.transform.position;
 
@@ -75,25 +84,27 @@ public class PlayerBulletTest : MonoBehaviour
 
         // Ellenőrizzük, hogy a lövedék pozíciója helyesen változott
         Assert.AreNotEqual(initialPosition, bulletGO.transform.position);
-        Assert.AreEqual(initialPosition.y + (playerBullet.GetType().GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerBullet) * deltaTime), bulletGO.transform.position.y);
+        float speedValue = (float)playerBullet.GetType().GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(playerBullet);
+        Assert.AreEqual(initialPosition.y + (speedValue * deltaTime), bulletGO.transform.position.y);
     }
 
     [Test]
-    public void Update_DestroysBulletWhenGoesOffScreen()
-    {
-        // Meghívjuk a Start-ot a sebesség inicializálásához
-        playerBullet.Start();
+public void Update_DestroysBulletWhenGoesOffScreen()
+{
+    // Meghívjuk a Start-ot a sebesség inicializálásához
+    playerBullet.Start();
 
-        // A lövedék a képernyő tetejére mozgatása
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-        bulletGO.transform.position = new Vector2(0, max.y + 1); // Pozíció a képernyő fölött
+    // A lövedék a képernyő tetejére mozgatása
+    Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+    bulletGO.transform.position = new Vector2(0, max.y + 1); // Pozíció a képernyő fölött
 
-        // Meghívjuk az Update-ot
-        playerBullet.Update();
+    // Meghívjuk az Update-ot
+    playerBullet.Update();
 
-        // Ellenőrizzük, hogy a lövedék megsemmisült-e
-        Assert.IsNull(bulletGO);
-    }
+    // Ellenőrizzük, hogy a lövedék megsemmisült-e
+    Assert.IsNull(bulletGO);
+}
+
 
     [Test]
     public void OnTriggerEnter2D_DestroyBulletOnEnemyCollision()

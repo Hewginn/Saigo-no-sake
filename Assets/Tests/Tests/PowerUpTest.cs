@@ -1,13 +1,13 @@
 using NUnit.Framework;
 using UnityEngine;
+using System.Collections;
 
 public class PowerUpTest : MonoBehaviour
 {
-
-    //Tárgyak sebessége
+    // Tárgyak sebessége
     float speed;
-    private GameObject powerUpGO;  // A PowerUp GameObject
-    private PowerUpTest powerUp;        // A PowerUp komponens
+    private GameObject powerUpGO;   // A PowerUp GameObject
+    private PowerUpTest powerUp;    // A PowerUp komponens
     private GameObject playerGO;    // A játékos GameObject
 
     [SetUp]
@@ -22,36 +22,37 @@ public class PowerUpTest : MonoBehaviour
         playerGO.tag = "PlayerShipTag"; // A címke beállítása az ütközés kiváltásához
 
         // Beállítunk egy kamerát a viewport számításokhoz
-        Camera.main = new GameObject().AddComponent<Camera>();
-        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
+        GameObject cameraGO = new GameObject("MainCamera");
+        cameraGO.tag = "MainCamera";
+        cameraGO.AddComponent<Camera>();
+        cameraGO.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
     }
 
-
-    //Minden frame során megvan hívva
+    // Minden frame során megvan hívva
     void Update()
     {
-        //Mozgás
+        // Mozgás
         MoveForward();
     }
 
-    //Az objektum folyamatos lefele mozgását leíró függvény
-    void MoveForward(){
-
-        //Régi pozíció
+    // Az objektum folyamatos lefele mozgását leíró függvény
+    void MoveForward()
+    {
+        // Régi pozíció
         Vector2 position = transform.position;
 
-        //Határ meghatározása
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0,0));
+        // Határ meghatározása
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
 
-        //Új pozíció megadása
+        // Új pozíció megadása
         position.y -= speed * Time.deltaTime;
         transform.position = position;
-        
-        //Határ alkalmazása
-        if(transform.position.y < min.y){
+
+        // Határ alkalmazása
+        if (transform.position.y < min.y)
+        {
             Destroy(gameObject);
         }
-
     }
 
     [Test]
@@ -88,14 +89,14 @@ public class PowerUpTest : MonoBehaviour
         Assert.IsTrue(powerUpGO == null || powerUpGO.transform == null, "A PowerUp-nak el kell tűnnie, amikor a határon kívülre kerül.");
     }
 
-    //Ütközés kezelő
-    void OnTriggerEnter2D(Collider2D col){
-
-        //Ha a játékosnak ütközik fegye fel (törlődjön)
-        if(col.tag == "PlayerShipTag" || col.tag == "PlayerUndamagable"){
+    // Ütközés kezelő
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // Ha a játékosnak ütközik fegye fel (törlődjön)
+        if (col.tag == "PlayerShipTag" || col.tag == "PlayerUndamagable")
+        {
             Destroy(gameObject);
         }
-        
     }
 
     [Test]
@@ -104,7 +105,7 @@ public class PowerUpTest : MonoBehaviour
         // Hozzáadunk egy ütköződetektáló komponenst a power-up-hoz és a játékoshoz
         var powerUpCollider = powerUpGO.AddComponent<BoxCollider2D>();
         var playerCollider = playerGO.AddComponent<BoxCollider2D>();
-        
+
         // Biztosítjuk, hogy az ütközők trigger-ként legyenek beállítva
         powerUpCollider.isTrigger = true;
         playerCollider.isTrigger = true;

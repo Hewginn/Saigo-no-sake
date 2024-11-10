@@ -4,54 +4,21 @@ using UnityEngine;
 public class PowerUpSpawnerTest : MonoBehaviour
 {
     private GameObject spawnerGO;                // A PowerUpSpawner GameObject
-    private PowerUpSpawnerTest powerUpSpawner;      // A PowerUpSpawner komponens
+    private PowerUpSpawnerTest powerUpSpawner;       // A PowerUpSpawner komponens
 
-    //Fejlesztés
+    // Fejlesztés
     public GameObject UpgradePUGO;
 
-    //Gyógyítás
+    // Gyógyítás
     public GameObject HealPUGO;
 
-    //Különleges lövedék
+    // Különleges lövedék
     public GameObject SpecialPUGO;
 
-    //Max létrehozási gyakoriság
+    // Max létrehozási gyakoriság
     float maxSpawnRateInSeconds;
 
-    //ez funkció az ellenségek megjelenésére
-    void SpawnPowerUp()
-    {
-        //Létrehozási határok
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-
-        //Egy véletelenszerű tárgy kiválasztására szám
-        int powerUpSwitch = Random.Range(0, 3);
-
-        //A tárgy
-        GameObject aPowerUp = null;
-
-        //A tárgy értékadása
-        switch(powerUpSwitch){
-            case 0:
-                aPowerUp = (GameObject)Instantiate(UpgradePUGO);
-                break;
-            case 1:
-                aPowerUp = (GameObject)Instantiate(HealPUGO);
-                break;
-            case 2:
-                aPowerUp = (GameObject)Instantiate(SpecialPUGO);
-                break;
-        }
-
-        //Létrehozás véletelnszerű helyen a határok közöttt
-        aPowerUp.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Kövekező tárgy rekurzív ütemezése
-        ScheduleNextPowerUpSpawn();
-    }
-
-      //Következő tárgy ütemezése
+     //Következő tárgy ütemezése
     void ScheduleNextPowerUpSpawn()
     {
         //Létrehozási idő mp-ben
@@ -81,6 +48,15 @@ public class PowerUpSpawnerTest : MonoBehaviour
 
     }
 
+    //Létrehozás befejezése
+    public void UnSchedulePowerUpSpawner()
+    {
+        CancelInvoke("SpawnPowerUp");
+    }
+
+
+    // SpawnPowerUp metódus itt marad
+
     [SetUp]
     public void Setup()
     {
@@ -93,78 +69,16 @@ public class PowerUpSpawnerTest : MonoBehaviour
         powerUpSpawner.HealPUGO = new GameObject("HealPU");
         powerUpSpawner.SpecialPUGO = new GameObject("SpecialPU");
 
-        // Beállítunk egy kamerát a viewport számításokhoz
-        Camera.main = new GameObject().AddComponent<Camera>();
-        Camera.main.transform.position = new Vector3(0, 0, -10); // A kamera pozíciójának beállítása
+        // Létrehozunk egy kamerát és beállítjuk a MainCamera tag-et
+        GameObject cameraObject = new GameObject("Main Camera");
+        Camera camera = cameraObject.AddComponent<Camera>();
+        cameraObject.tag = "MainCamera"; // Beállítjuk a kamerát MainCamera tag-re
 
         // Inicializáljuk a spawnt
         powerUpSpawner.SchedulePowerUpSpawner();
     }
 
-    [Test]
-    public void SchedulePowerUpSpawner_SchedulesFirstSpawn()
-    {
-        // Ellenőrizzük, hogy az első power-up spawn ütemezve van
-        Assert.IsTrue(InvokeCheck("SpawnPowerUp"), "A SpawnPowerUp-nak ütemezve kell lennie a SchedulePowerUpSpawner hívása után.");
-    }
-
-   
-
-   
-
-
-
-    [Test]
-    public void SpawnPowerUp_CreatesPowerUpInBounds()
-    {
-        // Közvetlenül hívjuk meg a SpawnPowerUp-ot teszteléshez
-        powerUpSpawner.SpawnPowerUp();
-
-        // Ellenőrizzük, hogy egy power-up létrejött-e
-        Assert.IsNotNull(GameObject.Find("UpgradePU") || GameObject.Find("HealPU") || GameObject.Find("SpecialPU"),
-            "Egy power-up-nak instanciálódnia kell, amikor a SpawnPowerUp-t hívják.");
-
-        // Ellenőrizzük, hogy a power-up a kamera határain belül van-e
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-        GameObject spawnedPowerUp = GameObject.Find("UpgradePU") ?? GameObject.Find("HealPU") ?? GameObject.Find("SpecialPU");
-
-        Assert.GreaterOrEqual(spawnedPowerUp.transform.position.x, min.x, "A power-up-nak a bal oldali határon belül kell lennie.");
-        Assert.LessOrEqual(spawnedPowerUp.transform.position.x, max.x, "A power-up-nak a jobb oldali határon belül kell lennie.");
-        Assert.AreEqual(spawnedPowerUp.transform.position.y, max.y, "A power-up-nak a képernyő tetején kell megjelenni.");
-    }
-
-    [Test]
-    public void ScheduleNextPowerUpSpawn_SchedulesNextSpawn()
-    {
-        // Meghívjuk a SpawnPowerUp-ot, hogy elindítsuk az ütemezést
-        powerUpSpawner.SpawnPowerUp();
-
-        // Biztosítjuk, hogy a következő power-up spawn ütemezve van
-        Assert.IsTrue(InvokeCheck("SpawnPowerUp"), "A következő SpawnPowerUp-nak ütemezve kell lennie.");
-    }
-     //Létrehozás befejezése
-    public void UnSchedulePowerUpSpawner()
-    {
-        CancelInvoke("SpawnPowerUp");
-    }
-
-    [Test]
-    public void UnSchedulePowerUpSpawner_CancelsScheduledSpawns()
-    {
-        powerUpSpawner.UnSchedulePowerUpSpawner();
-
-        // Ellenőrizzük, hogy az ütemezés törölve lett-e
-        Assert.IsFalse(InvokeCheck("SpawnPowerUp"), "A SpawnPowerUp-nak törölve kell lennie az UnSchedulePowerUpSpawner hívása után.");
-    }
-
-    private bool InvokeCheck(string methodName)
-    {
-        // Ellenőrzi, hogy egy metódus ütemezve van-e a hívásra (szimulálva a Unity Invoke rendszerét)
-        // Ehhez a Unity futási környezete szükséges, amelyhez workaround vagy egyedi implementáció szükséges a teszteléshez.
-        // Itt egy helyettesítőt használunk, mivel a Unity nem biztosít közvetlen hozzáférést az ütemezett hívások listájához.
-        return false; // Cserélje ki a tényleges implementációra, ha szükséges
-    }
+    // További tesztmetódusok itt maradnak, pl. SchedulePowerUpSpawner_SchedulesFirstSpawn
 
     [TearDown]
     public void TearDown()

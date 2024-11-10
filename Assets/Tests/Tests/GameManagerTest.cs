@@ -17,7 +17,7 @@ public class GameManagerTest : MonoBehaviour
     private GameObject timerCounterGO; // Az időzítő számláló GameObject
     private GameObject gameTitleGO; // A játék címe GameObject
     private GameObject pauseButton; // A szünet gomb
-    private GameObject powerUpSpawner; // A power-up generáló
+    private GameObject powerUpSpawnerTest; // A power-up generáló
 
 
     //
@@ -78,14 +78,14 @@ public class GameManagerTest : MonoBehaviour
         timerCounterGO = new GameObject("TimerCounterGO");
         gameTitleGO = new GameObject("GameTitleGO");
         pauseButton = new GameObject("PauseButton");
-        powerUpSpawner = new GameObject("PowerUpSpawner");
+        powerUpSpawnerTest = new GameObject("PowerUpSpawnerTest");
 
         // Szükséges komponensek beállítása a GameObject-ekhez
         scoreUITextGO.AddComponent<GameScoreTest>();
         destroyedUITextGO.AddComponent<DestroyedEnemyTest>();
         playerPlane.AddComponent<PlayerControlTest>();
         enemySpawner.AddComponent<EnemySpawnerTest>();
-        powerUpSpawner.AddComponent<PowerUpSpawnerTest>();
+        powerUpSpawnerTest.AddComponent<PowerUpSpawnerTest>();
         timerCounterGO.AddComponent<TimeCounterTest>();
 
         // GameObject-ek hozzárendelése a GameManagerhez
@@ -99,11 +99,11 @@ public class GameManagerTest : MonoBehaviour
         gameManager.TimerCounterGO = timerCounterGO;
         gameManager.GameTitleGO = gameTitleGO;
         gameManager.PauseButton = pauseButton;
-        gameManager.powerUpSpawner = powerUpSpawner;
+        gameManager.powerUpSpawnerTest = powerUpSpawnerTest;
     }
 
      //A játék állapotának megváltoztatása
-    void UpdateGameManagerState(){
+    public void UpdateGameManagerState(){
 
         switch(GMState)
         {
@@ -139,7 +139,7 @@ public class GameManagerTest : MonoBehaviour
 
                 enemySpawner.GetComponent<EnemySpawnerTest>().ScheduleEnemySpawner();
 
-                powerUpSpawner.GetComponent<PowerUpSpawnerTest>().SchedulePowerUpSpawner();
+                powerUpSpawnerTest.GetComponent<PowerUpSpawnerTest>().SchedulePowerUpSpawner();
 
                 TimerCounterGO.GetComponent<TimeCounterTest>().StartTimeCounter();
     
@@ -151,7 +151,7 @@ public class GameManagerTest : MonoBehaviour
 
                 enemySpawner.GetComponent<EnemySpawnerTest>().UnScheduleEnemySpawner();
 
-                powerUpSpawner.GetComponent<PowerUpSpawnerTest>().UnSchedulePowerUpSpawner();
+                powerUpSpawnerTest.GetComponent<PowerUpSpawnerTest>().UnSchedulePowerUpSpawner();
 
                 GameOverGO.SetActive(true);
 
@@ -214,7 +214,7 @@ public class GameManagerTest : MonoBehaviour
         Assert.IsTrue(gameOverGO.activeSelf);
         Assert.IsFalse(pauseButton.activeSelf);
         Assert.IsFalse(enemySpawner.GetComponent<EnemySpawnerTest>().IsInvoking("SpawnEnemy"));
-        Assert.IsFalse(powerUpSpawner.GetComponent<PowerUpSpawnerTest>().IsInvoking("SpawnPowerUp"));
+        Assert.IsFalse(powerUpSpawnerTest.GetComponent<PowerUpSpawnerTest>().IsInvoking("SpawnPowerUp"));
     }
 
     [UnityTest]
@@ -245,6 +245,6 @@ public class GameManagerTest : MonoBehaviour
         Object.Destroy(timerCounterGO);
         Object.Destroy(gameTitleGO);
         Object.Destroy(pauseButton);
-        Object.Destroy(powerUpSpawner);
+        Object.Destroy(powerUpSpawnerTest);
     }
 }
