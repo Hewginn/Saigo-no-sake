@@ -5,6 +5,10 @@ using System.IO;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.IO;
+using UnityEngine.UI;
+using TMPro;
+using System;
 
 //Játékkezelő
 public class GameManager : MonoBehaviour
@@ -39,6 +43,15 @@ public class GameManager : MonoBehaviour
     //Felhető tárgyakat létrehozó
     public GameObject powerUpSpawner;
 
+    //A következő szint betöltése gomb
+    public GameObject nextLevelButton;
+
+    //A pálya száma történetmesélés és küldetés szempontjából
+    public int id; 
+
+    // a küldetés leírása és a küldetés teljeítésének szövege
+    public TextMeshProUGUI description; 
+
     //Főellenség asset
     public GameObject BossPrefab;
 
@@ -65,6 +78,8 @@ public class GameManager : MonoBehaviour
 
         //Játék vége
         GameOver,
+        //Küldetés teljesítve
+        Win,
 
         //Fő ellenség
         Bossfight,
@@ -128,11 +143,11 @@ public class GameManager : MonoBehaviour
                 playButton.SetActive(false);
 
                 menuButton.SetActive(false);
-                
+
                 PauseButton.SetActive(true);
 
                 // a küldetés szövegének eltüntetése
-                description.text="";
+                description.enabled= false;
 
                 playerPlane.GetComponent<PlayerControl>().Init();
 
@@ -198,6 +213,27 @@ public class GameManager : MonoBehaviour
                 nextLevelButton.SetActive(true);
 
             break;
+                
+                break;
+            
+            //Küldetés teljesítve beállítások
+             case GameManagerState.Win:
+
+                TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
+
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+
+                PauseButton.SetActive(false);
+                
+                MissionSuccessed();
+
+                menuButton.SetActive(true);
+
+                nextLevelButton.SetActive(true);
+
+ 
+
+            break;
         }
     }
 
@@ -221,6 +257,7 @@ public class GameManager : MonoBehaviour
 
      // a küldetés leírásának betöltése a Mission objektumba küldetésenként
     public void MissionDescription(){
+        description.enabled= true;
         if(id==1){
             description.text = story.missions[0].description;
         }
@@ -231,12 +268,10 @@ public class GameManager : MonoBehaviour
         else if(id==3){
             description.text = story.missions[2].description;
         }
-        else if(id==3){
-            description.text = story.missions[2].description;
-        }
     }
     // a küldetés sikerrel zárult történetének a betöltése a Mission objektumba küldetésenként
      public void MissionSuccessed(){
+        description.enabled= true;
         if(id==1)
           description.text = story.missions[0].successed;
         else if(id==2){
