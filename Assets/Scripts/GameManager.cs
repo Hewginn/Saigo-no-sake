@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using UnityEngine.UI;
+using TMPro;
+using System;
 
 //Játékkezelő
 public class GameManager : MonoBehaviour
@@ -29,9 +33,6 @@ public class GameManager : MonoBehaviour
     //Időt számláló UI
     public GameObject TimerCounterGO;
 
-    //Cím kiirás
-    public GameObject GameTitleGO;
-
     //Megállító gomb
     public GameObject PauseButton;
 
@@ -43,6 +44,15 @@ public class GameManager : MonoBehaviour
 
     //Főellenség objektum
     GameObject BossInstance;
+    
+    //A következő szint betöltése gomb
+    public GameObject nextLevelButton;
+
+    //A pálya száma történetmesélés és küldetés szempontjából
+    public int id; 
+
+    // a küldetés leírása és a küldetés teljeítésének szövege
+    public TextMeshProUGUI description; 
 
     //Játék állapotok tipus
     public enum GameManagerState{
@@ -58,14 +68,33 @@ public class GameManager : MonoBehaviour
 
         //Fő ellenség
         Bossfight,
+        //Küldetés teljesítve
+        Win,
     }
 
     //Játék állapota
     GameManagerState GMState;
 
+    Missions story; //a történetet tárolja a json fájlból
+
     //Első frame update előtt van meghívva
     void Start()
     {
+        // A fájl betöltése a Resources mappából
+        TextAsset jsonFile = Resources.Load<TextAsset>("story");
+        if (jsonFile != null)
+        {
+        // Deszerializáljuk a JSON-t a C# osztályba
+        story = JsonUtility.FromJson<Missions>(jsonFile.text); 
+        // Kiírjuk a szöveget a Mission objektumba
+        MissionDescription();   
+         
+        }
+    else
+        {
+            Debug.LogError("Nem található a JSON fájl!");
+        }
+
         GMState = GameManagerState.Opening;
     }
 
@@ -81,11 +110,12 @@ public class GameManager : MonoBehaviour
 
                 menuButton.SetActive(true);
 
-                GameTitleGO.SetActive(true);
-
                 GameOverGO.SetActive(false);
 
                 PauseButton.SetActive(false);
+
+                // Kiírjuk a szöveget a Mission objektumba
+                MissionDescription();
 
                 break;
 
@@ -98,10 +128,11 @@ public class GameManager : MonoBehaviour
                 playButton.SetActive(false);
 
                 menuButton.SetActive(false);
-
-                GameTitleGO.SetActive(false);
-
+                
                 PauseButton.SetActive(true);
+
+                // a küldetés szövegének eltüntetése
+                description.text="";
 
                 playerPlane.GetComponent<PlayerControl>().Init();
 
@@ -150,6 +181,21 @@ public class GameManager : MonoBehaviour
                 BossInstance.transform.position = new Vector2(position.x, position.y + 2f);
 
                 break;
+            
+            //Küldetés teljesítve beállítások
+             case GameManagerState.Win:
+
+                TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
+
+                PauseButton.SetActive(false);
+                
+                MissionSuccessed();
+
+                menuButton.SetActive(true);
+
+                nextLevelButton.SetActive(true);
+
+            break;
         }
     }
 
@@ -171,12 +217,28 @@ public class GameManager : MonoBehaviour
         SetGameManagerState(GameManagerState.Opening);
     }
 
-    //Új szint feloldása
-    /*void UnlockNewLevel(){
-        if(SceneManager.GetActiveScene().buildIndex>=PlayerPrefs.GetInt("ReachedIndex")){
-            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex +1);
-            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnlockedLevel") +1);
-            PlayerPrefs.Save();
+     // a küldetés leírásának betöltése a Mission objektumba küldetésenként
+    public void MissionDescription(){
+        if(id==1){
+            description.text = story.missions[0].description;
         }
-    }*/
+
+        else if(id==2){
+            description.text = story.missions[1].description;
+        }
+        else if(id==3){
+            description.text = story.missions[2].description;
+        }
+    }
+    // a küldetés sikerrel zárult történetének a betöltése a Mission objektumba küldetésenként
+     public void MissionSuccessed(){
+        if(id==1)
+          description.text = story.missions[0].successed;
+        else if(id==2){
+            description.text = story.missions[1].successed;
+        }
+        else if(id==3){
+            description.text = story.missions[2].successed;
+        }
+    }
 }
