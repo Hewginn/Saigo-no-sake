@@ -39,6 +39,12 @@ public class GameManager : MonoBehaviour
     //Felhető tárgyakat létrehozó
     public GameObject powerUpSpawner;
 
+    //Főellenség asset
+    public GameObject BossPrefab;
+
+    //Főellenség objektum
+    GameObject BossInstance;
+    
     //A következő szint betöltése gomb
     public GameObject nextLevelButton;
 
@@ -59,6 +65,9 @@ public class GameManager : MonoBehaviour
 
         //Játék vége
         GameOver,
+
+        //Fő ellenség
+        Bossfight,
         //Küldetés teljesítve
         Win,
     }
@@ -119,7 +128,7 @@ public class GameManager : MonoBehaviour
                 playButton.SetActive(false);
 
                 menuButton.SetActive(false);
-
+                
                 PauseButton.SetActive(true);
 
                 // a küldetés szövegének eltüntetése
@@ -139,16 +148,38 @@ public class GameManager : MonoBehaviour
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
-                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
-
                 powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
+
+                if(BossInstance == null){
+                    enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+                    
+                }else{
+                    BossInstance.GetComponent<BomberBossControl>().DestroyFinalBoss();
+                }
 
                 GameOverGO.SetActive(true);
 
                 PauseButton.SetActive(false);
 
+                playerPlane.SetActive(false);
+
                 Invoke("ChangeToOpeningState",8f);
                 
+                break;
+
+            //Utolsó küzdelem megkezdése
+            case GameManagerState.Bossfight:
+
+                //Ellenséges repülők létrehozásának megállítása
+                enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
+                
+                //Főellenség létrehozása
+                BossInstance = Instantiate(BossPrefab);
+
+                Vector2 position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,1));
+
+                BossInstance.transform.position = new Vector2(position.x, position.y + 2f);
+
                 break;
             
             //Küldetés teljesítve beállítások
@@ -165,8 +196,6 @@ public class GameManager : MonoBehaviour
                 menuButton.SetActive(true);
 
                 nextLevelButton.SetActive(true);
-
- 
 
             break;
         }
@@ -198,6 +227,9 @@ public class GameManager : MonoBehaviour
 
         else if(id==2){
             description.text = story.missions[1].description;
+        }
+        else if(id==3){
+            description.text = story.missions[2].description;
         }
         else if(id==3){
             description.text = story.missions[2].description;
