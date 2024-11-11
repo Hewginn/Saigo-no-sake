@@ -83,7 +83,7 @@ public class PlayerControl : MonoBehaviour
 
         //Különleges lövedékek száma
         specials = 0;
-        SpecialsUIText.text = "X " + specials.ToString();
+        SpecialsUIText.text = specials.ToString() + " X";
 
     }
 
@@ -219,7 +219,7 @@ public class PlayerControl : MonoBehaviour
             case "SpecialPU":
                 if(specials < maxSpecial){
                     specials++;
-                    SpecialsUIText.text = "X " + specials.ToString();
+                    SpecialsUIText.text = specials.ToString() + " X";
                 }else{
                     scoreUITextGO.GetComponent<GameScore>().Score += 500;
                 }
