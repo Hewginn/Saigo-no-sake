@@ -133,6 +133,7 @@ public class BossBigTurretControl : MonoBehaviour
         if(playerPlane != null){
             GameObject bomb = (GameObject)Instantiate(BombGO);
             bomb.GetComponent<BossBomb>().Init(gun.transform.position, playerPlane.transform.position - gun.transform.position, 2f);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, (playerPlane.transform.position - gun.transform.position) * -1);
         }
     }
 }

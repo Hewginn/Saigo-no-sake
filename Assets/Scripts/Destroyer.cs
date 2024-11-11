@@ -8,4 +8,8 @@ public class Destroyer : MonoBehaviour
     void DestroyGameObject(){
         Destroy(gameObject);
     }
+
+    void SetTagToUntagged(){
+        gameObject.tag = "Untagged";
+    }
 }
