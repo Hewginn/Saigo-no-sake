@@ -1052,9 +1052,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46ad2cf8d3fb5247862dfbe1baa088b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyGO: {fileID: 8055049402244810835, guid: 0cbf7cc1d8f905244a40166074fec990, type: 3}
-  EnemyGO2: {fileID: 8055049402244810835, guid: 69b0e3ec2655a4e4a939e7c15fb3a3c3, type: 3}
-  EnemyGO3: {fileID: 2344398853210469666, guid: 068b132461cd32648908ded49bc9bbf1, type: 3}
+  enemies:
+  - {fileID: 8055049402244810835, guid: 0cbf7cc1d8f905244a40166074fec990, type: 3}
+  - {fileID: 8055049402244810835, guid: 69b0e3ec2655a4e4a939e7c15fb3a3c3, type: 3}
+  - {fileID: 2344398853210469666, guid: 068b132461cd32648908ded49bc9bbf1, type: 3}
 --- !u!4 &532809369
 Transform:
   m_ObjectHideFlags: 0

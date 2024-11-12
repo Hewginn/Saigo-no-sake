@@ -44,7 +44,7 @@ public class DestroyedEnemy : MonoBehaviour
         killsTextUI.text = killsStr;
 
         //Küldetés teljesítése elért kiiktatással
-        if(killsStr=="2"){
+        if(killsStr=="40"){
 
                 //Játék megszakítása
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Bossfight);

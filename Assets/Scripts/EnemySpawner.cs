@@ -5,17 +5,20 @@ using UnityEngine;
 //Ellenségek létrehozását kezelő
 public class EnemySpawner : MonoBehaviour
 {
-    //Első ellenség fajta
-    public GameObject EnemyGO;
+    //Már megtörtént spawnolások száma
+    int numberOfSpawns;
 
-    //Második ellenség fajta
-    public GameObject EnemyGO2;
-
-    //Harmadik ellenség fajta
-    public GameObject EnemyGO3;
+    //Ellenségek listája
+    public GameObject [] enemies;
 
     //Ellenség létrehozási gyakoriság (alap: 5mp)
     float maxSpawnRateInSeconds;
+
+    //Maximum létrehozott ellenségek száma
+    int maxNumberOfEnemies;
+
+    //Minimum létrehozott ellenségek száma
+    int minNumberOfEnemies;
 
     //Funkció az ellenség létrehozására
     void SpawnEnemy()
@@ -24,17 +27,10 @@ public class EnemySpawner : MonoBehaviour
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
-        //Első ellenség létrehozása
-        GameObject anEnemy = (GameObject)Instantiate(EnemyGO);
-        anEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Második ellenség létrehozása
-        GameObject anEnemy2 = (GameObject)Instantiate(EnemyGO2);
-        anEnemy2.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-
-        //Harmadik ellenség létrehozása
-        GameObject anEnemy3 = (GameObject)Instantiate(EnemyGO3);
-        anEnemy3.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
+        for(int i = 0; i < Random.Range(minNumberOfEnemies,maxNumberOfEnemies); i++){
+            GameObject anEnemy = (GameObject)Instantiate(enemies[Random.Range(0, enemies.Length)]);
+            anEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
+        }
 
         //Következő létrehozás rekurzív hívása
         ScheduleNextEnemySpawn();
@@ -43,9 +39,26 @@ public class EnemySpawner : MonoBehaviour
     //Létrehozás ütemezés
     void ScheduleNextEnemySpawn()
     {
+
+        //Következő spawn száma
+        numberOfSpawns++;
+
         //Létrehozás ütemezési ideje
         float spawnInSeconds;
 
+        if(numberOfSpawns % 5 == 0){
+            maxNumberOfEnemies++;
+        }
+
+        if(numberOfSpawns % 10 == 0){
+            minNumberOfEnemies++;
+        }
+
+        if(numberOfSpawns % 15 == 0){
+            IncreaseSpawnRate();
+        }
+
+        
         if (maxSpawnRateInSeconds > 1f)
         {
             //Véletelnszerű ütemezés 1mp és a maximum Létrehozási gyakoriság között
@@ -63,20 +76,20 @@ public class EnemySpawner : MonoBehaviour
     //Létrehozási gyakoriság növelése, amíg 1mp nem lesz
     void IncreaseSpawnRate()
     {
-        if (maxSpawnRateInSeconds > 1f)
+        if (maxSpawnRateInSeconds > 5f)
             maxSpawnRateInSeconds--;
-        if (maxSpawnRateInSeconds == 1f)
+        if (maxSpawnRateInSeconds == 5f)
             CancelInvoke("IncreaseSpawnRate");
     }
 
     //Ellenségek létrehozásának megkezdése
     public void ScheduleEnemySpawner()
     {
-        
-        maxSpawnRateInSeconds = 5f;
+        numberOfSpawns = 1;
+        minNumberOfEnemies = 1;
+        maxNumberOfEnemies = 2;
+        maxSpawnRateInSeconds = 10f;
         Invoke("SpawnEnemy", maxSpawnRateInSeconds);
-        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
-
     }
 
     //Ellnségek létrehozásának megszakítása

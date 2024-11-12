@@ -202,6 +202,8 @@ public class GameManager : MonoBehaviour
 
                 nextLevelButton.SetActive(true);
 
+                playerPlane.SetActive(false);
+
                 SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
 
                 break;
