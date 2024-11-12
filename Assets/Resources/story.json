@@ -3,24 +3,24 @@
     "missions": [
         {
             "id": 0,
-            "description": "1941. december 7. Pearl Harbor\nKüldetésed az amerikai ellenséges repülőgépek kiiktatása. Pusztítsd el, mind a 40 elit vadászgépet és pusztísd el az ellenséges hajókat!",
-            "successed": "A küldetés sikerrel zárult, sajnos nagy veszteségek árán, de győzedelmeskedtünk. Térj vissza a főhadiszállásra és várd a további parancsokat!"
+            "description": "1941. december 7. Pearl Harbor\nYour mission is to destroy all american airplanes. Destroy all 40 enemy fighters and ships!",
+            "successed": "The mission was succesful. We suffered heavy losses, but we have won. Return to the base and wait for new orders!"
         },
         {
             "id": 1,
-            "description": "1942. február 27. Java-tenger\nA küldetés az ellenség zászlós hajójának kiktatása. Két percig tarsd a frontot, amíg megérkezik az erősítés, hogy közös erővel pusztítsátok el a hajót!",
-            "successed": "A küldtés ismételten sikerrel zárult! Egy gellert kapott golyó miatt sajnos kórházba kell küldenünk!"
+            "description": "1942. february 27. Java Sea\nYour mission is to give cover for ally ships. Hold the line for 2 minutes until the reinforcement arrives! Then we can initiate a counterattack.",
+            "successed": "The mission was succesful again! You got hit by ricochet. Return to the base for immidiate medical care!"
         },
         {
             "id": 2,
-            "description": "1945. augusztus 6. Hirosima\nHíreink szerint az amerikaiak kifejlesztették az atombombát, ami eddig nem látott pusztításra képes! Küldetésed a bombát cipelő repülőgép megálítása, mielőtt eléri a várost!",
-            "successed": "Hiába volt sikeres minden, a bomba ledobása elkerülhetetlen volt, és bár hősünk mindent megtett hazája megvédése érdekében, mégis hősies halállal távozott a túlvilágra!"
+            "description": "1945. august 6. Hirosima\nAccording our intel the americans developed a new weapon which has unseen power! Your mission is to destroy the bomber carrying the weapon, before it reaches the city center!",
+            "successed": "All ammunition have ran out. You have only one choice..."
         }
     ],
     "score": 0,
     "highscores": [
-        1300,
-        1200,
+        21000,
+        15200,
         1200
     ]
 }
