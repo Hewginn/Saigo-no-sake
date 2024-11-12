@@ -192,6 +192,8 @@ public class GameManager : MonoBehaviour
 
                 enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
 
+                powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
+
                 PauseButton.SetActive(false);
 
                 MissionSuccessed();

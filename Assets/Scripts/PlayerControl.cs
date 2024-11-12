@@ -123,7 +123,7 @@ public class PlayerControl : MonoBehaviour
             GameObject bomb = (GameObject) Instantiate(SpecialGO);
             bomb.GetComponent<PlayerSpecial>().Init(specialPosition.transform.position, new Vector2(0,1), 6f);
             specials--;
-            SpecialsUIText.text = "X " + specials.ToString();
+            SpecialsUIText.text = specials.ToString() + " X";
         }
 
         // az ertek -1 (balra nyil), 0 (nincs gomb megnyomva) vagy 1 (jobbra nyil) lesz 
