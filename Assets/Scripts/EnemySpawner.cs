@@ -46,15 +46,18 @@ public class EnemySpawner : MonoBehaviour
         //Létrehozás ütemezési ideje
         float spawnInSeconds;
 
+        //Maximum ellenség inkrementálása
         if(numberOfSpawns % 5 == 0){
             maxNumberOfEnemies++;
         }
 
+        //Minimum ellenség inkrementálása
         if(numberOfSpawns % 10 == 0){
             minNumberOfEnemies++;
         }
 
-        if(numberOfSpawns % 15 == 0){
+        //Éledési gyakoriság inkrementálása
+        if(numberOfSpawns % 10 == 0){
             IncreaseSpawnRate();
         }
 
