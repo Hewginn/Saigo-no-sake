@@ -2154,9 +2154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb1564585ce9e1419d42295c7903c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UpgradePUGO: {fileID: 1117657793019618908, guid: 0bea8fb1745072548bb229db63aa37b0, type: 3}
-  HealPUGO: {fileID: 6906509015077084686, guid: b9029e4af8e91384cbe5dc446750f851, type: 3}
-  SpecialPUGO: {fileID: 8994704215961294813, guid: 26d8549e52912d84cbdb65a809ebf45d, type: 3}
+  PowerUps:
+  - {fileID: 6906509015077084686, guid: b9029e4af8e91384cbe5dc446750f851, type: 3}
+  - {fileID: 1117657793019618908, guid: 0bea8fb1745072548bb229db63aa37b0, type: 3}
+  - {fileID: 8994704215961294813, guid: 26d8549e52912d84cbdb65a809ebf45d, type: 3}
 --- !u!4 &1167671382
 Transform:
   m_ObjectHideFlags: 0
@@ -3109,7 +3110,7 @@ MonoBehaviour:
   LivesUIText: {fileID: 324326806}
   SpecialsUIText: {fileID: 1665592150}
   scoreUITextGO: {fileID: 1298713731}
-  speed: 6
+  speed: 5
 --- !u!50 &1449621468
 Rigidbody2D:
   serializedVersion: 4
