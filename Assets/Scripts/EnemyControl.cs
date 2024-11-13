@@ -57,8 +57,6 @@ public class EnemyControl : MonoBehaviour
         //Játékossal való ütközési esemény megadása
         if ((col.tag == "PlayerShipTag") || (col.tag == "PlayerBulletTag") || (col.tag == "PlayerSpecialTag"))
         {
-            //Robbanás lejátszása
-            PlayerExplosion();
 
             //Játékos robbantotta fel
             isDestroyedByPlayer = true;
@@ -86,6 +84,8 @@ public class EnemyControl : MonoBehaviour
 
             scoreUITextGO.GetComponent<GameScore>().Score += 100;
             killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
+            //Robbanás lejátszása
+            PlayerExplosion();
 
         }
         
