@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         // a higscore-ok megjelenítése
-        high_scores.text = "1. " + data.highscores[0] + " pont\n\n2. " + data.highscores[1] + "pont\n\n3. " + data.highscores[2] + " pont";
+        high_scores.text = "1. " + data.highscores[0] + " points\n\n2. " + data.highscores[1] + " points\n\n3. " + data.highscores[2] + " points";
 
     }
 
