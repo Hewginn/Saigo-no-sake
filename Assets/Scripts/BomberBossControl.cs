@@ -14,12 +14,14 @@ public class BomberBossControl : MonoBehaviour
     //Ellenséges lövedék
     public GameObject EnemyBullet;
 
+    //Hajtómű szám getter, setter
     public int NumberOfEngines{
         get{
             return this.numberOfEngines;
         }
         set{
             this.numberOfEngines = value;
+            //Hajtómű szám módosítása esetén, ha 0 akkor a gép felrobban
             if(numberOfEngines <= 0){
                 DestroyFinalBoss();
                 GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Win);
@@ -97,27 +99,50 @@ public class BomberBossControl : MonoBehaviour
 
     //Főellenség támadásai
     public void actions(){
+
+        //Támadás véletlenszerű kiválasztása
         int actionSelector = Random.Range(1,4);
+        
         switch(actionSelector){
 
             //Hajtóművek sugárlövése
             case 1:
+
+                //Hajtóművek megkeresése
                 EngineControl [] engines = gameObject.transform.GetComponentsInChildren<EngineControl>();
                 foreach(EngineControl engine in engines){
+
+                    //Sugár kilövése
                     engine.engineBlast();
+
                 }
+
+                //Következő támadás időzítése
                 Invoke("actions", 3f);
+
                 break;
 
-            //Szoró lövés
+            //Szort lövés
             case 2:
+
+                //Szoró lövés meghívása corutine formában
                 StartCoroutine(BulletRain());
                 break;
+
+            //Nagy ágyú folyamatos lövése
             case 3:
+
+                //Ellenőrzés: el lette-e már pusztítva a nagy ágyú
                 if(gameObject.transform.GetComponentInChildren<BossBigTurretControl>() != null){
+
+                    //Lövés megkezdése
                     gameObject.transform.GetComponentInChildren<BossBigTurretControl>().HellFireTrigger();
+
                 }else{
+
+                    //Függvény újra hívása
                     Invoke("actions", 0f);
+
                 }
                 break;
         }
@@ -126,26 +151,36 @@ public class BomberBossControl : MonoBehaviour
     //Szort lövés
     private IEnumerator BulletRain(){
 
+        //Páratlan sor-e, az eltolás miatt
         bool oddRow = false;
 
+        //Lövés pozíviójának mmeghatározására új objektum megadása
         GameObject shootPosition = new GameObject("shootPosition");
+
+        //Boss SpriteRenderer a boss határaihoz
         SpriteRenderer bomber = gameObject.GetComponent<SpriteRenderer>();
+
+        //Lövés pozíció
         shootPosition.transform.position = new Vector2(
             transform.position.x - bomber.bounds.size.x / 2,
             transform.position.y);
 
+        //Lövés pozíció beállítása a boss gyerekének, hogy kövesse a mozgását (relatív pozíciója ne változzon)
         shootPosition.transform.SetParent(gameObject.transform, true);
 
+        //10 sor lövése
         for(int i = 0; i < 10; i++){
                     
-                    
+            //Sor lövése  
             while(shootPosition.transform.position.x <= transform.position.x + bomber.bounds.size.x / 2){
 
+                //Lövedék inicializálása
                 GameObject bullet = Instantiate(EnemyBullet);
                 bullet.transform.position = shootPosition.transform.position;
                 bullet.GetComponent<EnemyBullet>().SetDirection(new Vector2(0, -1));
                 bullet.GetComponent<EnemyBullet>().Speed = 2f;
 
+                //Lövés pozíció eltolása a következő pontra
                 shootPosition.transform.position = new Vector2(
                     shootPosition.transform.position.x + 1.25f,
                     shootPosition.transform.position.y
@@ -153,14 +188,21 @@ public class BomberBossControl : MonoBehaviour
 
             }
 
+            // A következő sor kezdő lövés pozíciójának meghatározása
             oddRow = !oddRow;
             shootPosition.transform.position = new Vector2(
                 transform.position.x - bomber.bounds.size.x / 2 + (oddRow ? 0.5f : -0.5f),
                 transform.position.y
             );
+
+            //Várakozás a következő sorral
             yield return new WaitForSeconds((float)0.5);
         }
+
+        //Lövés pozíció törlése
         Destroy(shootPosition);
+
+        //Következő támadás meghívása
         Invoke("actions", 3f);
     }
 

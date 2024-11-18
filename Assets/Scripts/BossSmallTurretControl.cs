@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Kis ágyú
 public class BossSmallTurretControl : MonoBehaviour
 {
     

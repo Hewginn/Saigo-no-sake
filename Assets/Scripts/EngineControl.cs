@@ -87,6 +87,8 @@ public class EngineControl : MonoBehaviour
 
     //Élettöltés
     private void Regeneration(){
+
+        //Adott idő után kezdejen el életet tölteni
         if((Time.time - lastDamaged >= 5f) && (health < maxHealth) && (Time.time - lastHeal > 1f)){
             health = health + 1;
             Heal.SetActive(true);
