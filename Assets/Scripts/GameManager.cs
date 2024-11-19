@@ -86,8 +86,6 @@ public class GameManager : MonoBehaviour
 
     Missions data; //a történetet tárolja a json fájlból
 
-    bool pressed;// annak az ellenőrzése,hogy az escape billentyűt lenyomták-e már egyszer vagy sem
-
     //Első frame update előtt van meghívva
     void Start()
     {
@@ -95,7 +93,6 @@ public class GameManager : MonoBehaviour
         jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
-        pressed = false;
         MissionDescription();
 
 
@@ -111,27 +108,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //ha lenyomjuk az escape billentyűt először és már játékban vagyunk
-        if (Input.GetKey(KeyCode.Escape) && (GMState == GameManagerState.Gameplay) && (pressed == false))
+        if (Input.GetKey(KeyCode.Escape) && (GMState == GameManagerState.Gameplay))
         {
             // a pause menü megjelenítése
             pauseMenu.SetActive(true);
             // a játék megállítása
             Time.timeScale = 0;
-            //megnyomták már az escape billenyűt
-            pressed = true;
 
         }
-        //ha lenyomjuk már az escape billentyűt egyszer és már játékban vagyunk, és a két billentyű leütés között eltelt ez bizonyos idő nagyság
-        /*else if (Input.GetKey(KeyCode.Escape) && (GMState == GameManagerState.Gameplay) && (pressed == true))
-        {
-            // a pause menü megjelenítése
-            pauseMenu.SetActive(false);
-            // a játék megállítása
-            Time.timeScale = 1;
-            //megnyomták már az escape billenyűt
-            StartCoroutine(Delay());
-            pressed = false;
-        }*/
 
     }
 
