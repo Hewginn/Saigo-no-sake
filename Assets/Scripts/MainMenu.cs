@@ -52,14 +52,5 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
-
-
-    public void ScoreToZero()
-    {
-        data.score = 0;
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
-    }
-
 }
 

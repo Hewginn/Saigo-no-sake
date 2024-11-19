@@ -42,9 +42,6 @@ public class GameManager : MonoBehaviour
     //A következő szint betöltése gomb
     public GameObject nextLevelButton;
 
-    //A pálya száma történetmesélés és küldetés szempontjából
-    public int id;
-
     // a küldetés leírása és a küldetés teljeítésének szövege
     public TextMeshProUGUI description;
 
@@ -53,6 +50,14 @@ public class GameManager : MonoBehaviour
 
     //Főellenség objektum
     GameObject BossInstance;
+
+    //A páya száma
+    public int level;
+
+    //Kiiktatást számláló UI szövege
+    GameObject killsUITextGO;
+    //Az időzítő értéke
+    GameObject timeUITextGO;
 
     //Játék állapotok tipus
     public enum GameManagerState
@@ -83,6 +88,7 @@ public class GameManager : MonoBehaviour
     //Első frame update előtt van meghívva
     void Start()
     {
+        // a beolvasott fájl útvonala
         jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
@@ -92,7 +98,10 @@ public class GameManager : MonoBehaviour
 
         GMState = GameManagerState.Opening;
 
-        GMState = GameManagerState.Opening;
+        //A elpusztított elenséget számoló UI megnevezése
+        killsUITextGO = GameObject.FindGameObjectWithTag("DestroyedEnemies");
+        //Az időt számoló UI megnevezése
+        timeUITextGO = GameObject.FindGameObjectWithTag("TimerText");
     }
 
     //A játék állapotának megváltoztatása
@@ -120,7 +129,7 @@ public class GameManager : MonoBehaviour
             //Játékmenet beállítása
             case GameManagerState.Gameplay:
 
-                scoreUITextGO.GetComponent<GameScore>().Score = 0;
+                scoreUITextGO.GetComponent<GameScore>().Score = data.score;
                 destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
 
                 playButton.SetActive(false);
@@ -235,16 +244,16 @@ public class GameManager : MonoBehaviour
     {
 
         description.enabled = true;
-        if (id == 1)
+        if (level == 1)
         {
             description.text = data.missions[0].description;
         }
 
-        else if (id == 2)
+        else if (level == 2)
         {
             description.text = data.missions[1].description;
         }
-        else if (id == 3)
+        else if (level == 3)
         {
             description.text = data.missions[2].description;
         }
@@ -254,39 +263,90 @@ public class GameManager : MonoBehaviour
     {
 
         description.enabled = true;
-        if (id == 1)
+        if (level == 1)
             description.text = data.missions[0].successed;
-        else if (id == 2)
+        else if (level == 2)
         {
             description.text = data.missions[1].successed;
         }
-        else if (id == 3)
+        else if (level == 3)
         {
             description.text = data.missions[2].successed;
         }
     }
 
 
-
+    //A pontszám mentése JSON fájlba
     public void SaveToJson(int score, bool success)
     {
-        Missions data1 = data;
+        //Ha sikeres a küldetés, akkor elmentjük az összegyűjtött pontokat, különben lenullázuk
+        Missions data_new = data;
         if (success)
         {
-            data1.score += score;
+            data_new.score = score;
         }
-        else { data1.score = 0; }
-        for (int i = 0; i < data.highscores.Length; i++)
+        else { data_new.score = 0; }
+        //A highscore menübe való elmentése, megdölt-e egy rekord
+        for (int i = 0; i < data_new.highscores.Length; i++)
         {
-            if (score > data1.highscores[i])
+            if (score > data_new.highscores[i])
             {
-                data1.highscores[i] = score;
+                data_new.highscores[i] = score;
                 break;
             }
         }
 
-        string json = JsonUtility.ToJson(data1, true);
+        //A fájlba való kiírás
+        string json = JsonUtility.ToJson(data_new, true);
         File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+    }
+
+    public void Missions()
+    {
+
+        //UI frissítés
+        if (level == 1)
+        {
+            //killsUITextGO.GetComponent<DestroyedEnemy>().UpdateDestroyedTextUI();
+
+
+            //Az első küldetés teljesítésének feltétele
+            if (killsUITextGO.GetComponent<DestroyedEnemy>().Kills == 10)
+            {
+
+                //Játék megszakítása
+                SetGameManagerState(GameManagerState.Win);
+                //Player.SetActive(false);
+
+                //Új szint feloldása
+                //UnlockNewLevel();
+
+            }
+
+        }
+        //A második Küldetés teljesítésének feltétele
+        else if (level == 2)
+        {
+
+            if ((int)timeUITextGO.GetComponent<TimeCounter>().ellapsedTime % 60 == 10)
+            {
+                SetGameManagerState(GameManagerState.Win);
+            }
+
+
+        }
+        //A harmadik küldetés teljesítésének feltétele
+        else if (level == 3)
+        {
+
+
+            if (killsUITextGO.GetComponent<DestroyedEnemy>().Kills == 2)
+            {
+                SetGameManagerState(GameManagerState.Bossfight);
+
+
+            }
+        }
     }
 }
 

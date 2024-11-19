@@ -815,18 +815,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 519420033}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: ScoreToZero
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &418615936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3450,18 +3438,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 519420033}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: ScoreToZero
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1514180664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3841,7 +3817,7 @@ GameObject:
   - component: {fileID: 1818521755}
   m_Layer: 5
   m_Name: TextTimeCounter
-  m_TagString: Untagged
+  m_TagString: TimerText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3858,6 +3834,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a66d14492afcb74eaeefd681eaaacc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ellapsedTime: 0
+  GameManagerGO: {fileID: 1822782872}
 --- !u!114 &1818521756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4015,9 +3993,9 @@ MonoBehaviour:
   PauseButton: {fileID: 722187716}
   powerUpSpawner: {fileID: 1167671380}
   nextLevelButton: {fileID: 1341626020}
-  id: 3
   description: {fileID: 1389126954}
   BossPrefab: {fileID: 5657256975444942908, guid: 8a498c4caa58bb44b9bb2ab6928e6711, type: 3}
+  level: 3
 --- !u!4 &1822782874
 Transform:
   m_ObjectHideFlags: 0
