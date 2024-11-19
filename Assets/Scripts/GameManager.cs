@@ -88,8 +88,6 @@ public class GameManager : MonoBehaviour
 
     bool pressed;// annak az ellenőrzése,hogy az escape billentyűt lenyomták-e már egyszer vagy sem
 
-    float time_between_presses;// két escape billentyű lenyomása között eltelt idő
-
     //Első frame update előtt van meghívva
     void Start()
     {
@@ -121,19 +119,20 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             //megnyomták már az escape billenyűt
             pressed = true;
-            //amikor a billentyűt lenyomtuk
-            time_between_presses = Time.time;
+
         }
         //ha lenyomjuk már az escape billentyűt egyszer és már játékban vagyunk, és a két billentyű leütés között eltelt ez bizonyos idő nagyság
-        /*else if (Input.GetKey(KeyCode.Escape) && (GMState == GameManagerState.Gameplay) && (pressed == true) && (Time.time - time_between_presses > 0.25f))
+        /*else if (Input.GetKey(KeyCode.Escape) && (GMState == GameManagerState.Gameplay) && (pressed == true))
         {
             // a pause menü megjelenítése
             pauseMenu.SetActive(false);
             // a játék megállítása
             Time.timeScale = 1;
             //megnyomták már az escape billenyűt
+            StartCoroutine(Delay());
             pressed = false;
         }*/
+
     }
 
     //A játék állapotának megváltoztatása

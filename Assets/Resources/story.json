@@ -49,11 +49,11 @@
             "small_turret_health": 40
         }
     ],
-    "score": 4300,
+    "score": 0,
     "highscores": [
         41400,
         15200,
         6700
     ],
-    "choosed_difficulty": "hard"
+    "choosed_difficulty": "easy"
 }

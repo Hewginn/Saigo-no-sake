@@ -12,9 +12,9 @@ public class DifficultyColor : MonoBehaviour
     Missions data; //a történetet, és más adatokat tartalmazó osztály
 
 
-    public Button EasyButton;
-    public Button MediumButton;
-    public Button HardButton;
+    public Button EasyButton;//a legkönnyebb szint gombja
+    public Button MediumButton;// a közepes szint gombja
+    public Button HardButton;// a nehéz szint gobja
 
 
     public TextMeshProUGUI high_scores;// a highscore-okat megjelenítő elem
@@ -29,6 +29,7 @@ public class DifficultyColor : MonoBehaviour
         // a higscore-ok megjelenítése
         high_scores.text = "1. " + data.highscores[0] + " points\n\n2. " + data.highscores[1] + " points\n\n3. " + data.highscores[2] + " points";
 
+        //annak függvényében hogy melyik szint van bveállítva a json fájlba, azt a gombot színezze be pirosra
         if (data.choosed_difficulty == "easy")
         {
             Image buttonImageEasy = EasyButton.GetComponent<Image>();
@@ -46,6 +47,7 @@ public class DifficultyColor : MonoBehaviour
         }
     }
 
+    //a könnyű nehézségű gomb kiválasztása (ez piros színű, a többi fehér)
     public void Easy()
     {
         Image buttonImageEasy = EasyButton.GetComponent<Image>();
@@ -57,10 +59,12 @@ public class DifficultyColor : MonoBehaviour
         Image buttonImageHard = HardButton.GetComponent<Image>();
         buttonImageHard.color = Color.white;
 
+        //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "easy";
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
     }
+    //a közepes nehézségű gomb kiválasztása (ez piros színű, a többi fehér)
     public void Medium()
     {
         Image buttonImageEasy = EasyButton.GetComponent<Image>();
@@ -72,10 +76,12 @@ public class DifficultyColor : MonoBehaviour
         Image buttonImageHard = HardButton.GetComponent<Image>();
         buttonImageHard.color = Color.white;
 
+        //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "medium";
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
     }
+    //a nehéz nehézségű gomb kiválasztása (ez piros színű, a többi fehér)
     public void Hard()
     {
         Image buttonImageEasy = EasyButton.GetComponent<Image>();
@@ -87,6 +93,7 @@ public class DifficultyColor : MonoBehaviour
         Image buttonImageHard = HardButton.GetComponent<Image>();
         buttonImageHard.color = Color.red;
 
+        //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "hard";
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
