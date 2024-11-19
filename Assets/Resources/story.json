@@ -3,7 +3,7 @@
     "missions": [
         {
             "id": 0,
-            "description": "1941. december 7. Pearl Harbor\nYour mission is to destroy all american airplanes. Destroy all 40 enemy fighters and ships!",
+            "description": "1941. december 7. Pearl Harbor\nYour mission is to destroy all american airplanes. Destroy all the enemy fighters and ships!",
             "successed": "The mission was succesful. We suffered heavy losses, but we have won. Return to the base and wait for new orders!"
         },
         {
@@ -17,10 +17,43 @@
             "successed": "All ammunition have ran out. You have only one choice..."
         }
     ],
-    "score": 0,
+    "difficulty": [
+        {
+            "type": "easy",
+            "maxspawntime": 7,
+            "enemynumber_first_level": 40,
+            "enemynumber_last_level": 20,
+            "min_number_of_enemy": 1,
+            "engine_health": 20,
+            "big_turret_health": 50,
+            "small_turret_health": 0
+        },
+        {
+            "type": "medium",
+            "maxspawntime": 5,
+            "enemynumber_first_level": 50,
+            "enemynumber_last_level": 30,
+            "min_number_of_enemy": 1,
+            "engine_health": 30,
+            "big_turret_health": 60,
+            "small_turret_health": 0
+        },
+        {
+            "type": "hard",
+            "maxspawntime": 4,
+            "enemynumber_first_level": 60,
+            "enemynumber_last_level": 40,
+            "min_number_of_enemy": 2,
+            "engine_health": 40,
+            "big_turret_health": 70,
+            "small_turret_health": 40
+        }
+    ],
+    "score": 4300,
     "highscores": [
-        21000,
+        41400,
         15200,
-        1200
-    ]
+        6700
+    ],
+    "choosed_difficulty": "hard"
 }

@@ -4,13 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
+using System.IO;
 
 //Nagy ágyú
 public class BossBigTurretControl : MonoBehaviour
 {
-//Pontokat számláló UI szöveg
+    //Pontokat számláló UI szöveg
     GameObject scoreUITextGO;
-    
+
     //Fegyver által ki lőtt lövedék
     public GameObject BulletGO;
 
@@ -31,11 +32,31 @@ public class BossBigTurretControl : MonoBehaviour
 
     //HellFire akció fut-e
     bool isHellFireOn;
+    string jsonFile;// a json fájl elérési útvonala
+
+    Missions data; //a történetet tárolja a json fájlból
+
+    int i; //a nehézségi szint száma a tömbben
 
     //Éledéskor inicializálás beállítása
-    private void Start() {
+    private void Start()
+    {
+
+        // a beolvasott fájl útvonala
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+
+        // a nehézségi szint kiválasztása
+        for (i = 0; i < data.difficulty.Length; i++)
+        {
+            if (data.difficulty[i].type == data.choosed_difficulty)
+            {
+                break;
+            }
+        }
         isHellFireOn = false;
-        health = 50;
+        health = data.difficulty[i].big_turret_health;
         isDestroyedByPlayer = false;
         InvokeRepeating("FireBomb", 5f, Random.Range(3f, 7f));
         scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
@@ -51,23 +72,26 @@ public class BossBigTurretControl : MonoBehaviour
         float delta = Mathf.Deg2Rad * 10;
 
         //Első lövés iránya (egyenesen lefele)
-        Vector2 direction = new Vector2(0,-1);
+        Vector2 direction = new Vector2(0, -1);
 
         //Lövés 30x
-        for(int i = 0; i<30; i++){
+        for (int i = 0; i < 30; i++)
+        {
 
             //Ha az ágyú felrobbant lövés megszakítása
-            if(gameObject == null){
+            if (gameObject == null)
+            {
                 break;
             }
 
             //Lövedék inicializálása
-            GameObject bullet = (GameObject) Instantiate(BulletGO);
+            GameObject bullet = (GameObject)Instantiate(BulletGO);
             bullet.GetComponent<EnemyBullet>().SetDirection(direction);
             bullet.transform.position = gun.transform.position;
 
             //Ha az irány már 45 fokkal eltér akkor vissza fele forgatás
-            if(Vector2.Angle(direction, new Vector2(0,-1)) > 45){
+            if (Vector2.Angle(direction, new Vector2(0, -1)) > 45)
+            {
                 delta *= -1;
             }
 
@@ -76,7 +100,7 @@ public class BossBigTurretControl : MonoBehaviour
                 direction.x * Mathf.Cos(delta) - direction.y * Mathf.Sin(delta),
                 direction.x * Mathf.Sin(delta) + direction.y * Mathf.Cos(delta)
                 );
-            
+
             //Ágyú elforgatása a lövés irányába
             transform.rotation = Quaternion.LookRotation(Vector3.forward, direction * -1);
 
@@ -90,13 +114,16 @@ public class BossBigTurretControl : MonoBehaviour
         isHellFireOn = false;
     }
 
-    public void HellFireTrigger(){
+    public void HellFireTrigger()
+    {
         StartCoroutine(HellFire());
     }
 
     //Találatok ellenőrzése
-    private void OnTriggerEnter2D(Collider2D col) {
-        switch(col.tag){
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        switch (col.tag)
+        {
 
             //Sima lövés ellenőrzése
             case "PlayerBulletTag":
@@ -105,11 +132,12 @@ public class BossBigTurretControl : MonoBehaviour
 
             //Különleges lövés ellenőrzése
             case "PlayerSpecialTag":
-                health-=5;
+                health -= 5;
                 break;
         }
-        
-        if(health <= 0){
+
+        if (health <= 0)
+        {
 
             //Robbanás lejátszása
             PlayerExplosion();
@@ -132,20 +160,24 @@ public class BossBigTurretControl : MonoBehaviour
         explosion.transform.position = transform.position;
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
 
         //Ha a HellFire támadás éppen fut és felrobban az ágyú
         // a coroutine befejezése és a következő támadás megkezdése (ha még él a játékos)
-        if(isHellFireOn){
+        if (isHellFireOn)
+        {
             StopCoroutine(HellFire());
-            if(GameObject.Find("PlayerGO") != null){
+            if (GameObject.Find("PlayerGO") != null)
+            {
                 gameObject.transform.GetComponentInParent<BomberBossControl>().Invoke("actions", 3f);
             }
         }
-        
+
 
         //Pontszámolás
-        if(isDestroyedByPlayer){
+        if (isDestroyedByPlayer)
+        {
 
             scoreUITextGO.GetComponent<GameScore>().Score += 500;
 
@@ -153,9 +185,11 @@ public class BossBigTurretControl : MonoBehaviour
     }
 
     //A nagy ágyú saját támadása -> felrobbanó bomba lövése
-    private void FireBomb(){
+    private void FireBomb()
+    {
         GameObject playerPlane = GameObject.Find("PlayerGO");
-        if(playerPlane != null){
+        if (playerPlane != null)
+        {
 
             //Bomba létrehozása
             GameObject bomb = (GameObject)Instantiate(BombGO);

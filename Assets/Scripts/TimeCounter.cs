@@ -14,7 +14,7 @@ public class TimeCounter : MonoBehaviour
     float startTime;
 
     //Játék idő
-    float ellapsedTime;
+    public float ellapsedTime = 0;
 
     //Logikai változó: Időszámláló fut-e
     bool startCounter;
@@ -24,6 +24,9 @@ public class TimeCounter : MonoBehaviour
 
     //Eltelt idő másodpercei
     int seconds;
+
+    //Játék kezelő
+    public GameObject GameManagerGO;
 
     //Első frame update előtt van meghívva
     void Start()
@@ -35,7 +38,7 @@ public class TimeCounter : MonoBehaviour
 
     //Számláló elinditása
     public void StartTimeCounter()
-    {   
+    {
         startTime = Time.time;
         startCounter = true;
     }
@@ -50,16 +53,22 @@ public class TimeCounter : MonoBehaviour
     //Minden frame során megvan hívva
     void Update()
     {
-        if(startCounter){
+        if (startCounter)
+        {
 
-           //Eltelt idő kiszámítása
-           ellapsedTime =  Time.time - startTime;
+            //Eltelt idő kiszámítása
+            ellapsedTime = Time.time - startTime;
 
-           //Eltelt idő kiírása
-           minutes = (int)ellapsedTime / 60;
-           seconds = (int)ellapsedTime % 60;
-           timeUI.text = string.Format("{0:00}:{1:00}", minutes,seconds);
+            //Eltelt idő kiírása
+            minutes = (int)ellapsedTime / 60;
+            seconds = (int)ellapsedTime % 60;
+            timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            //A második pályánál nézi meg, hogy mi a küldetés
+            if (GameManagerGO.GetComponent<GameManager>().level == 2)
+            {
+                GameManagerGO.GetComponent<GameManager>().Missions();
+            }
         }
-        
+
     }
 }

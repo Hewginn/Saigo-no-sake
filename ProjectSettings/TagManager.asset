@@ -18,6 +18,10 @@ TagManager:
   - PlayerUndamagable
   - BossBlastTag
   - BossEngines
+  - TimerText
+  - Easy
+  - Medium
+  - Hard
   layers:
   - Default
   - TransparentFX

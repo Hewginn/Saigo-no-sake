@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 
 //Kis ágyú
 public class BossSmallTurretControl : MonoBehaviour
 {
-    
+
     //Pontokat számláló UI szöveg
     GameObject scoreUITextGO;
-    
+
     //Fegyver által ki lőtt lövedék
     public GameObject BulletGO;
 
@@ -31,11 +31,31 @@ public class BossSmallTurretControl : MonoBehaviour
     //Sokszoros lövés szórás szöge
     float spread;
 
+    string jsonFile;// a json fájl elérési útvonala
+
+    Missions data; //a történetet tárolja a json fájlból
+
+    int i; //a nehézségi szint száma a tömbben
+
     //Éledéskor inicializálás beállítása
-    private void Start() {
+    private void Start()
+    {
+        // a beolvasott fájl útvonala
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+
+        // a nehézségi szint kiválasztása
+        for (i = 0; i < data.difficulty.Length; i++)
+        {
+            if (data.difficulty[i].type == data.choosed_difficulty)
+            {
+                break;
+            }
+        }
         numberOfBullets = 3;
         spread = 20;
-        health = 10;
+        health = data.difficulty[i].small_turret_health; ;
         isDestroyedByPlayer = false;
         InvokeRepeating("FireBullet", 2f, Random.Range(3f, 8f));
         scoreUITextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
@@ -52,31 +72,35 @@ public class BossSmallTurretControl : MonoBehaviour
         //Ha létezik a játékos objektum lövedék lövése az irányába
         if (playerPlane != null)
         {
-            if(Random.Range(0, 99) < 80){
+            if (Random.Range(0, 99) < 80)
+            {
                 //Lövedék létrehozása
                 GameObject bullet = (GameObject)Instantiate(BulletGO);
                 bullet.transform.position = gun.transform.position;
 
                 //Lövedék irányának megadása
                 bullet.GetComponent<EnemyBullet>().SetDirection(direction);
-            }else{
+            }
+            else
+            {
                 //Létrehozott lövedékek tömbje
                 GameObject[] bullets = new GameObject[numberOfBullets];
 
                 //Adott mennyiségű lövedék kilövése
-                for(int i = 0; i < numberOfBullets; i++){
+                for (int i = 0; i < numberOfBullets; i++)
+                {
 
                     //Lövedék létrehozása az adott pozícióban
-                    bullets[i] = (GameObject) Instantiate(BulletGO);
+                    bullets[i] = (GameObject)Instantiate(BulletGO);
                     bullets[i].transform.position = transform.position;
-                
+
                     //Lövés vektorának véletlenszerű elforgatása
                     direction = playerPlane.transform.position - gun.transform.position;
-                    float delta = UnityEngine.Random.Range(spread/2 * Mathf.Deg2Rad, -spread/2 * Mathf.Deg2Rad);
+                    float delta = UnityEngine.Random.Range(spread / 2 * Mathf.Deg2Rad, -spread / 2 * Mathf.Deg2Rad);
                     direction = new UnityEngine.Vector2
                         (direction.x * Mathf.Cos(delta) - direction.y * Mathf.Sin(delta),
                         direction.x * Mathf.Sin(delta) + direction.y * Mathf.Cos(delta));
-                    
+
                     //Irány továbbítása a lövedék objektumnak
                     bullets[i].GetComponent<EnemyBullet>().SetDirection(direction);
                 }
@@ -88,8 +112,10 @@ public class BossSmallTurretControl : MonoBehaviour
     }
 
     //Találatok ellenőrzése
-    private void OnTriggerEnter2D(Collider2D col) {
-        switch(col.tag){
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        switch (col.tag)
+        {
 
             //Sima lövés ellenőrzése
             case "PlayerBulletTag":
@@ -98,13 +124,14 @@ public class BossSmallTurretControl : MonoBehaviour
 
             //Különleges lövés ellenőrzése
             case "PlayerSpecialTag":
-                health-=5;
+                health -= 5;
                 break;
             default:
                 break;
         }
-        
-        if(health <= 0){
+
+        if (health <= 0)
+        {
 
             //Robbanás lejátszása
             PlayerExplosion();
@@ -127,9 +154,11 @@ public class BossSmallTurretControl : MonoBehaviour
         explosion.transform.position = transform.position;
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         //Elpusztított repülők számolása
-        if(isDestroyedByPlayer){
+        if (isDestroyedByPlayer)
+        {
 
             scoreUITextGO.GetComponent<GameScore>().Score += 100;
 

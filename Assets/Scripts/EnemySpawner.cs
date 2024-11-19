@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 //Ellenségek létrehozását kezelő
 public class EnemySpawner : MonoBehaviour
 {
+    public GameObject GameManager;
     //Már megtörtént spawnolások száma
     int numberOfSpawns;
 
     //Ellenségek listája
-    public GameObject [] enemies;
+    public GameObject[] enemies;
 
     //Ellenség létrehozási gyakoriság (alap: 5mp)
     float maxSpawnRateInSeconds;
@@ -21,13 +23,20 @@ public class EnemySpawner : MonoBehaviour
     int minNumberOfEnemies;
 
     //Funkció az ellenség létrehozására
+
+    string jsonFile;// a json fájl elérési útvonala
+
+    Missions data; //a történetet tárolja a json fájlból
+
+    int i; //a nehézségi szint száma a tömbben
     void SpawnEnemy()
     {
         //Határok meghatározása
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
-        for(int i = 0; i < Random.Range(minNumberOfEnemies,maxNumberOfEnemies); i++){
+        for (int i = 0; i < Random.Range(minNumberOfEnemies, maxNumberOfEnemies); i++)
+        {
             GameObject anEnemy = (GameObject)Instantiate(enemies[Random.Range(0, enemies.Length)]);
             anEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
         }
@@ -47,27 +56,31 @@ public class EnemySpawner : MonoBehaviour
         float spawnInSeconds;
 
         //Maximum ellenség inkrementálása
-        if(numberOfSpawns % 5 == 0){
+        if (numberOfSpawns % 5 == 0)
+        {
             maxNumberOfEnemies++;
         }
 
         //Minimum ellenség inkrementálása
-        if(numberOfSpawns % 10 == 0){
+        if (numberOfSpawns % 10 == 0)
+        {
             minNumberOfEnemies++;
         }
 
         //Éledési gyakoriság inkrementálása
-        if(numberOfSpawns % 10 == 0){
+        if (numberOfSpawns % 10 == 0)
+        {
             IncreaseSpawnRate();
         }
 
-        
+
         if (maxSpawnRateInSeconds > 1f)
         {
             //Véletelnszerű ütemezés 1mp és a maximum Létrehozási gyakoriság között
             spawnInSeconds = Random.Range(1f, maxSpawnRateInSeconds);
         }
-        else{
+        else
+        {
             //Létrehozási ütemezés ideje minimum 1mp
             spawnInSeconds = 1f;
         }
@@ -89,9 +102,9 @@ public class EnemySpawner : MonoBehaviour
     public void ScheduleEnemySpawner()
     {
         numberOfSpawns = 1;
-        minNumberOfEnemies = 1;
+        minNumberOfEnemies = data.difficulty[i].min_number_of_enemy;
         maxNumberOfEnemies = 2;
-        maxSpawnRateInSeconds = 10f;
+        maxSpawnRateInSeconds = data.difficulty[i].maxspawntime;
         Invoke("SpawnEnemy", maxSpawnRateInSeconds);
     }
 
@@ -100,5 +113,21 @@ public class EnemySpawner : MonoBehaviour
     {
         CancelInvoke("SpawnEnemy");
         CancelInvoke("IncreaseSpawnRate");
+    }
+
+    void Start()
+    {
+        // a beolvasott fájl útvonala
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+        // a nehézségi szint kiválasztása
+        for (i = 0; i < data.difficulty.Length; i++)
+        {
+            if (data.difficulty[i].type == data.choosed_difficulty)
+            {
+                break;
+            }
+        }
     }
 }

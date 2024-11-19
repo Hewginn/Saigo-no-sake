@@ -2,30 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.IO;
-using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
     //TextMeshProUGUI high_scores;
-    string jsonFile;// a json fájl elérési útvonala
-    Missions data; //a történetet, és más adatokat tartalmazó osztály
 
-
-    public TextMeshProUGUI high_scores;// a highscore-okat megjelenítő elem
-
-
-    void Start()
-    {
-
-        // a beolvasndó fájl
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
-        // a beolvasott fájl adatait eltároló változó
-        data = JsonUtility.FromJson<Missions>(jsonFile);
-        // a higscore-ok megjelenítése
-        high_scores.text = "1. " + data.highscores[0] + " points\n\n2. " + data.highscores[1] + " points\n\n3. " + data.highscores[2] + " points";
-
-    }
 
     //az első küldetés betöltése
     public void PlayGame()
@@ -52,14 +33,24 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
-
-
-    public void ScoreToZero()
-    {
-        data.score = 0;
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
-    }
-
+    /*
+        public void Easy()
+        {
+            data.choosed_difficulty = "easy";
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        }
+        public void Medium()
+        {
+            data.choosed_difficulty = "medium";
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        }
+        public void Hard()
+        {
+            data.choosed_difficulty = "hard";
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        }*/
 }
 
