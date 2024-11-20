@@ -70,7 +70,7 @@ public class PlayerControl : MonoBehaviour
 
         //Élet
         lives = maxLives;
-        LivesUIText.text=lives.ToString();
+        LivesUIText.text=lives.ToString() + " X";
 
         //Helyzet
         transform.position = new Vector2(0,0);
@@ -174,7 +174,7 @@ public class PlayerControl : MonoBehaviour
 
             //Élet csökkentése
             lives = lives > 0 ? lives - 1 : 0;
-            LivesUIText.text = lives.ToString();
+            LivesUIText.text = lives.ToString() + " X";
 
             //Fejlesztés nullázása
             upgradeLevel = 0;
@@ -209,7 +209,7 @@ public class PlayerControl : MonoBehaviour
             case "HealPU":
                 if(lives < maxLives){
                     lives++;
-                    LivesUIText.text = lives.ToString();
+                    LivesUIText.text = lives.ToString() + " X";
                 }else{
                     scoreUITextGO.GetComponent<GameScore>().Score += 500;
                 }
