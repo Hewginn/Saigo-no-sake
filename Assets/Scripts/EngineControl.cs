@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using System.IO;
 
 public class EngineControl : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class EngineControl : MonoBehaviour
     int health;
 
     //Max élet
-    int maxHealth = 20;
+    int maxHealth;
 
     //Legutóbb kapott sebzés
     float lastDamaged;
@@ -27,9 +28,17 @@ public class EngineControl : MonoBehaviour
     bool isDestroyedByPlayer;
 
     public GameObject ExplosionGO;
-    
+
+    string jsonFile;// a json fájl elérési útvonala
+
+    Missions data; //a történetet tárolja a json fájlból
+
+    int i; //a nehézségi szint száma a tömbben
+
+
     //Inicializálás
-    public void Init(){
+    public void Init()
+    {
         health = maxHealth;
 
         lastDamaged = Time.time;
@@ -42,22 +51,38 @@ public class EngineControl : MonoBehaviour
     }
 
 
-    
-    
-    
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        // a beolvasott fájl útvonala
+        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        // a beolvasott fájl adatait eltároló változó
+        data = JsonUtility.FromJson<Missions>(jsonFile);
+
+        // a nehézségi szint kiválasztása
+        for (i = 0; i < data.difficulty.Length; i++)
+        {
+            if (data.difficulty[i].type == data.choosed_difficulty)
+            {
+                break;
+            }
+        }
+        maxHealth = data.difficulty[i].engine_health;
         Init();
     }
 
     //Minden képkockánál meghívásra kerül
-    void Update(){
+    void Update()
+    {
         Regeneration();
     }
 
     //Sugárlövés
-    public void engineBlast(){
+    public void engineBlast()
+    {
 
         //Sugár létrehozása
         GameObject newBlast = (GameObject)Instantiate(Blast);
@@ -72,34 +97,45 @@ public class EngineControl : MonoBehaviour
     }
 
     //Ütközések kezelése
-    private void OnTriggerEnter2D(Collider2D col) {
-        if(col.tag == "PlayerBulletTag"){
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "PlayerBulletTag")
+        {
             health--;
-        }else if(col.tag == "PlayerSpecialTag"){
+        }
+        else if (col.tag == "PlayerSpecialTag")
+        {
             health -= 5;
         }
-        if(health <= 0){
-                isDestroyedByPlayer = true;
-                Destroy(gameObject);
+        if (health <= 0)
+        {
+            isDestroyedByPlayer = true;
+            Destroy(gameObject);
         }
         lastDamaged = Time.time;
     }
 
     //Élettöltés
-    private void Regeneration(){
+    private void Regeneration()
+    {
 
         //Adott idő után kezdejen el életet tölteni
-        if((Time.time - lastDamaged >= 5f) && (health < maxHealth) && (Time.time - lastHeal > 1f)){
+        if ((Time.time - lastDamaged >= 5f) && (health < maxHealth) && (Time.time - lastHeal > 1f))
+        {
             health = health + 1;
             Heal.SetActive(true);
             lastHeal = Time.time;
-        }else if(lastHeal < lastDamaged || health == maxHealth){
+        }
+        else if (lastHeal < lastDamaged || health == maxHealth)
+        {
             Heal.SetActive(false);
         }
     }
 
-    private void OnDestroy() {
-        if(isDestroyedByPlayer){
+    private void OnDestroy()
+    {
+        if (isDestroyedByPlayer)
+        {
             transform.parent.gameObject.GetComponent<BomberBossControl>().NumberOfEngines -= 1;
             PlayerExplosion();
         }
@@ -114,5 +150,5 @@ public class EngineControl : MonoBehaviour
         //Robbanás helyének meghatározása (objektum helye)
         explosion.transform.position = transform.position;
     }
-    
+
 }
