@@ -293,6 +293,11 @@ public class GameManager : MonoBehaviour
             data_new.score = score;
         }
         else { data_new.score = 0; }
+        // a következő szint feloldása, ha sikerült a küldetés és még nem oldottuk fel a következő pályát, és nem az utolsó pályáról van szó
+        if (level != 3 && data_new.unlock_level[level] == false && success)
+        {
+            data_new.unlock_level[level] = true;
+        }
         //A highscore menübe való elmentése, megdölt-e egy rekord
         for (int i = 0; i < data_new.highscores.Length; i++)
         {
@@ -345,7 +350,7 @@ public class GameManager : MonoBehaviour
         else if (level == 2)
         {
 
-            if ((int)timeUITextGO.GetComponent<TimeCounter>().ellapsedTime % 60 == 2)
+            if ((int)timeUITextGO.GetComponent<TimeCounter>().ellapsedTime / 60 == 2)
             {
                 //Játék győzelemmel zárult
                 SetGameManagerState(GameManagerState.Win);

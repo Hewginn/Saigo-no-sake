@@ -26,7 +26,7 @@
             "min_number_of_enemy": 1,
             "engine_health": 20,
             "big_turret_health": 50,
-            "small_turret_health": 0
+            "small_turret_health": 20
         },
         {
             "type": "medium",
@@ -36,7 +36,7 @@
             "min_number_of_enemy": 1,
             "engine_health": 30,
             "big_turret_health": 60,
-            "small_turret_health": 0
+            "small_turret_health": 30
         },
         {
             "type": "hard",
@@ -55,5 +55,10 @@
         15200,
         6700
     ],
-    "choosed_difficulty": "easy"
+    "choosed_difficulty": "easy",
+    "unlock_level": [
+        true,
+        false,
+        false
+    ]
 }

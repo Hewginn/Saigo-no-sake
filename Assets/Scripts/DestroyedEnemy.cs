@@ -54,18 +54,18 @@ public class DestroyedEnemy : MonoBehaviour
             //UnlockNewLevel();
         }
     }
-
-    //Új szint feloldása és feloldott szintek elmentése
-    void UnlockNewLevel()
-    {
-        if (SceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ReachedIndex"))
+    /*
+        //Új szint feloldása és feloldott szintek elmentése
+        void UnlockNewLevel()
         {
-            PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex + 1);
-            PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnclokedLevel", 1) + 1);
-            PlayerPrefs.Save();
+            if (SceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ReachedIndex"))
+            {
+                PlayerPrefs.SetInt("ReachedIndex", SceneManager.GetActiveScene().buildIndex + 1);
+                PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnclokedLevel", 1) + 1);
+                PlayerPrefs.Save();
+            }
         }
-    }
-
+    */
 
 
 }

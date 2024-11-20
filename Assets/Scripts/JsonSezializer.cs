@@ -1,6 +1,6 @@
 [System.Serializable]
 // a json fájlban eltárolt tömb objektumok változói
-public class JsonSezializer
+public class MissionType
 {
   public int id;
   public string description;
@@ -27,7 +27,7 @@ public class Difficulty
 public class Missions
 {
   public string title;
-  public JsonSezializer[] missions;
+  public MissionType[] missions;
 
   public Difficulty[] difficulty;
   public int score;
@@ -35,6 +35,8 @@ public class Missions
   public int[] highscores;
 
   public string choosed_difficulty;
+
+  public bool[] unlock_level;
 
 }
 
