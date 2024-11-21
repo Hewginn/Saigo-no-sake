@@ -229,7 +229,9 @@ public class GameManager : MonoBehaviour
 
                 menuButton.SetActive(true);
 
-                nextLevelButton.SetActive(true);
+                if(level != 3){
+                    nextLevelButton.SetActive(true);
+                }
 
                 playerPlane.SetActive(false);
 
