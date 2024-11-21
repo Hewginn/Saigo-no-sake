@@ -60,6 +60,9 @@ public class GameManager : MonoBehaviour
     //Az időzítő értéke
     GameObject timeUITextGO;
 
+    //Kiiktatási cél UI
+    public TextMeshProUGUI killGoalUITextGO;
+
     //Játék állapotok tipus
     public enum GameManagerState
     {
@@ -95,11 +98,21 @@ public class GameManager : MonoBehaviour
         data = JsonUtility.FromJson<Missions>(jsonFile);
         MissionDescription();
 
-
+        if(level != 2){
+            killGoalUITextGO.text = " / ";
+            for (int i = 0; i < data.difficulty.Length; i++)
+            {
+                if (data.difficulty[i].type == data.choosed_difficulty)
+                {
+                    killGoalUITextGO.text += (level == 1 ? data.difficulty[i].enemynumber_first_level : data.difficulty[i].enemynumber_last_level).ToString();
+                    break;
+                }
+            }
+        }
 
         GMState = GameManagerState.Opening;
 
-        //A elpusztított elenséget számoló UI megnevezése
+        //A elpusztított ellenséget számoló UI megnevezése
         killsUITextGO = GameObject.FindGameObjectWithTag("DestroyedEnemies");
         //Az időt számoló UI megnevezése
         timeUITextGO = GameObject.FindGameObjectWithTag("TimerText");
