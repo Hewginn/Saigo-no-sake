@@ -14,7 +14,7 @@
         {
             "id": 2,
             "description": "1945. august 6. Hirosima\nAccording our intel the americans developed a new weapon which has unseen power! Your mission is to destroy the bomber carrying the weapon, before it reaches the city center!",
-            "successed": "All ammunition have ran out. You have only one choice..."
+            "successed": "You have died an honorable death. By flying into the bomber carrying the atomic bomb, you were able to save thousands of lives. Your memory will never be forgotten."
         }
     ],
     "difficulty": [
@@ -24,7 +24,7 @@
             "enemynumber_first_level": 40,
             "enemynumber_last_level": 20,
             "min_number_of_enemy": 1,
-            "engine_health": 20,
+            "engine_health": 30,
             "big_turret_health": 50,
             "small_turret_health": 20
         },
@@ -53,12 +53,13 @@
     "highscores": [
         41400,
         15200,
-        6700
+        15000
     ],
     "choosed_difficulty": "easy",
     "unlock_level": [
         true,
-        false,
-        false
-    ]
+        true,
+        true
+    ],
+    "final_message": "All ammunition have ran out. You have only one choice...FOR THE EMPEROR!!!"
 }

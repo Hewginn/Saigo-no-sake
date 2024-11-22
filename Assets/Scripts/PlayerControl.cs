@@ -5,6 +5,7 @@ using TMPro;
 using System.Threading;
 using System.Timers;
 using Unity.VisualScripting;
+using System.IO;
 
 //Játékos irányítása, kezelése
 public class PlayerControl : MonoBehaviour
@@ -65,6 +66,9 @@ public class PlayerControl : MonoBehaviour
     //Legutóbbi lövés időpontja
     float lastShoot;
 
+    //A játékos tudja irányítani a gépet
+    bool hasControl;
+
     //Repülő inicializálása
     public void Init(){
 
@@ -85,13 +89,16 @@ public class PlayerControl : MonoBehaviour
         specials = 0;
         SpecialsUIText.text = specials.ToString() + " X";
 
+        //Irányítás megkapása
+        hasControl = true;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // a szóköz billentyű lenyomására lő az űrhajó 0.25 másodpercenként
-        if(Input.GetKey("space") && Time.time - lastShoot > 0.25f){
+        if(Input.GetKey("space") && Time.time - lastShoot > 0.25f && hasControl){
             GetComponent<AudioSource>().Play();
             GameObject bullet01= (GameObject)Instantiate(PlayerBulletGO);
             bullet01.transform.position = bulletPosition01.transform.position;
@@ -119,7 +126,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //Különleges lövedék lövése 'E' billentyűvel
-        if(Input.GetKeyDown("e") && specials > 0){
+        if(Input.GetKeyDown("e") && specials > 0 && hasControl){
             GameObject bomb = (GameObject) Instantiate(SpecialGO);
             bomb.GetComponent<PlayerSpecial>().Init(specialPosition.transform.position, new Vector2(0,1), 6f);
             specials--;
@@ -260,6 +267,18 @@ public class PlayerControl : MonoBehaviour
 
     //Repölő villantása
     void Flash(){
-        GetComponent<Renderer>().enabled = !(GetComponent<Renderer>().enabled);
+        GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
+    }
+
+    public void loseControl(){
+        hasControl = false;
+        transform.position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,0));
+        transform.position = new Vector2 (transform.position.x, transform.position.y + GetComponent<SpriteRenderer>().bounds.size.y / 2);
+        if(isInvincible){
+            CancelInvoke("InvincibleModeOff");
+            InvincibleModeOff();
+        }
+        gameObject.tag = "PlayerUndamagable";
+        isInvincible = true;
     }
 }
