@@ -162,24 +162,19 @@ public class BossBigTurretControl : MonoBehaviour
 
     private void OnDestroy()
     {
-
-        //Ha a HellFire támadás éppen fut és felrobban az ágyú
-        // a coroutine befejezése és a következő támadás megkezdése (ha még él a játékos)
-        if (isHellFireOn)
-        {
-            StopCoroutine(HellFire());
-            if (GameObject.Find("PlayerGO") != null)
-            {
-                gameObject.transform.GetComponentInParent<BomberBossControl>().Invoke("actions", 3f);
-            }
-        }
-
-
         //Pontszámolás
         if (isDestroyedByPlayer)
         {
-
+            //Pontszámolás
             scoreUITextGO.GetComponent<GameScore>().Score += 500;
+
+            //Ha éppen tüzet okádott megállítása és másik támadás meginditása
+            if (isHellFireOn){
+                StopCoroutine(HellFire());
+                if (GameObject.Find("PlayerGO") != null){
+                    gameObject.transform.GetComponentInParent<BomberBossControl>().Invoke("actions", 3f);
+                }
+            }
 
         }
     }
