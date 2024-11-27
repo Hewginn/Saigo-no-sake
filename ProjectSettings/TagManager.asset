@@ -74,6 +74,9 @@ TagManager:
   - name: GamePlay
     uniqueID: 2783777473
     locked: 0
+  - name: Bullets
+    uniqueID: 776370385
+    locked: 0
   - name: Effects
     uniqueID: 486020657
     locked: 0

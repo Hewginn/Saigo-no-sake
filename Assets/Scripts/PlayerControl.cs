@@ -45,7 +45,7 @@ public class PlayerControl : MonoBehaviour
     public GameObject scoreUITextGO;
 
     //Maximum élet
-    const int maxLives = 3;
+    const int maxLives = 100;
 
     //Aktuális élet
     int lives;
