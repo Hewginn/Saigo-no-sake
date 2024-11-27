@@ -191,7 +191,7 @@ public class BomberBossControl : MonoBehaviour
             // A következő sor kezdő lövés pozíciójának meghatározása
             oddRow = !oddRow;
             shootPosition.transform.position = new Vector2(
-                transform.position.x - bomber.bounds.size.x / 2 + (oddRow ? 0.5f : -0.5f),
+                transform.position.x - bomber.bounds.size.x / 2 + (oddRow ? 1f : -1f),
                 transform.position.y
             );
 
