@@ -22,7 +22,7 @@
             "type": "easy",
             "maxspawntime": 7,
             "enemynumber_first_level": 40,
-            "enemynumber_last_level": 1,
+            "enemynumber_last_level": 20,
             "min_number_of_enemy": 1,
             "engine_health": 20,
             "big_turret_health": 50,
