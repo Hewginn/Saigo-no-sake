@@ -49,7 +49,7 @@
             "small_turret_health": 40
         }
     ],
-    "score": 0,
+    "score": 700,
     "highscores": [
         41400,
         15200,
@@ -58,7 +58,7 @@
     "choosed_difficulty": "easy",
     "unlock_level": [
         true,
-        false,
-        false
+        true,
+        true
     ]
 }

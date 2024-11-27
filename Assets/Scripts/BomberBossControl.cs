@@ -76,7 +76,7 @@ public class BomberBossControl : MonoBehaviour
     void MoveToStartingPosition(){
 
         //Főellenség Y pozíció célja
-        float wantedY = Camera.main.ViewportToWorldPoint(new Vector2(1,(float)0.5)).y + 1.5f;
+        float wantedY = Camera.main.ViewportToWorldPoint(new Vector2(1,(float)0.5)).y + 1f;
 
         //Mozgás a pozíció felé vagy, ha elérte elkezdeni jobbra és balra mozogni
         if(transform.position.y >= wantedY){
@@ -182,7 +182,7 @@ public class BomberBossControl : MonoBehaviour
 
                 //Lövés pozíció eltolása a következő pontra
                 shootPosition.transform.position = new Vector2(
-                    shootPosition.transform.position.x + 1.25f,
+                    shootPosition.transform.position.x + 2f,
                     shootPosition.transform.position.y
                 );
 
@@ -191,12 +191,12 @@ public class BomberBossControl : MonoBehaviour
             // A következő sor kezdő lövés pozíciójának meghatározása
             oddRow = !oddRow;
             shootPosition.transform.position = new Vector2(
-                transform.position.x - bomber.bounds.size.x / 2 + (oddRow ? 0.5f : -0.5f),
+                transform.position.x - bomber.bounds.size.x / 2 + (oddRow ? 1f : -1f),
                 transform.position.y
             );
 
             //Várakozás a következő sorral
-            yield return new WaitForSeconds((float)0.5);
+            yield return new WaitForSeconds((float)0.75);
         }
 
         //Lövés pozíció törlése

@@ -45,7 +45,7 @@ public class PlayerControl : MonoBehaviour
     public GameObject scoreUITextGO;
 
     //Maximum élet
-    const int maxLives = 3;
+    const int maxLives = 100;
 
     //Aktuális élet
     int lives;
@@ -167,7 +167,7 @@ public class PlayerControl : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col){
 
         //Sebződés kezelése
-        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag") || (col.tag == "BossBlastTag")) && !isInvincible){
+        if(((col.tag == "EnemyShipTag") || (col.tag == "EnemyBulletTag") || (col.tag == "BossBlastTag") || col.tag == "BossEngines") && !isInvincible){
 
             //Robbanás lejátszása
             PlayerExplosion();

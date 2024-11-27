@@ -68,11 +68,17 @@ TagManager:
   - name: Boss
     uniqueID: 991534891
     locked: 0
+  - name: BossObjects
+    uniqueID: 427169637
+    locked: 0
   - name: GamePlay
     uniqueID: 2783777473
     locked: 0
   - name: GamePlay
     uniqueID: 2783777473
+    locked: 0
+  - name: Bullets
+    uniqueID: 776370385
     locked: 0
   - name: Effects
     uniqueID: 486020657

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a6046c60e659cca4bbab504bac9d4553
+guid: cf28b49f47cd5134c9474aee7721f7a7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Boss engines placeholder_0
+      name: Engines_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 70
-        width: 32
-        height: 70
+        y: 200
+        width: 100
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f27b07fb10f8ef4409ad103bb243dbcb
-      internalID: 294751945
+      spriteID: 623d7a916ddadc84eae77abe9ac75f1a
+      internalID: -1521484201
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Boss engines placeholder_1
+      name: Engines_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 70
-        width: 32
-        height: 70
+        x: 100
+        y: 200
+        width: 100
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e1bd8bed59d58be4a8a95a1f484a0a63
-      internalID: -1040762915
+      spriteID: e301621e85876304ca1abf08dc2b7a2a
+      internalID: 1333774735
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Boss engines placeholder_2
+      name: Engines_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 70
-        width: 32
-        height: 70
+        x: 200
+        y: 200
+        width: 100
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 39e256bf30f5b794e865e767b2701fb2
-      internalID: 317151177
+      spriteID: 9dbbb5552afcb6549b255a2152c3e529
+      internalID: -1727627521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Boss engines placeholder_3
+      name: Engines_3
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 70
+        width: 100
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a97f773ab4b047f4cb711159746ffcb1
-      internalID: -1074146206
+      spriteID: df1b4670c4aa407459e92e4cf120d226
+      internalID: 560790827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Boss engines placeholder_4
+      name: Engines_4
       rect:
         serializedVersion: 2
-        x: 32
+        x: 100
         y: 0
-        width: 32
-        height: 70
+        width: 100
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,8 +208,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee2b9eea953e0aa40838d0e95ddc450b
-      internalID: 1091390578
+      spriteID: e7c5af4650cb6b8429abfa93e60c22f7
+      internalID: 1658798847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Engines_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 100
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a63b4c79144b244befc4d19d12dd82
+      internalID: 1730155590
       vertices: []
       indices: 
       edges: []
@@ -225,11 +246,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Boss engines placeholder_0: 294751945
-      Boss engines placeholder_1: -1040762915
-      Boss engines placeholder_2: 317151177
-      Boss engines placeholder_3: -1074146206
-      Boss engines placeholder_4: 1091390578
+      Engines_0: -1521484201
+      Engines_1: 1333774735
+      Engines_2: -1727627521
+      Engines_3: 560790827
+      Engines_4: 1658798847
+      Engines_5: 1730155590
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
