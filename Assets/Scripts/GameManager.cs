@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using UnityEngine.SocialPlatforms.Impl;
 
 //Játékkezelő
 public class GameManager : MonoBehaviour
@@ -80,6 +82,9 @@ public class GameManager : MonoBehaviour
 
         //Fő ellenség
         Bossfight,
+
+        //Játék vége
+        Ending,
     }
 
     //Játék állapota
@@ -156,6 +161,7 @@ public class GameManager : MonoBehaviour
             case GameManagerState.Gameplay:
 
                 scoreUITextGO.GetComponent<GameScore>().Score = data.score;
+
                 destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
 
                 playButton.SetActive(false);
@@ -188,7 +194,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    BossInstance.GetComponent<BomberBossControl>().DestroyFinalBoss();
+                    Destroy(BossInstance);
                 }
 
                 GameOverGO.SetActive(true);
@@ -229,9 +235,26 @@ public class GameManager : MonoBehaviour
 
                 menuButton.SetActive(true);
 
-                if(level != 3){
-                    nextLevelButton.SetActive(true);
-                }
+                nextLevelButton.SetActive(true);
+
+                playerPlane.SetActive(false);
+
+                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
+
+                break;
+            
+            //Játékos kijátszotta a játékot
+            case GameManagerState.Ending:
+
+                TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
+
+                powerUpSpawner.GetComponent<PowerUpSpawner>().UnSchedulePowerUpSpawner();
+
+                MissionSuccessed();
+
+                description.text += "\nTotal score: " + scoreUITextGO.GetComponent<GameScore>().Score.ToString();
+
+                menuButton.SetActive(true);
 
                 playerPlane.SetActive(false);
 
@@ -386,6 +409,14 @@ public class GameManager : MonoBehaviour
 
             }
         }
+    }
+    
+    public void WriteFinalMessage(){
+
+        description.enabled = true;
+
+        //Utolsó üzenet kiírása
+        description.text = data.final_message;
     }
 }
 

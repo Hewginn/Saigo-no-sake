@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using System.IO;
+using TMPro;
 
 public class BomberBossControl : MonoBehaviour
 {
@@ -14,6 +16,12 @@ public class BomberBossControl : MonoBehaviour
     //Ellenséges lövedék
     public GameObject EnemyBullet;
 
+    //Robbanás lejátszó
+    public GameObject ExplosionGO;
+
+    //
+    bool isDying;
+
     //Hajtómű szám getter, setter
     public int NumberOfEngines{
         get{
@@ -24,7 +32,6 @@ public class BomberBossControl : MonoBehaviour
             //Hajtómű szám módosítása esetén, ha 0 akkor a gép felrobban
             if(numberOfEngines <= 0){
                 DestroyFinalBoss();
-                GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Win);
             }
         }
     }
@@ -36,6 +43,8 @@ public class BomberBossControl : MonoBehaviour
         numberOfEngines = 4;
 
         InvokeRepeating("MoveToStartingPosition", 0f, Time.deltaTime);
+
+        isDying = false;
     }
     
     // Harc megkezdése
@@ -90,11 +99,34 @@ public class BomberBossControl : MonoBehaviour
     //Főellenség elpusztítása
     public void DestroyFinalBoss(){
 
+
         //Mozgás befejezése
         CancelInvoke("Move");
+
+        //Lövések befejezése
+        StopAllCoroutines();
+        CancelInvoke("actions");
         
-        //Objektum törlése
-        Destroy(gameObject);
+        //Maradék ágyúk felrobbantása
+        foreach(Transform child in gameObject.transform){
+            Destroy(child.gameObject);
+        }
+
+        GameObject player = GameObject.Find("PlayerGO");
+        player.GetComponent<PlayerControl>().loseControl();
+
+        isDying = true;
+
+        GameObject.Find("GameManagerGO").GetComponent<GameManager>().WriteFinalMessage();
+    }
+
+    //Kamikáze ütközés érzékelő
+    private void OnTriggerEnter2D(Collider2D col) {
+        if(col.tag == "PlayerUndamagable" && isDying){
+            PlayerExplosion();
+            Destroy(gameObject);
+            GameObject.Find("GameManagerGO").GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.Ending);
+        }
     }
 
     //Főellenség támadásai
@@ -206,5 +238,15 @@ public class BomberBossControl : MonoBehaviour
         Invoke("actions", 3f);
     }
 
+    //Robbanást inicializáló kódrész
+    void PlayerExplosion()
+    {
+        //Példányosítás
+        GameObject explosion = (GameObject)Instantiate(ExplosionGO);
 
+        explosion.transform.localScale = new Vector3(5f, 5f, 1f); 
+
+        //Robbanás helyének meghatározása (objektum helye)
+        explosion.transform.position = transform.position;
+    }
 }

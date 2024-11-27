@@ -22,6 +22,7 @@ public class Difficulty
   public int small_turret_health;
 
 }
+
 // a json fájlban eltárolt adatok változói
 [System.Serializable]
 public class Missions
@@ -37,6 +38,8 @@ public class Missions
   public string choosed_difficulty;
 
   public bool[] unlock_level;
+
+  public string  final_message;
 
 }
 

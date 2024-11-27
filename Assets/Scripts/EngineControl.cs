@@ -27,6 +27,7 @@ public class EngineControl : MonoBehaviour
     //Játékos lötte le
     bool isDestroyedByPlayer;
 
+    //Robbanás
     public GameObject ExplosionGO;
 
     string jsonFile;// a json fájl elérési útvonala
