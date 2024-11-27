@@ -91,7 +91,7 @@ public class EngineControl : MonoBehaviour
         newBlast.transform.position =
         new Vector2(
             transform.position.x,
-            transform.position.y - newBlast.GetComponent<SpriteRenderer>().bounds.size.y / 2 - 0.064f
+            transform.position.y - newBlast.GetComponent<SpriteRenderer>().bounds.size.y / 2
         );
         newBlast.transform.SetParent(gameObject.transform, true);
     }

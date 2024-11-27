@@ -76,7 +76,7 @@ public class BomberBossControl : MonoBehaviour
     void MoveToStartingPosition(){
 
         //Főellenség Y pozíció célja
-        float wantedY = Camera.main.ViewportToWorldPoint(new Vector2(1,(float)0.5)).y + 1.5f;
+        float wantedY = Camera.main.ViewportToWorldPoint(new Vector2(1,(float)0.5)).y + 1f;
 
         //Mozgás a pozíció felé vagy, ha elérte elkezdeni jobbra és balra mozogni
         if(transform.position.y >= wantedY){
