@@ -22,7 +22,7 @@
             "type": "easy",
             "maxspawntime": 7,
             "enemynumber_first_level": 40,
-            "enemynumber_last_level": 20,
+            "enemynumber_last_level": 1,
             "min_number_of_enemy": 1,
             "engine_health": 20,
             "big_turret_health": 50,
@@ -49,7 +49,7 @@
             "small_turret_health": 40
         }
     ],
-    "score": 0,
+    "score": 100,
     "highscores": [
         41400,
         15200,
@@ -58,7 +58,7 @@
     "choosed_difficulty": "easy",
     "unlock_level": [
         true,
-        false,
-        false
+        true,
+        true
     ]
 }

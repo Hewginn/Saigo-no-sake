@@ -182,7 +182,7 @@ public class BomberBossControl : MonoBehaviour
 
                 //Lövés pozíció eltolása a következő pontra
                 shootPosition.transform.position = new Vector2(
-                    shootPosition.transform.position.x + 1.25f,
+                    shootPosition.transform.position.x + 2f,
                     shootPosition.transform.position.y
                 );
 
@@ -196,7 +196,7 @@ public class BomberBossControl : MonoBehaviour
             );
 
             //Várakozás a következő sorral
-            yield return new WaitForSeconds((float)0.5);
+            yield return new WaitForSeconds((float)0.75);
         }
 
         //Lövés pozíció törlése
