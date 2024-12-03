@@ -3,7 +3,10 @@ guid: 7fb1564585ce9e1419d42295c7903c6c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UpgradePUGO: {fileID: 1117657793019618908, guid: 0bea8fb1745072548bb229db63aa37b0, type: 3}
+  - HealPUGO: {fileID: 6906509015077084686, guid: b9029e4af8e91384cbe5dc446750f851, type: 3}
+  - SpecialPUGO: {fileID: 8635537552159150856, guid: ae6b91cf5b5ffd24eba15052a8593cd7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

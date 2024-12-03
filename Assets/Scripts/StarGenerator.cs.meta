@@ -3,7 +3,8 @@ guid: ade61a977b439d546a57fef772ddeff9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - StarGO: {fileID: 1774408919767446817, guid: 8898db21162cb6346a1b6dcd06a068e7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

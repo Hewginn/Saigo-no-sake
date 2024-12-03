@@ -3,7 +3,21 @@ guid: 504a5448a42becf46876eed9fa1f2a52
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - GameManagerGO: {instanceID: 0}
+  - PlayerBulletGO: {fileID: 8082158710186996147, guid: fe3bbd80fcabe4b48a179cf09d730910, type: 3}
+  - bulletPosition01: {instanceID: 0}
+  - bulletPosition02: {instanceID: 0}
+  - bulletPosition03: {instanceID: 0}
+  - bulletPosition04: {instanceID: 0}
+  - bulletPosition05: {instanceID: 0}
+  - bulletPosition06: {instanceID: 0}
+  - specialPosition: {instanceID: 0}
+  - ExpolsionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
+  - SpecialGO: {fileID: 784265174094879923, guid: 0183b1453ef44bb44bc75edc188ea237, type: 3}
+  - LivesUIText: {instanceID: 0}
+  - SpecialsUIText: {instanceID: 0}
+  - scoreUITextGO: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

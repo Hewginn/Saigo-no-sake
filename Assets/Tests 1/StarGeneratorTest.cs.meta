@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: d53c450572c562245b5c0b2650be0a44
+guid: b1374d5786b105f4083a062c5c3a9225
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - ExpolsionGO: {fileID: 784265174094879923, guid: ae4eb5637255a164c87eb92ba0736b22, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
