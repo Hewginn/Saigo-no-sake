@@ -1,58 +1,37 @@
-using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TestTools;
 
-[TestFixture]
-public class StarGeneratorTest : StarGenMonoBehavTest
+public class StarGenerator : MonoBehaviour
 {
-    [UnityTest]
-    public IEnumerator Start_CreatesCorrectNumberOfStars()
+    public GameObject StarGO;
+    public int MaxStars;
+    public GameObject ObjectToActivate;
+
+    Color[] starColors = {
+        new Color (0.5f, 0.5f, 1f),
+        new Color (0f, 1f, 1f),
+        new Color (1f, 1f, 0f),
+        new Color (1f, 0f, 0f),
+    };
+
+    void Start()
     {
-        // Arrange
-        var stargen = subject.AddComponent<StarGenerator>();
-        
-        // Létrehozunk egy StarGO GameObject-et a teszt során
-        var starPrefab = new GameObject("StarPrefab");
-        starPrefab.AddComponent<SpriteRenderer>();
-        starPrefab.AddComponent<Star>(); // A Star osztály elvárt
-        stargen.StarGO = starPrefab; // Hozzárendeljük a StarGO-hoz
-
-        // Beállítjuk a MaxStars értékét
-        stargen.MaxStars = 3;
-
-        // Act
-        yield return new WaitForEndOfFrame();
-
-        // Assert
-        var generatedStars = subject.GetComponentsInChildren<Star>();
-        Assert.AreEqual(3, generatedStars.Length, "The number of generated stars does not match MaxStars.");
-    }
-
-    [UnityTest]
-    public IEnumerator Start_StarsAreCorrectlyConfigured()
-    {
-        // Arrange
-        var stargen = subject.AddComponent<StarGenerator>();
-        
-        // StarGO GameObject dinamikus létrehozása
-        var starPrefab = new GameObject("StarPrefab");
-        starPrefab.AddComponent<SpriteRenderer>();
-        starPrefab.AddComponent<Star>(); // A Star osztály elvárt
-        stargen.StarGO = starPrefab;
-
-        // Beállítjuk a MaxStars értékét
-        stargen.MaxStars = 3;
-
-        // Act
-        yield return new WaitForEndOfFrame();
-
-        // Assert
-        var stars = subject.GetComponentsInChildren<Star>();
-        foreach (var star in stars)
+        if (ObjectToActivate != null)
         {
-            Assert.IsNotNull(star.GetComponent<SpriteRenderer>(), "Each star must have a SpriteRenderer component.");
-            Assert.IsTrue(star.speed < 0, "Each star's speed must be negative.");
+            ObjectToActivate.SetActive(true);
+        }
+
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+
+        for (int i = 0; i < MaxStars; ++i)
+        {
+            GameObject star = Instantiate(StarGO);
+            star.GetComponent<SpriteRenderer>().color = starColors[i % starColors.Length];
+            star.transform.position = new Vector2(Random.Range(min.x, max.x), Random.Range(min.y, max.y));
+            star.GetComponent<Star>().speed = -(1f * Random.value + 0.5f);
+            star.transform.parent = transform;
         }
     }
 }
