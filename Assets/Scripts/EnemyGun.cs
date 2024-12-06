@@ -12,7 +12,7 @@ public class EnemyGun : MonoBehaviour
     public bool isEnemyZigZag;
 
     //Első frame update előtt van meghívva
-    public void Start()
+    void Start()
     {
 
         //Lövés 1 másodperc elteltével

@@ -60,7 +60,6 @@ public class EnemyGunTest
         enemyGun.GetComponent<EnemyGun>().EnemyBulletGO.AddComponent<EnemyBullet>();
         enemyGun.transform.position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,(float)0.5));
 
-        enemyGun.GetComponent<EnemyGun>().Start();
         yield return new WaitForSeconds(1);
         GameObject bullet = GameObject.Find("TestBullet(Clone)");
 
@@ -162,6 +161,7 @@ public class EnemyGunTest
         GameObject.Destroy(bullet);
     }
 
+        [UnityTest]
         public IEnumerator isNotZigZagTest(){
         yield return new WaitForFixedUpdate();
 
@@ -170,7 +170,7 @@ public class EnemyGunTest
 
         enemyGun = new GameObject("EnemyGunGO");
         enemyGun.AddComponent<EnemyGun>();
-        enemyGun.GetComponent<EnemyGun>().isEnemyZigZag = true;
+        enemyGun.GetComponent<EnemyGun>().isEnemyZigZag = false;
         enemyGun.GetComponent<EnemyGun>().EnemyBulletGO = new GameObject("TestBullet");
         enemyGun.GetComponent<EnemyGun>().EnemyBulletGO.AddComponent<EnemyBullet>();
         enemyGun.transform.position = Camera.main.ViewportToWorldPoint(new Vector2((float)0.5,(float)0.5));
