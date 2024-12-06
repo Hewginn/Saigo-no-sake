@@ -51,8 +51,9 @@ public class BackObjectControllerTest
         GameObject BackObject = GameObject.Find("BackObjectPrefab(Clone)");
         bool check = false;
         string spriteName = "BackgroundIslands_";
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < 7; i++){
             if(BackObject.GetComponent<SpriteRenderer>().sprite.name == spriteName + i){
+                Debug.Log(BackObject.GetComponent<SpriteRenderer>().sprite.name);
                 check = true;
                 break;
             }
@@ -76,7 +77,7 @@ public class BackObjectControllerTest
         GameObject BackObject = GameObject.Find("BackObjectPrefab(Clone)");
         bool check = false;
         string spriteName = "BackgroundShips_";
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < 5; i++){
             if(BackObject.GetComponent<SpriteRenderer>().sprite.name == spriteName + i){
                 check = true;
                 break;
