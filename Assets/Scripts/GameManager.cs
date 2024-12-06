@@ -65,6 +65,10 @@ public class GameManager : MonoBehaviour
     //Kiiktatási cél UI
     public TextMeshProUGUI killGoalUITextGO;
 
+    public GameObject video;
+
+    public int videoTime;
+
     //Játék állapotok tipus
     public enum GameManagerState
     {
@@ -97,13 +101,16 @@ public class GameManager : MonoBehaviour
     //Első frame update előtt van meghívva
     void Start()
     {
+        ShowVideo();
+        Invoke("HideVideo", videoTime + 1);
         // a beolvasott fájl útvonala
         jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         MissionDescription();
 
-        if(level != 2){
+        if (level != 2)
+        {
             killGoalUITextGO.text = " / ";
             for (int i = 0; i < data.difficulty.Length; i++)
             {
@@ -133,6 +140,10 @@ public class GameManager : MonoBehaviour
             // a játék megállítása
             Time.timeScale = 0;
 
+        }
+        if (Input.GetKey("f"))
+        {
+            HideVideo();
         }
 
     }
@@ -242,7 +253,7 @@ public class GameManager : MonoBehaviour
                 SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
 
                 break;
-            
+
             //Játékos kijátszotta a játékot
             case GameManagerState.Ending:
 
@@ -410,13 +421,25 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
-    public void WriteFinalMessage(){
+
+    public void WriteFinalMessage()
+    {
 
         description.enabled = true;
 
         //Utolsó üzenet kiírása
         description.text = data.final_message;
+    }
+
+    //a videó megjelenítése
+    public void ShowVideo()
+    {
+        video.SetActive(true);
+    }
+    //a videó elrejtése
+    public void HideVideo()
+    {
+        video.SetActive(false);
     }
 }
 
