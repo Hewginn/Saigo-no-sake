@@ -3769,7 +3769,7 @@ MonoBehaviour:
   playerPlane: {fileID: 1449621463}
   enemySpawner: {fileID: 532809367}
   GameOverGO: {fileID: 1671467210}
-  scoreUITextGO: {fileID: 0}
+  scoreUITextGO: {fileID: 744794275}
   destroyedUITextGO: {fileID: 2006373027}
   TimerCounterGO: {fileID: 1818521754}
   powerUpSpawner: {fileID: 1167671380}
