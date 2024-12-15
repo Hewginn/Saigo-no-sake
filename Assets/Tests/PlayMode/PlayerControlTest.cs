@@ -205,7 +205,7 @@ public class PlayerControlTest
         yield return new WaitForSeconds(1);
 
         //Assert
-        Assert.IsTrue(player.GetComponent<PlayerControl>().LivesUIText.text == "2");
+        Assert.IsTrue(player.GetComponent<PlayerControl>().LivesUIText.text == "2 X");
     }
 
     //Gyógyulás tesztelése
@@ -226,8 +226,10 @@ public class PlayerControlTest
         Heal.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + 2f);
         yield return new WaitForSeconds(1);
 
+        Debug.Log(player.GetComponent<PlayerControl>().LivesUIText.text);
+
         //Arrange
-        Assert.IsTrue(player.GetComponent<PlayerControl>().LivesUIText.text == "3");
+        Assert.IsTrue(player.GetComponent<PlayerControl>().LivesUIText.text == "3 X");
     }
     
 }
