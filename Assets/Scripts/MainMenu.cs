@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         // a beolvasndó fájl
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
     }

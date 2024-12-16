@@ -23,7 +23,7 @@ public class DifficultyColor : MonoBehaviour
     void Start()
     {
         // a beolvasndó fájl
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         // a higscore-ok megjelenítése
@@ -62,7 +62,7 @@ public class DifficultyColor : MonoBehaviour
         //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "easy";
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
     //a közepes nehézségű gomb kiválasztása (ez piros színű, a többi fehér)
     public void Medium()
@@ -79,7 +79,7 @@ public class DifficultyColor : MonoBehaviour
         //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "medium";
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
     //a nehéz nehézségű gomb kiválasztása (ez piros színű, a többi fehér)
     public void Hard()
@@ -96,6 +96,6 @@ public class DifficultyColor : MonoBehaviour
         //a kiválasztott szint elmentése a json fájlba
         data.choosed_difficulty = "hard";
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
 }
