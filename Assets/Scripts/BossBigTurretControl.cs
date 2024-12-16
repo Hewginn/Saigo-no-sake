@@ -166,7 +166,7 @@ public class BossBigTurretControl : MonoBehaviour
         if (isDestroyedByPlayer)
         {
             //Pontszámolás
-            scoreUITextGO.GetComponent<GameScore>().Score += 500;
+            scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(500);
 
             //Ha éppen tüzet okádott megállítása és másik támadás meginditása
             if (isHellFireOn)

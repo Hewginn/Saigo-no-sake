@@ -57,7 +57,7 @@
     ],
     "choosed_difficulty": "easy",
     "unlock_level": [
-        true,
+        false,
         false,
         false
     ],

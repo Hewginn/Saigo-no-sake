@@ -3,53 +3,70 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using System;
+using System.Runtime.CompilerServices;
 
-//Pontszámláló
-public class GameScore : MonoBehaviour
+//Pontszámlálóstatic 
+public static class GameScore
 {
-    //Pontszámláló UI szöveg
-    TextMeshProUGUI scoreTextUI;
-
-    string jsonFile;// a json fájl elérési útvonala
-    Missions data; //a történetet, és más adatokat tartalmazó osztály
 
     //Pontok
-    int score;
+    static int currentScore = 0;
+    static int sumScore = 0;
 
-    //Pontok setter, getter
-    public int Score
-    {
-
-        get
-        {
-            return this.score;
-        }
-        set
-        {
-            this.score = value;
-            UpdateScoreTextUI();
-        }
-
+    //Pont hozzáadása
+    public static void AddScore(int value){
+        currentScore += value;
     }
 
-    //Első frame update előtt van meghívva
-    void Start()
+    //Az éppenleges küldetésben szerzett pontok nullázása
+    public static void NullCurrentScore(){
+        currentScore = 0;
+    }
+
+    //Összpont nullázása
+    public static void NullSumScore(){
+        SaveScoreToJson();
+        sumScore = 0;
+    }
+
+    //Eddig szerzett pontok
+    public static int getSumScore(){
+        return sumScore;
+    }
+
+    //
+    public static void addCurrentToSum(){
+        sumScore += currentScore;
+        NullCurrentScore();
+    }
+
+    public static int getAll(){
+        return currentScore + sumScore;
+    }
+
+    //A pontszám mentése JSON fájlba
+    static private void SaveScoreToJson()
     {
-        // a beolvasndó fájl
-        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
+        // a beolvasott fájl útvonala
+        string jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
-        data = JsonUtility.FromJson<Missions>(jsonFile);
-        score = data.score;
+        Missions data = JsonUtility.FromJson<Missions>(jsonFile);
 
-        scoreTextUI = GetComponent<TextMeshProUGUI>();
-        UpdateScoreTextUI();
+        int scoreHigh = sumScore;
+        int switcher;
+        //A highscore menübe való elmentése, megdölt-e egy rekord
+        for (int i = 0; i < data.highscores.Length; i++)
+        {
+            if (scoreHigh > data.highscores[i])
+            {
+                switcher = data.highscores[i];
+                data.highscores[i] = scoreHigh;
+                scoreHigh = switcher;
+            }
+        }
+        //A fájlba való kiírás
+        string json = JsonUtility.ToJson(data, true);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
-
-    //Pontszámláló UI átírása
-    void UpdateScoreTextUI()
-    {
-        string scoreStr = string.Format("{0:000000}", score);
-        scoreTextUI.text = scoreStr;
-    }
-
 }

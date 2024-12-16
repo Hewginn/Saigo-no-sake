@@ -160,7 +160,7 @@ public class BossSmallTurretControl : MonoBehaviour
         if (isDestroyedByPlayer)
         {
 
-            scoreUITextGO.GetComponent<GameScore>().Score += 100;
+            scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(100);
 
         }
     }

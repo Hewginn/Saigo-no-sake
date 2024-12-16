@@ -157,6 +157,8 @@ public class GameManager : MonoBehaviour
             //Kezdeti állapot beállítása
             case GameManagerState.Opening:
 
+                scoreUITextGO.GetComponent<ScoreUIHandeler>().ResetCurrent();
+
                 playButton.SetActive(true);
 
                 menuButton.SetActive(true);
@@ -170,8 +172,6 @@ public class GameManager : MonoBehaviour
 
             //Játékmenet beállítása
             case GameManagerState.Gameplay:
-
-                scoreUITextGO.GetComponent<GameScore>().Score = data.score;
 
                 destroyedUITextGO.GetComponent<DestroyedEnemy>().Kills = 0;
 
@@ -212,8 +212,6 @@ public class GameManager : MonoBehaviour
 
                 playerPlane.SetActive(false);
 
-                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, false);
-
                 Invoke("ChangeToOpeningState", 8f);
 
                 break;
@@ -236,6 +234,8 @@ public class GameManager : MonoBehaviour
             //Küldetés teljesítve beállítások
             case GameManagerState.Win:
 
+                GameScore.addCurrentToSum();
+
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
                 enemySpawner.GetComponent<EnemySpawner>().UnScheduleEnemySpawner();
@@ -250,12 +250,14 @@ public class GameManager : MonoBehaviour
 
                 playerPlane.SetActive(false);
 
-                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
+                UnlockNextLevel();
 
                 break;
 
             //Játékos kijátszotta a játékot
             case GameManagerState.Ending:
+
+                GameScore.addCurrentToSum();
 
                 TimerCounterGO.GetComponent<TimeCounter>().StopTimeCounter();
 
@@ -263,13 +265,11 @@ public class GameManager : MonoBehaviour
 
                 MissionSuccessed();
 
-                description.text += "\nTotal score: " + scoreUITextGO.GetComponent<GameScore>().Score.ToString();
+                description.text += "\nTotal score: " + GameScore.getSumScore();
 
                 menuButton.SetActive(true);
 
                 playerPlane.SetActive(false);
-
-                SaveToJson(scoreUITextGO.GetComponent<GameScore>().Score, true);
 
                 break;
         }
@@ -333,32 +333,16 @@ public class GameManager : MonoBehaviour
 
 
     //A pontszám mentése JSON fájlba
-    public void SaveToJson(int score, bool success)
+    public void UnlockNextLevel()
     {
-        //Ha sikeres a küldetés, akkor elmentjük az összegyűjtött pontokat, különben lenullázuk
-        Missions data_new = data;
-        if (success)
-        {
-            data_new.score = score;
-        }
-        else { data_new.score = 0; }
         // a következő szint feloldása, ha sikerült a küldetés és még nem oldottuk fel a következő pályát, és nem az utolsó pályáról van szó
-        if (level != 3 && data_new.unlock_level[level] == false && success)
+        if (level != 3 && data.unlock_level[level] == false)
         {
-            data_new.unlock_level[level] = true;
-        }
-        //A highscore menübe való elmentése, megdölt-e egy rekord
-        for (int i = 0; i < data_new.highscores.Length; i++)
-        {
-            if (score > data_new.highscores[i])
-            {
-                data_new.highscores[i] = score;
-                break;
-            }
+            data.unlock_level[level] = true;
         }
 
         //A fájlba való kiírás
-        string json = JsonUtility.ToJson(data_new, true);
+        string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
 

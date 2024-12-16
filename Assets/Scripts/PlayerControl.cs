@@ -209,7 +209,7 @@ public class PlayerControl : MonoBehaviour
                 if(upgradeLevel < 2){
                     upgradeLevel++;
                 }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                    scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(500);
                 }
                 break;
             
@@ -219,7 +219,7 @@ public class PlayerControl : MonoBehaviour
                     lives++;
                     LivesUIText.text = lives.ToString() + " X";
                 }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                    scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(500);
                 }
                 break;
 
@@ -229,7 +229,7 @@ public class PlayerControl : MonoBehaviour
                     specials++;
                     SpecialsUIText.text = specials.ToString() + " X";
                 }else{
-                    scoreUITextGO.GetComponent<GameScore>().Score += 500;
+                    scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(500);
                 }
                 break;          
         }
