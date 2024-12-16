@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     //vissza a menübe gomb
     public void Home()
     {
+        GameScore.NullSumScore();
+        GameScore.NullCurrentScore();
         SceneManager.LoadScene("MainMenu");
         //a folyamatok folytatása
         Time.timeScale = 1;

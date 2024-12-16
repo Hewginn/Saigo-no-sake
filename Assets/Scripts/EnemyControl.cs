@@ -82,7 +82,7 @@ public class EnemyControl : MonoBehaviour
         //Elpusztított repülők számolása
         if(isDestroyedByPlayer){
 
-            scoreUITextGO.GetComponent<GameScore>().Score += 100;
+            scoreUITextGO.GetComponent<ScoreUIHandeler>().AddtoScore(100);
             killsUITextGO.GetComponent<DestroyedEnemy>().Kills += 1;
             //Robbanás lejátszása
             PlayerExplosion();
