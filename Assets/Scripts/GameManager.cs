@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         ShowVideo();
         Invoke("HideVideo", videoTime + 1);
         // a beolvasott fájl útvonala
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         MissionDescription();
@@ -359,7 +359,7 @@ public class GameManager : MonoBehaviour
 
         //A fájlba való kiírás
         string json = JsonUtility.ToJson(data_new, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
 
     public void Missions()

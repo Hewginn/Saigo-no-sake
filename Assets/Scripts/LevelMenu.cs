@@ -34,7 +34,7 @@ public class LevelMenu : MonoBehaviour
     void Start()
     {
         // a beolvasott fájl útvonala
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         // a ha a küldetés fel van oldva, akkor kiválasztható legyen a főmenüben, ha meg nem, akkor meg nem
@@ -63,6 +63,6 @@ public class LevelMenu : MonoBehaviour
         SceneManager.LoadScene(LevelName);
         data.score = 0;
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(Application.dataPath + "/Resources/story.json", json);
+        File.WriteAllText(Application.dataPath + "/StreamingAssets/story.json", json);
     }
 }
