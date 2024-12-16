@@ -186,11 +186,12 @@ public class PlayerControl : MonoBehaviour
             //Fejlesztés nullázása
             upgradeLevel = 0;
 
-            if(lives ==0){
+            if(lives == 0){
 
                 //0 élettel játék elvesztése
                 GameManagerGO.GetComponent<GameManager>().SetGameManagerState(GameManager.GameManagerState.GameOver);
                 gameObject.SetActive(false);
+                
 
             }else{
 

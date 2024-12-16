@@ -43,7 +43,7 @@ public class BossBigTurretControl : MonoBehaviour
     {
 
         // a beolvasott fájl útvonala
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
 
@@ -169,9 +169,11 @@ public class BossBigTurretControl : MonoBehaviour
             scoreUITextGO.GetComponent<GameScore>().Score += 500;
 
             //Ha éppen tüzet okádott megállítása és másik támadás meginditása
-            if (isHellFireOn){
+            if (isHellFireOn)
+            {
                 StopCoroutine(HellFire());
-                if (GameObject.Find("PlayerGO") != null){
+                if (GameObject.Find("PlayerGO") != null)
+                {
                     gameObject.transform.GetComponentInParent<BomberBossControl>().Invoke("actions", 3f);
                 }
             }

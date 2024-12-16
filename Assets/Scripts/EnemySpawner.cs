@@ -118,7 +118,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         // a beolvasott fájl útvonala
-        jsonFile = File.ReadAllText(Application.dataPath + "/Resources/story.json");
+        jsonFile = File.ReadAllText(Application.dataPath + "/StreamingAssets/story.json");
         // a beolvasott fájl adatait eltároló változó
         data = JsonUtility.FromJson<Missions>(jsonFile);
         // a nehézségi szint kiválasztása

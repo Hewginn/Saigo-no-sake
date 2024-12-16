@@ -37,6 +37,10 @@ public class EnemyBullet : MonoBehaviour
         isReady = true;
     }
 
+    public Vector2 GetDirection(){
+        return _direction;
+    }
+
     //Minden frame során megvan hívva
     void Update()
     {
