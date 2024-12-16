@@ -26,6 +26,7 @@ public class PauseMenu : MonoBehaviour
     //a pálya újra kezdése
     public void Restart()
     {
+        GameScore.NullCurrentScore();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         //a folyamatok folytatása
         Time.timeScale = 1;
